@@ -9,7 +9,7 @@ public class SessionThread extends Thread {
     private static int ThreadCounter = 0;
 
     private final Socket socket;
-    private Integer lastActivityLock = Integer.valueOf(0);
+    private final Integer lastActivityLock = Integer.valueOf(0);
     private LocalDateTime lastActivity = LocalDateTime.now();
     private final InputStream inStream;
     private final OutputStream outStream;
@@ -42,6 +42,7 @@ public class SessionThread extends Thread {
                     lastActivity = LocalDateTime.now();
                 }
                 HttpRequest request = new HttpRequest(inBuffer.toString());
+                // TODO
             }
         }
     }

@@ -7,10 +7,10 @@ import java.util.List;
 
 public class ServerManager {
 
-    private final List<SessionThread> sessions = new LinkedList<SessionThread>();
+    private final List<SessionThread> sessions = new LinkedList<>();
 
     public void acceptSession(Socket socket) {
-        SessionThread sessionThread = null;
+        SessionThread sessionThread;
         try {
             sessionThread = new SessionThread(socket);
             sessionThread.start();

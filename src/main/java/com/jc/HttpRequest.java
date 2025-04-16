@@ -9,8 +9,8 @@ public class HttpRequest {
     String method = "?";
     String url = "?";
     String version = "?";
-    Map<String, String> headers = new HashMap<String, String>();
-    StringBuilder body = new StringBuilder();;
+    Map<String, String> headers = new HashMap<>();
+    StringBuilder body = new StringBuilder();
 
     public HttpRequest(String content) {
         int lineIndex;

@@ -8,7 +8,7 @@ public class ListenerThread extends Thread {
 
     private final ServerManager manager;
     private final IConfiguration configuration;
-    private ServerSocket serverSocket = null;
+    private final ServerSocket serverSocket;
 
     public ListenerThread(ServerManager manager, IConfiguration configuration) throws IOException {
         this.manager = manager;
