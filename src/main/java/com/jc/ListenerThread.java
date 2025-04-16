@@ -18,7 +18,7 @@ public class ListenerThread extends Thread {
     }
 
     public void run() {
-        this.setName("Listener");
+        this.setName("ListenerThread");
         while (!isInterrupted()) {
             Logger.INFO("Listening on port: " + configuration.getPortNumber());
             Socket socket = null;
@@ -37,7 +37,7 @@ public class ListenerThread extends Thread {
 
     public void stopWaiting() {
         Logger.INFO("Listener terminating");
-        manager.killThreads();
+        manager.killThreads(0L);
         this.interrupt();
     }
 

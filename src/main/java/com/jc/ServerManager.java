@@ -7,23 +7,25 @@ import java.util.List;
 
 public class ServerManager {
 
-    private List<SessionThread> sessions = new LinkedList<SessionThread>();
+    private final List<SessionThread> sessions = new LinkedList<SessionThread>();
 
-    public SessionThread acceptSession(Socket socket) {
+    public void acceptSession(Socket socket) {
         SessionThread sessionThread = null;
         try {
             sessionThread = new SessionThread(socket);
+            sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
             Logger.INFO("acceptSession: " + e.getMessage());
-            return null;
         }
-        sessionThread.start();
-        return sessionThread;
     }
 
     public void killThreads(long MaxIdleSeconds) {
-
+        for(SessionThread sessionThread : sessions) {
+            if(sessionThread.beenIdleForHowLong() > MaxIdleSeconds && sessionThread.isAlive()) {
+                sessionThread.interrupt();
+            }
+        }
     }
 
 }

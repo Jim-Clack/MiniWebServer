@@ -1,5 +1,8 @@
 package com.jc;
 
+/**
+ * Sloppy, just for testing - needs to be replaced.
+ */
 public class Logger {
 
     private static Logger instance = new Logger();

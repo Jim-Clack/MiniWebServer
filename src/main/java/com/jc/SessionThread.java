@@ -9,12 +9,13 @@ public class SessionThread extends Thread {
     private static int ThreadCounter = 0;
 
     private final Socket socket;
-    private int requestCounter = 0;
+    private Integer lastActivityLock = Integer.valueOf(0);
     private LocalDateTime lastActivity = LocalDateTime.now();
     private final InputStream inStream;
     private final OutputStream outStream;
     private StringBuilder inBuffer;
     private StringBuilder outBuffer;
+    private int bytesReadThisTime;
 
     public SessionThread(Socket socket) throws IOException {
         this.socket = socket;
@@ -24,39 +25,55 @@ public class SessionThread extends Thread {
     }
 
     public void run() {
-        Thread.currentThread().setName("SessionThread" + (++ThreadCounter) +
-                socket.getRemoteSocketAddress());
+        Thread.currentThread().setName("SessionThread" + (++ThreadCounter));
+        Logger.INFO("Connection with " + socket.getRemoteSocketAddress());
         while(!isInterrupted()) {
-            receiveIntoInBuffer();
-            if(inBuffer.length() <= 0) {
-                continue;
+            emptyBuffers();
+            try {
+                if(inStream.available() <= 0) {
+                    Thread.sleep(50);
+                    continue;
+                }
+            } catch (IOException | InterruptedException e) {
+                Logger.INFO("Awaiting receive, e=" + e.getMessage());
             }
-            lastActivity = LocalDateTime.now();
-            Logger.INFO("Received RQST" + (++requestCounter) + "\n" + inBuffer.toString());
-            // Diagnostic
-            if(requestCounter > 10) {
-                break;
+            if(receiveIntoInBuffer() > 0) {
+                synchronized (lastActivityLock) {
+                    lastActivity = LocalDateTime.now();
+                }
+                HttpRequest request = new HttpRequest(inBuffer.toString());
             }
         }
     }
 
-    private void receiveIntoInBuffer() {
+    public long beenIdleForHowLong() {
+        synchronized (lastActivityLock) {
+            // TODO
+        }
+        return 1L;
+    }
+
+    private void emptyBuffers() {
+        outBuffer = new StringBuilder();
         inBuffer = new StringBuilder();
-        byte[] buffer = new byte[1024];
+        bytesReadThisTime = 0;
+    }
+
+    private int receiveIntoInBuffer() {
+        byte[] buffer = new byte[10000];
         int bytesRead;
         try {
-            while ((bytesRead = inStream.read(buffer)) != -1) {
-                inBuffer.append(new String(buffer, 0, bytesRead));
+            while((bytesRead = inStream.available()) > 0) {
+                bytesRead = inStream.read(buffer, 0, Math.min(buffer.length, bytesRead));
+                String content = new String(buffer, 0, bytesRead);
+                inBuffer.append(content);
             }
         } catch (IOException e) {
             Logger.INFO("receiveIntoInBuffer" + e.getMessage());
             throw new RuntimeException(e);
         }
-    }
-
-    private long idleForHowLong() {
-
-        return 1L;
+        bytesReadThisTime = inBuffer.length() - bytesReadThisTime;
+        return bytesReadThisTime;
     }
 
     private void sendFromOutBuffer() {
