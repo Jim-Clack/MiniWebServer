@@ -3,11 +3,14 @@ package com.jc;
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class SessionThread extends Thread {
 
     private static int ThreadCounter = 0;
 
+    private String threadName = "?";
+    private String clientIp = "?";
     private final Socket socket;
     private final Integer lastActivityLock = Integer.valueOf(0);
     private LocalDateTime lastActivity = LocalDateTime.now();
@@ -25,8 +28,11 @@ public class SessionThread extends Thread {
     }
 
     public void run() {
-        Thread.currentThread().setName("SessionThread" + (++ThreadCounter));
-        Logger.INFO("Connection with " + socket.getRemoteSocketAddress());
+        threadName = "SessionThread" + (++ThreadCounter);
+        Thread.currentThread().setName(threadName);
+        clientIp = socket.getRemoteSocketAddress().toString();
+        Logger.INFO("Connection with " + clientIp);
+        System.out.println("\n### Connect " + threadName + " with " + clientIp);
         while(!isInterrupted()) {
             emptyBuffers();
             try {
@@ -36,6 +42,7 @@ public class SessionThread extends Thread {
                 }
             } catch (IOException | InterruptedException e) {
                 Logger.INFO("Awaiting receive, e=" + e.getMessage());
+                break;
             }
             if(receiveIntoInBuffer() > 0) {
                 synchronized (lastActivityLock) {
@@ -48,10 +55,19 @@ public class SessionThread extends Thread {
     }
 
     public long beenIdleForHowLong() {
+        long seconds = 0;
         synchronized (lastActivityLock) {
-            // TODO
+            seconds = ChronoUnit.SECONDS.between(lastActivity, LocalDateTime.now());
         }
-        return 1L;
+        return seconds;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public String getAddressAndPort() {
+        return clientIp;
     }
 
     private void emptyBuffers() {

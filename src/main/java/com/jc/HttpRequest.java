@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class HttpRequest {
 
-    int code = 0;
+    int code = 10;
     String method = "?";
     String url = "?";
     String version = "?";
@@ -17,16 +17,16 @@ public class HttpRequest {
         String[] lines = content.split("\n");
         String[] tokens = lines[0].split(" ");
         if(tokens.length < 3) {
-            code = 400; // TODO
+            code = 9; // TODO
         } else {
             method = tokens[0].trim();
             url = tokens[1].trim();
             version = tokens[2].trim();
         }
-        if(method.equals("GET") && version.equals("1.1")) {
-            code = 200;
+        if(method.equals("GET") && version.equals("HTTP/1.1")) {
+            code = 0;
         }
-        Logger.INFO("HttpRequest code=" + code + " method=" + method + " url=" + url + " version=" + version);
+        Logger.INFO("HttpRequest code=" + code + ", method=" + method + ", url=" + url + ", version=" + version);
         for(lineIndex = 1; lineIndex < lines.length; lineIndex++) {
             String line = lines[lineIndex].trim();
             if(line.length() <= 0) {

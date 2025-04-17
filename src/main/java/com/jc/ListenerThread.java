@@ -30,9 +30,13 @@ public class ListenerThread extends Thread {
             if(socket != null) {
                 Logger.INFO("Connection " + socket.getInetAddress().getCanonicalHostName() +
                         " / " + socket.getInetAddress().getHostAddress());
-                manager.acceptSession(socket);
+                manager.createSession(socket);
             }
         }
+    }
+
+    public String getAddressAndPort() {
+        return serverSocket.getInetAddress().getHostAddress() + ":" + serverSocket.getLocalPort();
     }
 
     public void stopWaiting() {

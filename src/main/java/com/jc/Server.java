@@ -11,7 +11,10 @@ public class Server
         ServerManager manager = new ServerManager();
         listener = new ListenerThread(manager, configuration);
         listener.start();
-        listener.join();
+        manager.console(listener);
+        manager.killThreads(0L);
+        Thread.yield();
+        listener.interrupt();
     }
 
     public static void shutDown() {
