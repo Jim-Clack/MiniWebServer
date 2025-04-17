@@ -5,7 +5,11 @@ package com.jc;
  */
 public class Logger {
 
-    private static Logger instance = new Logger();
+    private static final Logger instance = new Logger();
+
+    private Logger() {
+        // singleton
+    }
 
     public void log(int level, String message, Throwable throwable) {
         System.err.println(Thread.currentThread().getName() + ">>> " + message);

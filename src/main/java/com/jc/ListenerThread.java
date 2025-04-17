@@ -28,7 +28,7 @@ public class ListenerThread extends Thread {
                 Logger.INFO("Listener accept(): " + e.getMessage());
             }
             if(socket != null) {
-                manager.createSession(socket);
+                manager.createSession(socket, configuration);
             }
         }
     }

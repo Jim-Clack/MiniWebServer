@@ -5,45 +5,56 @@ import java.util.Map;
 
 public class HttpRequest {
 
-    int code = 10;
+    Map<String, String> headers = new HashMap<>();
+    StringBuilder body = new StringBuilder();
+    ErrorCode errorCode = ErrorCode.UNINITIALIZED;
     String method = "?";
     String url = "?";
     String version = "?";
-    Map<String, String> headers = new HashMap<>();
-    StringBuilder body = new StringBuilder();
 
     public HttpRequest(String content) {
         int lineIndex;
         String[] lines = content.split("\n");
         String[] tokens = lines[0].split(" ");
         if(tokens.length < 3) {
-            code = 9; // TODO
+            errorCode = ErrorCode.BAD_FIRST_LINE;
         } else {
+            errorCode = ErrorCode.OK;
             method = tokens[0].trim();
             url = tokens[1].trim();
             version = tokens[2].trim();
         }
-        if(method.equals("GET") && version.equals("HTTP/1.1")) {
-            code = 0;
+        if(!method.equals("GET")) {
+            errorCode = ErrorCode.ILLEGAL_METHOD;
         }
-        Logger.INFO("HttpRequest code=" + code + ", method=" + method + ", url=" + url + ", version=" + version);
+        if(!version.equals("HTTP/1.1")) {
+            errorCode = ErrorCode.UNSUPPORTED_VERSION;
+        }
+        Logger.INFO("HttpRequest code=" + errorCode + ", method=" + method + ", url=" + url + ", version=" + version);
         for(lineIndex = 1; lineIndex < lines.length; lineIndex++) {
             String line = lines[lineIndex].trim();
             if(line.length() <= 0) {
                 break;
             }
-            String[] fields = line.split("[:,]");
+            String[] fields = line.split("[:,]", 1);
+            if(fields.length < 2) {
+                Logger.INFO("Bad Header: " + line);
+                errorCode = ErrorCode.BAD_HEADER;
+            }
             headers.put(fields[0].trim(), fields[1].trim());
             Logger.INFO("HttpRequest header key=" + fields[0].trim() + ", value=" + fields[1].trim());
         }
         for(; lineIndex < lines.length; lineIndex++) {
             body.append(lines[lineIndex]).append("\n");
+            if(body.toString().trim().isEmpty()) {
+                errorCode = ErrorCode.EMPTY_BODY;
+            }
         }
         Logger.INFO("HttpRequest body=\n" + body.toString());
     }
 
-    public int getCode() {
-        return code;
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 
     public String getMethod() {

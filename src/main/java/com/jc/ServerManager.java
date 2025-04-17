@@ -10,10 +10,10 @@ public class ServerManager {
 
     private final List<SessionThread> sessions = new LinkedList<>();
 
-    public void createSession(Socket socket) {
+    public void createSession(Socket socket, IConfiguration configuration) {
         SessionThread sessionThread;
         try {
-            sessionThread = new SessionThread(socket);
+            sessionThread = new SessionThread(socket, configuration);
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
@@ -21,8 +21,7 @@ public class ServerManager {
         }
     }
 
-    public int discardDeadSessions() {
-        int discardCount = 0;
+    public void discardDeadSessions() {
         List<SessionThread> deadSessions = new LinkedList<>();
         for(SessionThread sessionThread : sessions) {
             if(!sessionThread.isAlive()) {
@@ -31,9 +30,7 @@ public class ServerManager {
         }
         for(SessionThread deadThread : deadSessions) {
             sessions.remove(deadThread);
-            ++discardCount;
         }
-        return discardCount;
     }
 
     public int killThreads(long maxIdleSeconds) {
@@ -55,7 +52,9 @@ public class ServerManager {
             System.out.println("  Alive:   " + sessionThread.isAlive());
             System.out.println("  Idle:    " + sessionThread.beenIdleForHowLong());
             System.out.println("  Client:  " + sessionThread.getAddressAndPort());
-            threadCount++;
+            if(sessionThread.isAlive()) {
+                threadCount++;
+            }
         }
         discardDeadSessions();
         return threadCount;
@@ -82,10 +81,10 @@ public class ServerManager {
                     System.out.println("Number of sessions killed: " + killThreads(60));
                     break;
                 case 'A': case 'P':
-                    System.out.println(listener.getAddressAndPort());
+                    System.out.println("Server address and port: " + listener.getAddressAndPort());
                     break;
                 case 'S':
-                    System.out.println("Number of sessions: " + listThreads());
+                    System.out.println("Number of Alive sessions: " + listThreads());
                     break;
                 default:
                     System.out.println("Invalid command");

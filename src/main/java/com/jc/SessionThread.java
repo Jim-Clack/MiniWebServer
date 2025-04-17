@@ -11,8 +11,9 @@ public class SessionThread extends Thread {
 
     private String threadName = "?";
     private String clientIp = "?";
+    private final IConfiguration configuration;
     private final Socket socket;
-    private final Integer lastActivityLock = Integer.valueOf(0);
+    private final Integer lastActivityLock = 0;
     private LocalDateTime lastActivity = LocalDateTime.now();
     private final InputStream inStream;
     private final OutputStream outStream;
@@ -20,13 +21,15 @@ public class SessionThread extends Thread {
     private StringBuilder outBuffer;
     private int bytesReadThisTime;
 
-    public SessionThread(Socket socket) throws IOException {
+    public SessionThread(Socket socket, IConfiguration configuration) throws IOException {
+        this.configuration = configuration;
         this.socket = socket;
         inStream = socket.getInputStream();
         outStream = socket.getOutputStream();
         this.setDaemon(true);
     }
 
+    @SuppressWarnings({"all"})
     public void run() {
         threadName = "SessionThread" + (++ThreadCounter);
         Thread.currentThread().setName(threadName);
@@ -34,22 +37,17 @@ public class SessionThread extends Thread {
         Logger.INFO("Connection with " + clientIp);
         System.out.println("\n### Connect " + threadName + " with " + clientIp);
         while(!isInterrupted()) {
-            clearInBuffer();
             try {
                 if(inStream.available() <= 0) {
                     Thread.sleep(50);
                     continue;
                 }
             } catch (IOException | InterruptedException e) {
-                Logger.INFO("Awaiting receive, e=" + e.getMessage());
                 break;
             }
+            clearInBuffer();
             if(receiveIntoInBuffer() > 0) {
-                synchronized (lastActivityLock) {
-                    lastActivity = LocalDateTime.now();
-                }
-                HttpRequest request = new HttpRequest(inBuffer.toString());
-                // TODO - HttpResponse
+                handleRequest();
             }
         }
     }
@@ -70,11 +68,21 @@ public class SessionThread extends Thread {
         return clientIp;
     }
 
+    private void handleRequest() {
+        synchronized (lastActivityLock) {
+            lastActivity = LocalDateTime.now();
+        }
+        HttpRequest request = new HttpRequest(inBuffer.toString());
+        HttpResponse response = new HttpResponse(request, configuration);
+        int code = response.respond(socket);
+    }
+
     private void clearInBuffer() {
         inBuffer = new StringBuilder();
         bytesReadThisTime = 0;
     }
 
+    @SuppressWarnings({"all"})
     private int receiveIntoInBuffer() {
         byte[] buffer = new byte[10000];
         int bytesRead;
