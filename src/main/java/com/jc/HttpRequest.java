@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class HttpRequest {
 
-    Map<String, String> headers = new HashMap<>();
-    StringBuilder body = new StringBuilder();
-    ErrorCode errorCode = ErrorCode.UNINITIALIZED;
-    String method = "?";
-    String url = "?";
-    String version = "?";
+    private Map<String, String> headers = new HashMap<>();
+    private StringBuilder body = new StringBuilder();
+    private ErrorCode errorCode = ErrorCode.UNINITIALIZED;
+    private String method = "?";
+    private String url = "?";
+    private String version = "?";
 
     public HttpRequest(String content) {
         int lineIndex;

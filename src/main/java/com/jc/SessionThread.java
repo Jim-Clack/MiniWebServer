@@ -53,7 +53,7 @@ public class SessionThread extends Thread {
     }
 
     public long beenIdleForHowLong() {
-        long seconds = 0;
+        long seconds;
         synchronized (lastActivityLock) {
             seconds = ChronoUnit.SECONDS.between(lastActivity, LocalDateTime.now());
         }
