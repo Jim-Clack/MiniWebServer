@@ -74,7 +74,7 @@ public class SessionThread extends Thread {
         }
         HttpRequest request = new HttpRequest(inBuffer.toString());
         HttpResponse response = new HttpResponse(request, configuration);
-        int code = response.respond(socket);
+        ResponseCode code = response.respond(socket);
     }
 
     private void clearInBuffer() {

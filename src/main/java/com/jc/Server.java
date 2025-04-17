@@ -7,8 +7,6 @@ public class Server
     /**
      * Server.main()
      * @param args portNumber and rootPath - both are optional
-     * @throws IOException
-     * @throws InterruptedException
      * @apiNote settings can be set via configuration, properties, or command-line
      */
     public static void main(String[] args) throws IOException, InterruptedException {
