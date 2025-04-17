@@ -8,7 +8,7 @@ public class Logger {
     private static Logger instance = new Logger();
 
     public void log(int level, String message, Throwable throwable) {
-        System.out.println(Thread.currentThread().getName() + ">>> " + message);
+        System.err.println(Thread.currentThread().getName() + ">>> " + message);
     }
 
     public static void INFO(String message) {

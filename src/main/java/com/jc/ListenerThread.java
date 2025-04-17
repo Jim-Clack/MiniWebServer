@@ -19,8 +19,8 @@ public class ListenerThread extends Thread {
 
     public void run() {
         this.setName("ListenerThread");
+        Logger.INFO("Listening on port: " + configuration.getPortNumber());
         while (!isInterrupted()) {
-            Logger.INFO("Listening on port: " + configuration.getPortNumber());
             Socket socket = null;
             try {
                 socket = serverSocket.accept();
@@ -28,8 +28,6 @@ public class ListenerThread extends Thread {
                 Logger.INFO("Listener accept(): " + e.getMessage());
             }
             if(socket != null) {
-                Logger.INFO("Connection " + socket.getInetAddress().getCanonicalHostName() +
-                        " / " + socket.getInetAddress().getHostAddress());
                 manager.createSession(socket);
             }
         }
@@ -37,12 +35,6 @@ public class ListenerThread extends Thread {
 
     public String getAddressAndPort() {
         return serverSocket.getInetAddress().getHostAddress() + ":" + serverSocket.getLocalPort();
-    }
-
-    public void stopWaiting() {
-        Logger.INFO("Listener terminating");
-        manager.killThreads(0L);
-        this.interrupt();
     }
 
 }

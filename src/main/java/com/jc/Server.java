@@ -14,11 +14,8 @@ public class Server
         manager.console(listener);
         manager.killThreads(0L);
         Thread.yield();
+        Logger.INFO("Done!");
         listener.interrupt();
     }
 
-    public static void shutDown() {
-        Logger.INFO("Done!");
-        listener.stopWaiting();
-    }
 }

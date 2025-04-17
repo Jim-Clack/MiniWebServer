@@ -34,7 +34,7 @@ public class SessionThread extends Thread {
         Logger.INFO("Connection with " + clientIp);
         System.out.println("\n### Connect " + threadName + " with " + clientIp);
         while(!isInterrupted()) {
-            emptyBuffers();
+            clearInBuffer();
             try {
                 if(inStream.available() <= 0) {
                     Thread.sleep(50);
@@ -49,7 +49,7 @@ public class SessionThread extends Thread {
                     lastActivity = LocalDateTime.now();
                 }
                 HttpRequest request = new HttpRequest(inBuffer.toString());
-                // TODO
+                // TODO - HttpResponse
             }
         }
     }
@@ -70,8 +70,7 @@ public class SessionThread extends Thread {
         return clientIp;
     }
 
-    private void emptyBuffers() {
-        outBuffer = new StringBuilder();
+    private void clearInBuffer() {
         inBuffer = new StringBuilder();
         bytesReadThisTime = 0;
     }

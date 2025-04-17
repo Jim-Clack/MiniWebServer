@@ -52,7 +52,7 @@ public class ServerManager {
         int threadCount = 0;
         for(SessionThread sessionThread : sessions) {
             System.out.println(sessionThread.getThreadName());
-            System.out.println("  Alive?   " + sessionThread.isAlive());
+            System.out.println("  Alive:   " + sessionThread.isAlive());
             System.out.println("  Idle:    " + sessionThread.beenIdleForHowLong());
             System.out.println("  Client:  " + sessionThread.getAddressAndPort());
             threadCount++;
@@ -73,8 +73,6 @@ public class ServerManager {
             } while(input.isEmpty());
             switch(input.charAt(0)) {
                 case 'X': case 'Q':
-                    System.out.println("Bye");
-                    Thread.yield();
                     running = false;
                     break;
                 case 'H': case '?':
