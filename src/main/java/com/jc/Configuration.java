@@ -8,7 +8,7 @@ import java.io.File;
 public class Configuration implements IConfiguration {
 
     private int portNumber = 12345;
-    private String rootPath = "${user.home}/webroot";
+    private String rootPath = "C:/Users/jimcl/webroot";
 
     public Configuration() {
         this.portNumber = Integer.parseInt(

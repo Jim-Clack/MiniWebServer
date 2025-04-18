@@ -4,7 +4,7 @@ public enum ResponseCode {
 
     RC_CONTINUE(100, "Continue"),
     RC_SWITCHING_PROTOCOLS(101, "Switching Protocols"),
-    RC_OK(200, "Ok"),
+    RC_OK(200, "OK"),
     RC_CREATED(201, "Created"),
     RC_ACCEPTED(202, "Accepted"),
     RC_NON_AUTHORITATIVE_INFORMATION(203, "Non-Authoritative Information"),

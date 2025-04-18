@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class HttpRequest {
 
-    private Map<String, String> headers = new HashMap<>();
-    private StringBuilder body = new StringBuilder();
+    private final Map<String, String> headers = new HashMap<>();
+    private final StringBuilder body = new StringBuilder();
     private ErrorCode errorCode = ErrorCode.UNINITIALIZED;
     private String method = "?";
     private String url = "?";
@@ -36,13 +36,13 @@ public class HttpRequest {
             if(line.length() <= 0) {
                 break;
             }
-            String[] fields = line.split("[:,]", 1);
+            String[] fields = line.split("[:,]", 2);
             if(fields.length < 2) {
                 Logger.INFO("Bad Header: " + line);
                 errorCode = ErrorCode.BAD_HEADER;
             }
             headers.put(fields[0].trim(), fields[1].trim());
-            Logger.INFO("HttpRequest header key=" + fields[0].trim() + ", value=" + fields[1].trim());
+            // Logger.INFO("HttpRequest header key=" + fields[0].trim() + ", value=" + fields[1].trim());
         }
         for(; lineIndex < lines.length; lineIndex++) {
             body.append(lines[lineIndex]).append("\n");
@@ -50,7 +50,7 @@ public class HttpRequest {
                 errorCode = ErrorCode.EMPTY_BODY;
             }
         }
-        Logger.INFO("HttpRequest body=\n" + body.toString());
+        // Logger.INFO("HttpRequest body=\n" + body.toString());
     }
 
     public ErrorCode getErrorCode() {

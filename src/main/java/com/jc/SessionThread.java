@@ -2,6 +2,7 @@ package com.jc;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -69,12 +70,14 @@ public class SessionThread extends Thread {
     }
 
     private void handleRequest() {
-        synchronized (lastActivityLock) {
-            lastActivity = LocalDateTime.now();
-        }
         HttpRequest request = new HttpRequest(inBuffer.toString());
         HttpResponse response = new HttpResponse(request, configuration);
         ResponseCode code = response.respond(socket);
+        outBuffer = response.getContent();
+        sendFromOutBuffer();
+        synchronized (lastActivityLock) {
+            lastActivity = LocalDateTime.now();
+        }
     }
 
     private void clearInBuffer() {
@@ -102,7 +105,9 @@ public class SessionThread extends Thread {
 
     private void sendFromOutBuffer() {
         try {
-            outStream.write(outBuffer.toString().getBytes());
+            String s = outBuffer.toString();
+            byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+            outStream.write(outBuffer.toString().getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             Logger.INFO("sendFromOutBuffer" + e.getMessage());
             throw new RuntimeException(e);
