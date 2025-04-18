@@ -19,7 +19,6 @@ public class SessionThread extends Thread {
     private final InputStream inStream;
     private final OutputStream outStream;
     private StringBuilder inBuffer;
-    private StringBuilder outBuffer;
     private int bytesReadThisTime;
 
     public SessionThread(Socket socket, IConfiguration configuration) throws IOException {
@@ -73,8 +72,7 @@ public class SessionThread extends Thread {
         HttpRequest request = new HttpRequest(inBuffer.toString());
         HttpResponse response = new HttpResponse(request, configuration);
         ResponseCode code = response.respond(socket);
-        outBuffer = response.getContent();
-        sendFromOutBuffer();
+        sendResponse(response.getContent());
         synchronized (lastActivityLock) {
             lastActivity = LocalDateTime.now();
         }
@@ -103,13 +101,11 @@ public class SessionThread extends Thread {
         return bytesReadThisTime;
     }
 
-    private void sendFromOutBuffer() {
+    private void sendResponse(byte[] content) {
         try {
-            String s = outBuffer.toString();
-            byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
-            outStream.write(outBuffer.toString().getBytes(StandardCharsets.UTF_8));
+            outStream.write(content);
         } catch (IOException e) {
-            Logger.INFO("sendFromOutBuffer" + e.getMessage());
+            Logger.INFO("sendRewsponse" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
