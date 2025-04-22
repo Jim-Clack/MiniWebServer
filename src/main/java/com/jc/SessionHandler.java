@@ -26,16 +26,8 @@ public class SessionHandler {
     }
 
     public void sessionLoop() {
-        while(Thread.currentThread().isInterrupted()) {
-            try {
-                if(inStream.available() <= 0) {
-                    Thread.sleep(50);
-                    continue;
-                }
-            } catch (IOException | InterruptedException e) {
-                break;
-            }
-            clearInBuffer();
+        while(!Thread.currentThread().isInterrupted()) {
+            clearBuffers();
             if(receiveIntoInBuffer() > 0) {
                 handleRequest();
             }
@@ -50,7 +42,7 @@ public class SessionHandler {
         return seconds;
     }
 
-    private void clearInBuffer() {
+    private void clearBuffers() {
         inBuffer = new StringBuilder();
         bytesReadThisTime = 0;
     }
@@ -59,6 +51,7 @@ public class SessionHandler {
         HttpRequest request = new HttpRequest(inBuffer.toString());
         HttpResponse response = new HttpResponse(request, configuration);
         ResponseCode code = response.generateContent(socket);
+        // currently supports only simple HTTP file transfer
         sendResponse(response.getContent());
         synchronized (lastActivityLock) {
             lastActivity = LocalDateTime.now();
@@ -68,12 +61,15 @@ public class SessionHandler {
     @SuppressWarnings({"all"})
     private int receiveIntoInBuffer() {
         byte[] buffer = new byte[10000];
+        int offset = 1;
         int bytesRead;
         try {
-            while((bytesRead = inStream.available()) > 0) {
-                bytesRead = inStream.read(buffer, 0, Math.min(buffer.length, bytesRead));
-                String content = new String(buffer, 0, bytesRead);
+            inStream.read(buffer, 0, 1);
+            while((bytesRead = inStream.available()) > 0) { // read remainder of message
+                bytesRead = inStream.read(buffer, offset, Math.min(buffer.length - offset, bytesRead));
+                String content = new String(buffer, 0, bytesRead + offset);
                 inBuffer.append(content);
+                offset = 0;
             }
         } catch (IOException e) {
             Logger.WARN("receiveIntoInBuffer" + e.getMessage());

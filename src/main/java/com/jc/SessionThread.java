@@ -13,7 +13,7 @@ public class SessionThread extends Thread {
 
     public SessionThread(Socket socket, Configuration configuration) throws IOException {
         this.setDaemon(true);
-        String clientIp = socket.getRemoteSocketAddress().toString();
+        clientIp = socket.getRemoteSocketAddress().toString();
         Logger.INFO("Starting - connection with " + clientIp);
         System.out.println("\n### Connection with " + clientIp);
         handler = new SessionHandler(socket, configuration);
