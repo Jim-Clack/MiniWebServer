@@ -4,20 +4,19 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ServerManager {
 
     private final List<SessionThread> sessions = new LinkedList<>();
 
-    public void createSession(Socket socket, IConfiguration configuration) {
+    public void createSession(Socket socket, Configuration configuration) {
         SessionThread sessionThread;
         try {
             sessionThread = new SessionThread(socket, configuration);
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
-            Logger.INFO("acceptSession: " + e.getMessage());
+            Logger.ERROR("ServerManager acceptSession error: " + e.getMessage());
         }
     }
 
@@ -33,7 +32,7 @@ public class ServerManager {
         }
     }
 
-    public int killThreads(long maxIdleSeconds) {
+    public int killIdleSessions(long maxIdleSeconds) {
         int killCount = 0;
         for(SessionThread sessionThread : sessions) {
             if(sessionThread.beenIdleForHowLong() >= maxIdleSeconds) {
@@ -45,7 +44,7 @@ public class ServerManager {
         return killCount;
     }
 
-    public int listThreads() {
+    public int listAllSessions() {
         int threadCount = 0;
         for(SessionThread sessionThread : sessions) {
             System.out.println(sessionThread.getThreadName());
@@ -60,37 +59,5 @@ public class ServerManager {
         return threadCount;
     }
 
-    public void console(ListenerThread listener) {
-        System.out.println("Web Server is up and running...");
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
-        String input;
-        while(running) {
-            do {
-                System.out.print("ws>");
-                input = scanner.nextLine().trim().toUpperCase();
-            } while(input.isEmpty());
-            switch(input.charAt(0)) {
-                case 'X': case 'Q':
-                    running = false;
-                    break;
-                case 'H': case '?':
-                    System.out.println("Help, Sessions, KillIdle, Quit, Address");
-                    break;
-                case 'K':
-                    System.out.println("Number of sessions killed: " + killThreads(60));
-                    break;
-                case 'A': case 'P':
-                    System.out.println("Server address and port: " + listener.getAddressAndPort());
-                    break;
-                case 'S':
-                    System.out.println("Number of Alive sessions: " + listThreads());
-                    break;
-                default:
-                    System.out.println("Invalid command");
-                    break;
-            }
-        }
-    }
 
 }

@@ -13,44 +13,10 @@ public class HttpRequest {
     private String version = "?";
 
     public HttpRequest(String content) {
-        int lineIndex;
         String[] lines = content.split("\n");
-        String[] tokens = lines[0].split(" ");
-        if(tokens.length < 3) {
-            errorCode = ErrorCode.BAD_FIRST_LINE;
-        } else {
-            errorCode = ErrorCode.OK;
-            method = tokens[0].trim();
-            url = tokens[1].trim();
-            version = tokens[2].trim();
-        }
-        if(!method.equals("GET")) {
-            errorCode = ErrorCode.ILLEGAL_METHOD;
-        }
-        if(!version.equals("HTTP/1.1")) {
-            errorCode = ErrorCode.UNSUPPORTED_VERSION;
-        }
-        Logger.INFO("HttpRequest code=" + errorCode + ", method=" + method + ", url=" + url + ", version=" + version);
-        for(lineIndex = 1; lineIndex < lines.length; lineIndex++) {
-            String line = lines[lineIndex].trim();
-            if(line.length() <= 0) {
-                break;
-            }
-            String[] fields = line.split("[:,]", 2);
-            if(fields.length < 2) {
-                Logger.INFO("Bad Header: " + line);
-                errorCode = ErrorCode.BAD_HEADER;
-            }
-            headers.put(fields[0].trim(), fields[1].trim());
-            // Logger.INFO("HttpRequest header key=" + fields[0].trim() + ", value=" + fields[1].trim());
-        }
-        for(; lineIndex < lines.length; lineIndex++) {
-            body.append(lines[lineIndex]).append("\n");
-            if(body.toString().trim().isEmpty()) {
-                errorCode = ErrorCode.EMPTY_BODY;
-            }
-        }
-        // Logger.INFO("HttpRequest body=\n" + body.toString());
+        parseLineOne(lines);
+        int lineIndex = parseHeaders(lines);
+        parseBody(lineIndex, lines);
     }
 
     public ErrorCode getErrorCode() {
@@ -76,5 +42,54 @@ public class HttpRequest {
     public String getBody() {
         return body.toString();
     }
+
+    private void parseLineOne(String[] lines) {
+        String[] tokens = lines[0].split(" ");
+        if(tokens.length < 3) {
+            errorCode = ErrorCode.BAD_FIRST_LINE;
+        } else {
+            errorCode = ErrorCode.OK;
+            method = tokens[0].trim();
+            url = tokens[1].trim();
+            version = tokens[2].trim();
+        }
+        if(!method.equals("GET")) {
+            errorCode = ErrorCode.ILLEGAL_METHOD;
+        }
+        if(!version.equals("HTTP/1.1")) {
+            errorCode = ErrorCode.UNSUPPORTED_VERSION;
+        }
+        Logger.DEBUG("HttpRequest code=" + errorCode + ", method=" + method + ", url=" + url + ", version=" + version);
+    }
+
+    private int parseHeaders(String[] lines) {
+        int lineIndex;
+        for(lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+            String line = lines[lineIndex].trim();
+            if(line.isEmpty()) {
+                break;
+            }
+            String[] fields = line.split("[:,]", 2);
+            if(fields.length < 2) {
+                Logger.WARN("Bad Header in HttpRequest: " + line);
+                errorCode = ErrorCode.BAD_HEADER;
+            }
+            headers.put(fields[0].trim(), fields[1].trim());
+            Logger.TRACE("HttpRequest header key=" + fields[0].trim() + ", value=" + fields[1].trim());
+        }
+        return lineIndex;
+    }
+
+    private void parseBody(int lineIndex, String[] lines) {
+        for(; lineIndex < lines.length; lineIndex++) {
+            body.append(lines[lineIndex]).append("\n");
+        }
+        if(body.toString().trim().isEmpty()) {
+            errorCode = ErrorCode.EMPTY_BODY;
+        } else {
+            Logger.TRACE("HttpRequest body=\n" + body.toString());
+        }
+    }
+
 }
 

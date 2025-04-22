@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Simple class just for testing
  */
-public class Configuration implements IConfiguration {
+public class Configuration {
 
     private int portNumber = 12345;
     private String rootPath = "C:/Users/jimcl/webroot";
@@ -17,10 +17,11 @@ public class Configuration implements IConfiguration {
                 System.getProperty("MiniWebServer.rootPath", this.rootPath);
     }
 
-    @SuppressWarnings("all")
     public int getPortNumber() {
         File rootPathFile = new File(this.rootPath);
-        rootPathFile.mkdirs();
+        if(!rootPathFile.exists()) {
+            throw new RuntimeException("Web root path does not exist: " + rootPathFile.toString());
+        }
         return portNumber;
     }
 
