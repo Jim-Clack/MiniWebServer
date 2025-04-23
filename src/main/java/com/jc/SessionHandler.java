@@ -26,11 +26,9 @@ public class SessionHandler {
     }
 
     public void sessionLoop() {
-        while(!Thread.currentThread().isInterrupted()) {
-            clearBuffers();
-            if(receiveIntoInBuffer() > 0) {
-                handleRequest();
-            }
+        clearBuffers();
+        if(receiveIntoInBuffer() > 0) {
+            handleRequest();
         }
     }
 
@@ -72,8 +70,10 @@ public class SessionHandler {
                 offset = 0;
             }
         } catch (IOException e) {
+            if(Thread.currentThread().isInterrupted()) {
+                return 0;
+            }
             Logger.WARN("receiveIntoInBuffer" + e.getMessage());
-            throw new RuntimeException(e);
         }
         bytesReadThisTime = inBuffer.length() - bytesReadThisTime;
         return bytesReadThisTime;

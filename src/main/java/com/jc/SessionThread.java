@@ -10,9 +10,11 @@ public class SessionThread extends Thread {
     private String threadName = "?";
     private final SessionHandler handler;
     private String clientIp;
+    private final Socket socket;
 
     public SessionThread(Socket socket, Configuration configuration) throws IOException {
         this.setDaemon(true);
+        this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
         Logger.INFO("Starting - connection with " + clientIp);
         System.out.println("\n### Connection with " + clientIp);
@@ -23,7 +25,18 @@ public class SessionThread extends Thread {
     public void run() {
         threadName = "SessionThread" + (++ThreadCounter);
         Thread.currentThread().setName(threadName);
-        handler.sessionLoop();
+        while(!isInterrupted()) {
+            handler.sessionLoop();
+        }
+    }
+
+    public void closeSocket() {
+        // necessary because java threads don't interrupt sockets which are at a lower level
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("closeSocket " + e.getMessage());
+        }
     }
 
     public long beenIdleForHowLong() {

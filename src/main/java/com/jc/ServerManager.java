@@ -37,6 +37,7 @@ public class ServerManager {
         for(SessionThread sessionThread : sessions) {
             if(sessionThread.beenIdleForHowLong() >= maxIdleSeconds) {
                 sessionThread.interrupt();
+                sessionThread.closeSocket();
                 ++killCount;
             }
         }

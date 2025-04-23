@@ -13,10 +13,14 @@ public class Logger {
 
     private static final Logger instance = new Logger();
 
-    private final int level = LOGLEVEL_WARN;
+    private int level = LOGLEVEL_WARN;
 
     private Logger() {
         // sloppy singleton
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public void log(int level, String message, Throwable throwable) {

@@ -5,6 +5,9 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HttpResponse {
 
@@ -69,12 +72,15 @@ public class HttpResponse {
 
     private void createHeaders(String pathToFile, int contentLength) {
         String line1 = request.getVersion() + " " + responseCode.getNumValue() + " " + responseCode.getTextValue() + "\n";
+        DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
+        // Thu, 17 Apr 2025 23:25:14 GMT
+        String now = dateFormat.format(new Date());
         headerBuffer.append(line1);
-        headerBuffer.append("location: http://localhost\n");              // TODO
+        headerBuffer.append("location: http://localhost\n"); // TODO
         headerBuffer.append("content-type: text/html; charset=UTF-8\n");
-        headerBuffer.append("date: Thu, 17 Apr 2025 23:25:14 GMT\n");     // TODO
-        headerBuffer.append("expires: Sat, 17 May 2025 23:25:14 GMT\n");  // TODO
-        headerBuffer.append("cache-control: public, max-age=2592000\n");
+        headerBuffer.append("date: " + now + "\n");
+        headerBuffer.append("expires: " + now + "\n");
+        headerBuffer.append("cache-control: public, max-age=5000\n");
         headerBuffer.append("server: mini\n");
         headerBuffer.append("content-length: " + contentLength + "\n");
         headerBuffer.append("x-xss-protection: 0\n");
