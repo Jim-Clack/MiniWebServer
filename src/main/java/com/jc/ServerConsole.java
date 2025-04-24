@@ -27,7 +27,7 @@ public class ServerConsole {
                     running = false;
                     break;
                 case 'H': case '?':
-                    System.out.println("Help, Sessions, KillIdle, Quit, Address");
+                    System.out.println("[H]elp, [S]essions, [K]illIdle, [A]ddress, [Q]uit");
                     break;
                 case 'K':
                     System.out.println("Number of sessions killed: " + manager.killIdleSessions(60));
