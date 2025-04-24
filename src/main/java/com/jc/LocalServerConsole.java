@@ -2,12 +2,12 @@ package com.jc;
 
 import java.util.Scanner;
 
-public class ServerConsole {
+public class LocalServerConsole {
 
     private final ServerManager manager;
     private final ListenerThread listener;
 
-    public ServerConsole(ServerManager manager, ListenerThread listener) {
+    public LocalServerConsole(ServerManager manager, ListenerThread listener) {
         this.manager = manager;
         this.listener = listener;
     }
@@ -36,7 +36,7 @@ public class ServerConsole {
                     System.out.println("Server address and port: " + listener.getAddressAndPort());
                     break;
                 case 'S':
-                    System.out.println("Number of Alive sessions: " + manager.listAllSessions());
+                    System.out.println(manager.listAllSessions());
                     break;
                 default:
                     System.out.println("Invalid command");

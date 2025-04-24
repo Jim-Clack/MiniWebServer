@@ -12,7 +12,7 @@ public class ServerManager {
     public void createSession(Socket socket, Configuration configuration) {
         SessionThread sessionThread;
         try {
-            sessionThread = new SessionThread(socket, configuration);
+            sessionThread = new SessionThread(socket, configuration, this);
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
@@ -45,19 +45,23 @@ public class ServerManager {
         return killCount;
     }
 
-    public int listAllSessions() {
+    public String listAllSessions() {
         int threadCount = 0;
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("--------------------------------------\n");
         for(SessionThread sessionThread : sessions) {
-            System.out.println(sessionThread.getThreadName());
-            System.out.println("  Alive:   " + sessionThread.isAlive());
-            System.out.println("  Idle:    " + sessionThread.beenIdleForHowLong());
-            System.out.println("  Client:  " + sessionThread.getAddressAndPort());
+            buffer.append(sessionThread.getThreadName() + "\n");
+            buffer.append("  Alive:   " + sessionThread.isAlive() + "\n");
+            buffer.append("  Idle:    " + sessionThread.beenIdleForHowLong() + "\n");
+            buffer.append("  Client:  " + sessionThread.getAddressAndPort() + "\n");
+            buffer.append("  ------------------------------------\n");
             if(sessionThread.isAlive()) {
                 threadCount++;
             }
         }
+        buffer.append("Number of Alive sessions: " + threadCount + "\n");
         discardDeadSessions();
-        return threadCount;
+        return buffer.toString();
     }
 
 

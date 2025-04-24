@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 public class SessionHandler {
 
     private final Configuration configuration;
+    private final ServerManager manager;
     private final Socket socket;
     private final Integer lastActivityLock = 0;
     private LocalDateTime lastActivity = LocalDateTime.now();
@@ -18,9 +19,10 @@ public class SessionHandler {
     private StringBuilder inBuffer;
     private int bytesReadThisTime;
 
-    public SessionHandler(Socket socket, Configuration configuration) throws IOException {
+    public SessionHandler(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
         this.configuration = configuration;
         this.socket = socket;
+        this.manager = manager;
         inStream = socket.getInputStream();
         outStream = socket.getOutputStream();
     }
@@ -46,14 +48,19 @@ public class SessionHandler {
     }
 
     private void handleRequest() {
+        IHttpResponse response;
         HttpRequest request = new HttpRequest(inBuffer.toString());
-        HttpResponse response = new HttpResponse(request, configuration);
-        ResponseCode code = response.generateContent(socket);
-        // currently supports only simple HTTP file transfer
-        sendResponse(response.getContent());
         synchronized (lastActivityLock) {
             lastActivity = LocalDateTime.now();
         }
+        if(request.getUrl().toLowerCase().startsWith("/webconsole")) {
+            response = new WebConsoleResponse(request, manager);
+        } else {
+            response = new HttpResponse(request, configuration);
+        }
+        ResponseCode code = response.generateContent(socket);
+        // currently supports only simple HTTP file transfer
+        sendResponse(response.getContent());
     }
 
     @SuppressWarnings({"all"})

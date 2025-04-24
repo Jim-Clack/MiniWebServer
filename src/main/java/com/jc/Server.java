@@ -14,7 +14,7 @@ public class Server
         ServerManager manager = new ServerManager();
         ListenerThread listener = new ListenerThread(manager, configuration);
         listener.start();
-        ServerConsole console = new ServerConsole(manager, listener);
+        LocalServerConsole console = new LocalServerConsole(manager, listener);
         console.interact();
         manager.killIdleSessions(0L);
         Thread.yield();

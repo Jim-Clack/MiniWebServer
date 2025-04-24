@@ -9,7 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class HttpResponse {
+public class HttpResponse implements IHttpResponse {
 
     private final HttpRequest request;
     private final Configuration configuration;

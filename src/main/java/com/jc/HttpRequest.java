@@ -35,6 +35,18 @@ public class HttpRequest {
         return version;
     }
 
+    public String getQueryValue(String key, String defaultValue) {
+        int index = url.indexOf(key + "=") + 1;
+        if(index <= 0) {
+            return defaultValue;
+        }
+        int pastValue = url.indexOf("&", index + key.length());
+        if(pastValue == -1) {
+            pastValue = url.length();
+        }
+        return url.substring(index + key.length(), pastValue);
+    }
+
     public String[] getHeader(String key) {
         return headers.get(key).split(",");
     }

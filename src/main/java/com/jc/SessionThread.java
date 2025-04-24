@@ -9,16 +9,16 @@ public class SessionThread extends Thread {
 
     private String threadName = "?";
     private final SessionHandler handler;
-    private String clientIp;
+    private final String clientIp;
     private final Socket socket;
 
-    public SessionThread(Socket socket, Configuration configuration) throws IOException {
+    public SessionThread(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
         this.setDaemon(true);
         this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
         Logger.INFO("Starting - connection with " + clientIp);
         System.out.println("\n### Connection with " + clientIp);
-        handler = new SessionHandler(socket, configuration);
+        handler = new SessionHandler(socket, configuration, manager);
     }
 
     @SuppressWarnings({"all"})
