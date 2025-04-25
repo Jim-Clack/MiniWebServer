@@ -4,17 +4,25 @@ import java.io.IOException;
 
 public class Server
 {
+
+    private final String[] args;
+
     /**
-     * Server.main()
+     * Server.start()
      * @param args portNumber and rootPath - both are optional
      * @apiNote settings can be set via configuration, properties, or command-line
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public Server(String[] args) {
+        this.args = args;
+    }
+
+    public void start() throws IOException, InterruptedException {
         Configuration configuration = getConfiguration(args);
         ServerManager manager = new ServerManager();
         ListenerThread listener = new ListenerThread(manager, configuration);
         listener.start();
         LocalServerConsole console = new LocalServerConsole(manager, listener);
+        Thread.sleep(1000);
         console.interact();
         manager.killIdleSessions(0L);
         Thread.yield();
@@ -22,7 +30,7 @@ public class Server
         listener.interrupt();
     }
 
-    private static Configuration getConfiguration(String[] args) {
+    private Configuration getConfiguration(String[] args) {
         Configuration configuration = new Configuration();
         if(args.length > 0) {
             configuration.setPortNumber(Integer.parseInt(args[0]));

@@ -60,8 +60,8 @@ public class WebConsoleResponse implements IHttpResponse {
         bodyBuffer.append("<head>\n");
         bodyBuffer.append("</head>\n");
         bodyBuffer.append("<body>\n");
-        bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><br/>\n");
-        bodyBuffer.append("<h3>Click a selection...</h3><br/>\n");
+        bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><p/>\n");
+        bodyBuffer.append("<h3>Click a selection...</h3><p/>\n");
         bodyBuffer.append("<form name='myForm' action='/webconsole' method='get'>\n");
         bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
@@ -93,7 +93,7 @@ public class WebConsoleResponse implements IHttpResponse {
     }
 
     private void toBodyAsHtml(String text) {
-        bodyBuffer.append(text.replace("\n  ", "\n&nbsp;&nbsp;").replaceAll("\n", "<br/>\n"));
+        bodyBuffer.append(text.replace("\n  ", "\n&nbsp;&nbsp;").replaceAll("\n", "<p/>\n"));
     }
 
 }

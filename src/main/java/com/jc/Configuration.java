@@ -8,9 +8,11 @@ import java.io.File;
 public class Configuration {
 
     private int portNumber = 12345;
-    private String rootPath = "C:/Users/jimcl/webroot";
+    private String rootPath = ".";
 
     public Configuration() {
+        String userHome = System.getProperty("user.home");
+        rootPath = userHome + File.separator + "webroot";
         this.portNumber = Integer.parseInt(
                 System.getProperty("MiniWebServer.portNumber", ""+this.portNumber));
         this.rootPath =

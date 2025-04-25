@@ -19,27 +19,24 @@ public class LocalServerConsole {
         String input;
         while(running) {
             do {
-                System.out.print("ws>");
+                System.out.print("[S]essions, [K]illIdle60, [A]ddress, [Q]uit >> ");
                 input = scanner.nextLine().trim().toUpperCase();
             } while(input.isEmpty());
             switch(input.charAt(0)) {
                 case 'X': case 'Q':
                     running = false;
                     break;
-                case 'H': case '?':
-                    System.out.println("[H]elp, [S]essions, [K]illIdle, [A]ddress, [Q]uit");
-                    break;
                 case 'K':
-                    System.out.println("Number of sessions killed: " + manager.killIdleSessions(60));
+                    System.out.println("\nNumber of sessions killed: " + manager.killIdleSessions(60) + "\n");
                     break;
                 case 'A': case 'P':
-                    System.out.println("Server address and port: " + listener.getAddressAndPort());
+                    System.out.println("\nServer address and port: " + listener.getAddressAndPort() + "\n");
                     break;
                 case 'S':
                     System.out.println(manager.listAllSessions());
                     break;
                 default:
-                    System.out.println("Invalid command");
+                    System.out.println("\nInvalid command\n");
                     break;
             }
         }
