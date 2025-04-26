@@ -7,29 +7,27 @@ import java.net.Socket;
 
 class SocketIOBase {
 
-    protected final InputStream inStream;
-    protected StringBuilder inBuffer;
-    protected int bytesReadThisTime;
-    protected final Socket socket;
-    protected final OutputStream outStream;
+    private final InputStream inStream;
+    private StringBuilder inBuffer;
+    private final OutputStream outStream;
 
     protected SocketIOBase(Socket socket) throws IOException {
-        this.socket = socket;
         this.inStream = socket.getInputStream();
         this.outStream = socket.getOutputStream();
     }
 
-    protected int receiveIntoInBuffer() {
+    protected int read() {
         byte[] buffer = new byte[10000];
-        int offset = 1;
-        int bytesRead;
         try {
-            inStream.read(buffer, 0, 1);
-            while((bytesRead = inStream.available()) > 0) { // read remainder of message
-                bytesRead = inStream.read(buffer, offset, Math.min(buffer.length - offset, bytesRead));
-                String content = new String(buffer, 0, bytesRead + offset);
+            int bytesRead = Math.max(1, inStream.available()); // try to read at least one char
+            while(bytesRead > 0) {
+                bytesRead = inStream.read(buffer, 0, bytesRead);
+                if(bytesRead <= 0) { // just in case
+                    return inBuffer.length();
+                }
+                String content = new String(buffer, 0, bytesRead);
                 inBuffer.append(content);
-                offset = 0;
+                bytesRead = Math.min(buffer.length, inStream.available());
             }
         } catch (IOException e) {
             if(Thread.currentThread().isInterrupted()) {
@@ -37,8 +35,7 @@ class SocketIOBase {
             }
             Logger.WARN("receiveIntoInBuffer" + e.getMessage());
         }
-        bytesReadThisTime = inBuffer.length() - bytesReadThisTime;
-        return bytesReadThisTime;
+        return inBuffer.length();
     }
 
     protected void sendResponse(byte[] content) {
@@ -48,6 +45,14 @@ class SocketIOBase {
             Logger.WARN("sendResponse" + e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    protected String getReadBuffer() {
+        return inBuffer.toString();
+    }
+
+    protected void clearBuffers() {
+        inBuffer = new StringBuilder();
     }
 
 }

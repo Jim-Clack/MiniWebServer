@@ -11,16 +11,21 @@ public class SessionHandler extends SocketIOBase {
     private final ServerManager manager;
     private final Integer lastActivityLock = 0;
     private LocalDateTime lastActivity = LocalDateTime.now();
+    private final Socket socket;
 
     public SessionHandler(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
         super(socket);
         this.configuration = configuration;
         this.manager = manager;
+        this.socket = socket;
     }
 
     public void sessionLoop() {
         clearBuffers();
-        if(receiveIntoInBuffer() > 0) {
+        if(read() > 0) {
+            synchronized (lastActivityLock) {
+                lastActivity = LocalDateTime.now();
+            }
             handleRequest();
         }
     }
@@ -33,24 +38,15 @@ public class SessionHandler extends SocketIOBase {
         return seconds;
     }
 
-    private void clearBuffers() {
-        inBuffer = new StringBuilder();
-        bytesReadThisTime = 0;
-    }
-
     private void handleRequest() {
         IHttpResponse response;
-        HttpRequest request = new HttpRequest(inBuffer.toString());
-        synchronized (lastActivityLock) {
-            lastActivity = LocalDateTime.now();
-        }
+        HttpRequest request = new HttpRequest(getReadBuffer());
         if(request.getUrl().toLowerCase().startsWith("/webconsole")) {
             response = new WebConsoleResponse(request, manager);
         } else {
             response = new HttpResponse(request, configuration);
         }
         ResponseCode code = response.generateContent(socket);
-        // currently supports only simple HTTP file transfer
         sendResponse(response.getContent());
     }
 
