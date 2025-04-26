@@ -1,14 +1,11 @@
 package com.jc;
 
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Just like an HttpResponse but for a web console - remote server management.
  */
-public class WebConsoleResponse implements IHttpResponse {
+public class WebConsoleResponse extends HttpResponseBase implements IHttpResponse {
 
     private final HttpRequest request;
     private final StringBuilder headerBuffer;
@@ -40,19 +37,7 @@ public class WebConsoleResponse implements IHttpResponse {
      */
     private void generateHeaders() {
         String line1 = request.getVersion() + " 200 OK\n";
-        DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
-        String now = dateFormat.format(new Date());
-        headerBuffer.append(line1);
-        headerBuffer.append("location: http://localhost\n"); // TODO
-        headerBuffer.append("content-type: text/html; charset=UTF-8\n");
-        headerBuffer.append("date: " + now + "\n");
-        headerBuffer.append("expires: " + now + "\n");
-        headerBuffer.append("cache-control: public, max-age=1\n");
-        headerBuffer.append("server: mini\n");
-        headerBuffer.append("content-length: " + bodyBuffer.length() + "\n");
-        headerBuffer.append("x-xss-protection: 0\n");
-        headerBuffer.append("x-frame-options: SAMEORIGIN\n");
-        headerBuffer.append("\n");
+        assembleHeaders(headerBuffer, line1, bodyBuffer.length(), 1);
     }
 
     private void generateHtmlAtTop() {

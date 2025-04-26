@@ -19,22 +19,6 @@ public class HttpRequest {
         parseBody(lineIndex, lines);
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
     public String getQueryValue(String key, String defaultValue) {
         int index = url.indexOf(key + "=") + 1;
         if(index <= 0) {
@@ -53,6 +37,35 @@ public class HttpRequest {
 
     public String getBody() {
         return body.toString();
+    }
+
+    public String getFilePath() {
+        int colon = url.indexOf(":");
+        int question = url.indexOf(":");
+        int justPast = url.length();
+        if(colon != -1) {
+            justPast = colon;
+        }
+        if(question != -1) {
+            justPast = question;
+        }
+        return url.substring(0, justPast);
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     private void parseLineOne(String[] lines) {

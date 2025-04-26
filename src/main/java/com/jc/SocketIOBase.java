@@ -38,7 +38,7 @@ class SocketIOBase {
         return inBuffer.length();
     }
 
-    protected void sendResponse(byte[] content) {
+    protected void send(byte[] content) {
         try {
             outStream.write(content);
         } catch (IOException e) {

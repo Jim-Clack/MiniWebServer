@@ -47,7 +47,7 @@ public class SessionHandler extends SocketIOBase {
             response = new HttpResponse(request, configuration);
         }
         ResponseCode code = response.generateContent(socket);
-        sendResponse(response.getContent());
+        send(response.getContent());
     }
 
 }

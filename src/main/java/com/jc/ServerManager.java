@@ -59,7 +59,7 @@ public class ServerManager {
                 threadCount++;
             }
         }
-        buffer.append("Number of Alive sessions: " + threadCount + "\n");
+        buffer.append("Number of sessions Alive: " + threadCount + "\n");
         discardDeadSessions();
         return buffer.toString();
     }
