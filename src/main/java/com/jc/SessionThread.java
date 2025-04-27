@@ -3,15 +3,38 @@ package com.jc;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Main per-session thread - one per connection.
+ * ---------------------------------------------------------------------------
+ * A session (IP Address:port pair) is tied to a SessionThread by its socket.
+ * It is expected that, when the server accepts a connection, it will be
+ * passed to this object to deal with any further communications.
+ * ---------------------------------------------------------------------------
+ */
 public class SessionThread extends Thread {
 
+    /** [static] For numbering threads. */
     private static int ThreadCounter = 0;
 
+    /** Name of this thread. (Also same as Thread.currentThread.getName().) */
     private String threadName = "?";
+
+    /** SessionThread will create this to handle the sesssion. */
     private final SessionHandler handler;
+
+    /** Stash the Ip address and port of the remote client for reference. */
     private final String clientIp;
+
+    /** All of our web communication for this connection goes over this socket. */
     private final Socket socket;
 
+    /**
+     * ctor.
+     * @param socket Connection accepted by server.
+     * @param configuration For fetching configuration settings.
+     * @param manager This is the Top Dog that knows everything about the server.
+     * @throws IOException If we cannot recover, we will give up and throw this.
+     */
     public SessionThread(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
         this.setDaemon(true);
         this.socket = socket;
@@ -21,6 +44,10 @@ public class SessionThread extends Thread {
         handler = new SessionHandler(socket, configuration, manager);
     }
 
+    /**
+     * Main loop of thread.
+     * To kill this, call closeSocket() then interrupt(), not stop().
+     */
     @SuppressWarnings({"all"})
     public void run() {
         threadName = "SessionThread" + (++ThreadCounter);
@@ -30,8 +57,10 @@ public class SessionThread extends Thread {
         }
     }
 
+    /**
+     * Because java threads can't interrupt sockets, which are at a lower level.
+     */
     public void closeSocket() {
-        // necessary because java threads don't interrupt sockets which are at a lower level
         try {
             socket.close();
         } catch (IOException e) {
@@ -39,14 +68,26 @@ public class SessionThread extends Thread {
         }
     }
 
+    /**
+     * How many seconds have passed since the last http request?
+     * @return number of seconds since last request.
+     */
     public long beenIdleForHowLong() {
         return handler.beenIdleForHowLong();
     }
 
+    /**
+     * Get the name of the thread for logging and diagnostic purposes.
+     * @return Name of this thread.
+     */
     public String getThreadName() {
         return threadName;
     }
 
+    /**
+     * Get the address and port of the client.
+     * @return string containing address and port of remote host on this session.
+     */
     public String getAddressAndPort() {
         return clientIp;
     }
