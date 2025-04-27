@@ -3,13 +3,18 @@ package com.jc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class HttpResponseBase {
+public abstract class HttpResponseBase {
+
+    public abstract ResponseCode generateContent(Socket socket);
+
+    public abstract byte[] getContent();
 
     @SuppressWarnings("all")
     protected Path getFilePath(String url, boolean mustExist, Configuration configuration, String... defaultTo) {

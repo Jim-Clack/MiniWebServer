@@ -8,15 +8,15 @@ import java.time.temporal.ChronoUnit;
 public class SessionHandler extends SocketIOBase {
 
     private final Configuration configuration;
-    private final ServerManager manager;
     private final Integer lastActivityLock = 0;
     private LocalDateTime lastActivity = LocalDateTime.now();
+    private final ServerManager manager;
     private final Socket socket;
 
     public SessionHandler(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
         super(socket);
-        this.configuration = configuration;
         this.manager = manager;
+        this.configuration = configuration;
         this.socket = socket;
     }
 
@@ -39,14 +39,15 @@ public class SessionHandler extends SocketIOBase {
     }
 
     private void handleRequest() {
-        IHttpResponse response;
-        HttpRequest request = new HttpRequest(getReadBuffer());
-        if(request.getUrl().toLowerCase().startsWith("/webconsole")) {
-            response = new WebConsoleResponse(request, manager);
-        } else {
-            response = new HttpResponse(request, configuration);
+        HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
+        if(request.getErrorCode() == ErrorCode.UNINITIALIZED) {
+            Thread.currentThread().interrupt();
+            return;
         }
+        request = request.getTypedRequest(); // clone to correct type
+        HttpResponseBase response = request.getTypedResponse(configuration);
         ResponseCode code = response.generateContent(socket);
+        Logger.DEBUG("Processed request, code=" + code + ", type=" + request.getRequestKind());
         send(response.getContent());
     }
 

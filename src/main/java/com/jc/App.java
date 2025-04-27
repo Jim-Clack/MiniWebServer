@@ -3,7 +3,7 @@ package com.jc;
 import java.io.IOException;
 
 /**
- * Put the html/jpg files into /users/<yourname>/webroot, then try these URLs...
+ * Put test html/jpg files into /users/<yourname>/webroot, then try these URLs...
  *   localhost:12345/webconsole
  *   localhost:12345/index.html
  */

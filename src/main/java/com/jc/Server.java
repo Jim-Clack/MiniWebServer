@@ -2,6 +2,18 @@ package com.jc;
 
 import java.io.IOException;
 
+/**
+ * Very basic server, does NOT yet support...
+ *   full exception/error handling
+ *   HTTP > 1.1
+ *   basic auth
+ *   https
+ *   plugins
+ *   web services
+ *   JEE servlets JSP
+ *   multi-tenant directory trees
+ *   zip/jar deployment
+ */
 public class Server
 {
 

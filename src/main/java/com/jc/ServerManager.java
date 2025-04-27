@@ -16,7 +16,7 @@ public class ServerManager {
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
-            Logger.ERROR("ServerManager acceptSession error: " + e.getMessage());
+            Logger.ERROR("ServerManager accept session error: " + e.getMessage());
         }
     }
 

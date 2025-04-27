@@ -5,14 +5,14 @@ import java.net.Socket;
 /**
  * Just like an HttpResponse but for a web console - remote server management.
  */
-public class WebConsoleResponse extends HttpResponseBase implements IHttpResponse {
+public class HttpResponseWebConsole extends HttpResponseBase {
 
-    private final HttpRequest request;
+    private final HttpRequestBase request;
     private final StringBuilder headerBuffer;
     private final StringBuilder bodyBuffer;
     private final ServerManager manager;
 
-    public WebConsoleResponse(HttpRequest request, ServerManager manager) {
+    public HttpResponseWebConsole(HttpRequestBase request, ServerManager manager) {
         this.request = request;
         this.headerBuffer = new StringBuilder();
         this.bodyBuffer = new StringBuilder();
@@ -41,10 +41,7 @@ public class WebConsoleResponse extends HttpResponseBase implements IHttpRespons
     }
 
     private void generateHtmlAtTop() {
-        bodyBuffer.append("<html>\n");
-        bodyBuffer.append("<head>\n");
-        bodyBuffer.append("</head>\n");
-        bodyBuffer.append("<body>\n");
+        bodyBuffer.append("<html>\n<head>\n</head>\n<body>\n");
         bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><p/>\n");
         bodyBuffer.append("<h3>Click a selection...</h3><p/>\n");
         bodyBuffer.append("<form name='myForm' action='/webconsole' method='get'>\n");
@@ -73,8 +70,7 @@ public class WebConsoleResponse extends HttpResponseBase implements IHttpRespons
     }
 
     private void generateHtmlAtBottom() {
-        bodyBuffer.append("</body>\n");
-        bodyBuffer.append("</html>\n");
+        bodyBuffer.append("</body>\n</html>\n");
     }
 
     private void toBodyAsHtml(String text) {
