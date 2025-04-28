@@ -5,17 +5,40 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * Class for handling socket I/O, designed to provide an optimal API for
+ * HTTP request/response communications. There are four main APIs...
+ *    int read()                reads an HTTP message and returns the length
+ *    String getReadBuffer()    returns the HTTP message from read() above
+ *    send(byte[])              sends the HTTP response as passed in
+ *    clearBuffers()            call this between request/response cycles
+ */
 class SocketIOBase {
 
+    /** Input stream from socket. */
     private final InputStream inStream;
+
+    /** Buffer for reading. */
     private StringBuilder inBuffer;
+
+    /** Output stream from socket. */
     private final OutputStream outStream;
 
+    /**
+     * Ctor.
+     * @param socket to be read from or written to.
+     * @throws IOException only on unexpected exceptions.
+     */
     protected SocketIOBase(Socket socket) throws IOException {
         this.inStream = socket.getInputStream();
         this.outStream = socket.getOutputStream();
     }
 
+    /**
+     * Read - generally an HTTP request.
+     * @return length of received message.
+     * @apiNote on failure, returns nothing, but does not treat it as an error.
+     */
     protected int read() {
         byte[] buffer = new byte[10000];
         try {
@@ -38,6 +61,18 @@ class SocketIOBase {
         return inBuffer.length();
     }
 
+    /**
+     * Get the buffer populated by the previous read().
+     * @return The bytes that were read.
+     */
+    protected String getReadBuffer() {
+        return inBuffer.toString();
+    }
+
+    /**
+     * Send - generally an HTTP response, often with a file in it.
+     * @param content Binary, as it may contain a JPG or PNG file.
+     */
     protected void send(byte[] content) {
         try {
             outStream.write(content);
@@ -47,10 +82,9 @@ class SocketIOBase {
         }
     }
 
-    protected String getReadBuffer() {
-        return inBuffer.toString();
-    }
-
+    /**
+     * Clear out buffers in preparation for a fresh request/response cycle.
+     */
     protected void clearBuffers() {
         inBuffer = new StringBuilder();
     }

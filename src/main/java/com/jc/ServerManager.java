@@ -5,10 +5,19 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Top level class to manage all sessions.
+ */
 public class ServerManager {
 
+    /** List of all sessions. */
     private final List<SessionThread> sessions = new LinkedList<>();
 
+    /**
+     * Main method to create a new session, and thereby a SessionTread then SessionHandler.
+     * @param socket Connection to receive requests and send responses to.
+     * @param configuration Configuration - settings.
+     */
     public void createSession(Socket socket, Configuration configuration) {
         SessionThread sessionThread;
         try {
@@ -20,11 +29,14 @@ public class ServerManager {
         }
     }
 
+    /**
+     * Find sessions that are dead and remove them from the list.
+     */
     public void discardDeadSessions() {
         List<SessionThread> deadSessions = new LinkedList<>();
         for(SessionThread sessionThread : sessions) {
             if(!sessionThread.isAlive()) {
-                deadSessions.add(sessionThread); // remove it and any dead threads
+                deadSessions.add(sessionThread);
             }
         }
         for(SessionThread deadThread : deadSessions) {

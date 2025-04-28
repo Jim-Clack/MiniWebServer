@@ -3,7 +3,7 @@ package com.jc;
 import java.io.File;
 
 /**
- * Simple class just for testing
+ * Simple class just for testing.
  */
 public class Configuration {
 

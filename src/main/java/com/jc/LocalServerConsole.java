@@ -2,18 +2,38 @@ package com.jc;
 
 import java.util.Scanner;
 
+/**
+ * This is a keyboard-based management console for the server.
+ * ---------------------------------------------------------------------------
+ * Commands:
+ *    [Enter]     Help, show commands
+ *    A [Enter]   Show IP Address and port of this server
+ *    S [Enter]   Show all sessions
+ *    K [Enter]   Kill sessions that have been inactive for 60 seconds or more
+ *    Q [Enter]   Quit - shut down the server
+ */
 public class LocalServerConsole {
 
+    /** The top-level object that knows about all sessions. */
     private final ServerManager manager;
+
+    /** The server's listener thread. */
     private final ListenerThread listener;
 
+    /**
+     * Ctor.
+     * @param manager The top-level object that knows about all sessions.
+     * @param listener The server's listener thread.
+     */
     public LocalServerConsole(ServerManager manager, ListenerThread listener) {
         this.manager = manager;
         this.listener = listener;
     }
 
+    /**
+     * User interaction loop. Menu-based query text-UI.
+     */
     public void interact() {
-        System.out.println("Web Server is up and running...");
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         String input;
