@@ -1,15 +1,38 @@
 package com.jc;
 
+/**
+ * Simple static methods to assist with creating HTTP requests and responses.
+ */
 public class TransactionType {
 
     /**
      * What kind of request is this?
      */
-    public enum RequestKind {
+    public enum RequestType {
         RQ_FILE_GET,
         RQ_WS_SOAP,
         RQ_WS_JSON,
         RQ_WEB_CONSOLE,
+    }
+
+    /**
+     * What kind of request is this?
+     * @return RequestKind, typically based on the Content-Type header.
+     */
+    public static RequestType getRequestKind(HttpRequestPojo request) {
+        String[] contentTypes = request.getHeader("Content-Type");
+        String contentType = "text/html";
+        if(contentTypes != null && contentTypes.length > 0) {
+            contentType = contentTypes[0];
+        }
+        if(contentType.contains("/xml")) {
+            return RequestType.RQ_WS_SOAP;
+        } else if(contentType.contains("/json")) {
+            return RequestType.RQ_WS_JSON;
+        } else if(request.getFilePath().startsWith("/webconsole")) {
+            return RequestType.RQ_WEB_CONSOLE;
+        }
+        return RequestType.RQ_FILE_GET;
     }
 
     /**
@@ -23,16 +46,16 @@ public class TransactionType {
         return getTypedRequest(request);
     }
 
-    /*
+    /**
      * Create an HttpResponseXxxx type based on the header info.
      * @param request Any kind of HttpRequestXxxx
      * @return An initialized HttpRequestXxxxx cloned from this request.
      */
     public static HttpRequestBase getTypedRequest(HttpRequestPojo request) {
-        TransactionType.RequestKind requestKind = request.getRequestKind();
-        if (requestKind == TransactionType.RequestKind.RQ_WS_SOAP) {
+        RequestType requestType = getRequestKind(request);
+        if (requestType == RequestType.RQ_WS_SOAP) {
             return new HttpRequestSoap(request);
-        } else if (requestKind == TransactionType.RequestKind.RQ_WS_JSON) {
+        } else if (requestType == RequestType.RQ_WS_JSON) {
             return new HttpRequestJson(request);
         }
         return new HttpRequestFile(request);
@@ -47,12 +70,12 @@ public class TransactionType {
      */
     public static HttpResponseBase getTypedResponse(
             HttpRequestPojo request, Configuration configuration, ServerManager manager) {
-        TransactionType.RequestKind requestKind = request.getRequestKind();
-        if (requestKind == TransactionType.RequestKind.RQ_WS_SOAP) {
+        RequestType requestType = getRequestKind(request);
+        if (requestType == RequestType.RQ_WS_SOAP) {
             return new HttpResponseSoap(request, configuration);
-        } else if (requestKind == TransactionType.RequestKind.RQ_WS_JSON) {
+        } else if (requestType == RequestType.RQ_WS_JSON) {
             return new HttpResponseJson(request, configuration);
-        } else if (requestKind == TransactionType.RequestKind.RQ_WEB_CONSOLE) {
+        } else if (requestType == RequestType.RQ_WEB_CONSOLE) {
             return new HttpResponseWebConsole(request, manager);
         }
         return new HttpResponseFile(request, configuration);

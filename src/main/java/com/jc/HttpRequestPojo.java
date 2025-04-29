@@ -35,25 +35,6 @@ public class HttpRequestPojo {
     protected String version = "?";
 
     /**
-     * What kind of request is this?
-     * @return RequestKind, typically based on the Content-Type header.
-     */
-    public TransactionType.RequestKind getRequestKind() {
-        String contentType = headers.get("Content-Type");
-        if(contentType == null) {
-            contentType = "text/html";
-        }
-        if(contentType.contains("/xml")) {
-            return TransactionType.RequestKind.RQ_WS_SOAP;
-        } else if(contentType.contains("/json")) {
-            return TransactionType.RequestKind.RQ_WS_JSON;
-        } else if(getFilePath().startsWith("/webconsole")) {
-            return TransactionType.RequestKind.RQ_WEB_CONSOLE;
-        }
-        return TransactionType.RequestKind.RQ_FILE_GET;
-    }
-
-    /**
      * Get the specified file path from the URL passed in line 1.
      * @return file to transfer.
      */

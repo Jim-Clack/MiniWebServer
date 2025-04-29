@@ -22,8 +22,8 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseLineOne(lines);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        TransactionType.RequestKind rk = rq.getRequestKind();
-        Assert.assertEquals(TransactionType.RequestKind.RQ_FILE_GET, rk);
+        TransactionType.RequestType rk = rq.getRequestKind();
+        Assert.assertEquals(TransactionType.RequestType.RQ_FILE_GET, rk);
     }
 
     public void testGetFilePath() {
