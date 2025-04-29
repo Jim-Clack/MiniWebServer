@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 import java.util.Arrays;
 
-public class HttpRequestBaseTest extends TestCase {
+public class HttpRequestXxxxTest extends TestCase {
 
     private final String bufferWithQuery =
             "GET /index.html?qu=samp&qty=1 HTTP/1.1\n" +
@@ -16,34 +16,14 @@ public class HttpRequestBaseTest extends TestCase {
             "\n" +
             "<html><body>Hello</body></html>\n";
 
-    public void testGetTypedRequest() {
-        HttpRequestBase rq = new HttpRequestBase(null);
-        String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
-        int lineIndex = rq.parseHeaders(lines);
-        rq.parseBody(lineIndex, lines);
-        HttpRequestBase rb = rq.getTypedRequest();
-        Assert.assertEquals(HttpRequestFile.class, rb.getClass());
-    }
-
-    public void testGetTypedResponse() {
-        HttpRequestBase rq = new HttpRequestBase(null);
-        String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
-        int lineIndex = rq.parseHeaders(lines);
-        rq.parseBody(lineIndex, lines);
-        HttpResponseBase rs = rq.getTypedResponse(null);
-        Assert.assertEquals(HttpResponseFile.class, rs.getClass());
-    }
-
     public void testGetRequestKind() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseLineOne(lines);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        HttpRequestBase.RequestKind rk = rq.getRequestKind();
-        Assert.assertEquals(HttpRequestBase.RequestKind.RQ_FILE_GET, rk);
+        TransactionType.RequestKind rk = rq.getRequestKind();
+        Assert.assertEquals(TransactionType.RequestKind.RQ_FILE_GET, rk);
     }
 
     public void testGetFilePath() {

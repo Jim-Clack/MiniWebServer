@@ -6,21 +6,12 @@ import java.util.Map;
 
 /**
  * HTTP Request class hierarchy...
- *     HttpRequestXxxx -> HttpRequestBase -> HttpRequestPojo
- *     Xxxx can be File, Json, or Soap
- * Why?
- *     Pojo - A lightweight class for state that can be cloned.
- *     Base - Socket HTTP Request message parsing methods.
- *     Xxxx - Specific types of requests
+ *   HttpRequestXxxx -> HttpRequestBase -> HttpRequestPojo
+ *     Xxxx = Pojo - A lightweight class for state that can be cloned.
+ *     Xxxx = Base - Socket HTTP Request message parsing methods.
+ *     Xxxx = File - File transfer request or other kind of request.
  */
 public class HttpRequestPojo {
-
-    /** What kind of request is this? */
-    public enum RequestKind {
-        RQ_FILE_GET,
-        RQ_WS_SOAP,
-        RQ_WS_JSON,
-    }
 
     /** The manager at the top level. */
     protected ServerManager manager;
@@ -44,47 +35,22 @@ public class HttpRequestPojo {
     protected String version = "?";
 
     /**
-     * Dreadful cheat...
-     * @return An initialized HttpRequestXxxxx cloned from this request.
-     */
-    public HttpRequestBase getTypedRequest() {
-        RequestKind requestKind = getRequestKind();
-        if (requestKind == HttpRequestPojo.RequestKind.RQ_WS_SOAP) {
-            return new HttpRequestSoap(this);
-        } else if (requestKind == HttpRequestPojo.RequestKind.RQ_WS_JSON) {
-            return new HttpRequestJson(this);
-        }
-        return new HttpRequestFile(this);
-    }
-
-    /**
-     * Dreadful cheat...
-     * @return An initialized HttpResponseXxxxx suitable for this request.
-     */
-    public HttpResponseBase getTypedResponse(Configuration configuration) {
-        RequestKind requestKind = getRequestKind();
-        if (requestKind == HttpRequestPojo.RequestKind.RQ_WS_SOAP) {
-            return new HttpResponseSoap(this, configuration);
-        } else if (requestKind == HttpRequestPojo.RequestKind.RQ_WS_JSON) {
-            return new HttpResponseJson(this, configuration);
-        } else if(getFilePath().startsWith("/webconsole")) {
-            return new HttpResponseWebConsole(this, manager);
-        }
-        return new HttpResponseFile(this, configuration);
-    }
-
-    /**
      * What kind of request is this?
-     * @return RequestKind, often based on the Content-Type header.
+     * @return RequestKind, typically based on the Content-Type header.
      */
-    public RequestKind getRequestKind() {
-        if(Arrays.stream(getHeader("Content-Type")).anyMatch(s -> s.toLowerCase().contains("/xml"))) {
-            return RequestKind.RQ_WS_SOAP;
+    public TransactionType.RequestKind getRequestKind() {
+        String contentType = headers.get("Content-Type");
+        if(contentType == null) {
+            contentType = "text/html";
         }
-        if(Arrays.stream(getHeader("Content-Type")).anyMatch(s -> s.toLowerCase().contains("/json"))) {
-            return RequestKind.RQ_WS_JSON;
+        if(contentType.contains("/xml")) {
+            return TransactionType.RequestKind.RQ_WS_SOAP;
+        } else if(contentType.contains("/json")) {
+            return TransactionType.RequestKind.RQ_WS_JSON;
+        } else if(getFilePath().startsWith("/webconsole")) {
+            return TransactionType.RequestKind.RQ_WEB_CONSOLE;
         }
-        return RequestKind.RQ_FILE_GET;
+        return TransactionType.RequestKind.RQ_FILE_GET;
     }
 
     /**

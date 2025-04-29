@@ -39,9 +39,11 @@ public abstract class HttpResponseBase {
     @SuppressWarnings("all")
     protected Path getFilePath(String url, boolean mustExist, Configuration configuration, String... defaultTo) {
         Path pathToFile = Paths.get(configuration.getRootPath(), url);
-        for(String defaultPath : defaultTo) {
-            if (mustExist && (!pathToFile.toFile().exists() || pathToFile.toFile().isDirectory())) {
-                pathToFile = Paths.get(configuration.getRootPath(), defaultPath);
+        if(mustExist && !pathToFile.toFile().exists()) {
+            for (String defaultPath : defaultTo) {
+                if (!pathToFile.toFile().exists() || pathToFile.toFile().isDirectory()) {
+                    pathToFile = Paths.get(configuration.getRootPath(), defaultPath);
+                }
             }
         }
         if(mustExist && !pathToFile.toFile().exists()) {
