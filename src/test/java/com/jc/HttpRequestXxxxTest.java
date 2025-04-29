@@ -22,7 +22,7 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseLineOne(lines);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        TransactionType.RequestType rk = rq.getRequestKind();
+        TransactionType.RequestType rk = TransactionType.getRequestKind(rq);
         Assert.assertEquals(TransactionType.RequestType.RQ_FILE_GET, rk);
     }
 
