@@ -21,11 +21,11 @@ public class HttpRequestFile extends HttpRequestBase {
 
     /**
      * Copy constructor.
-     * @param base Original - state will be cloned from original to this one.
+     * @param original Original - state will be cloned from original to this one.
      */
-    public HttpRequestFile(HttpRequestBase base) {
+    public HttpRequestFile(HttpRequestPojo original) {
         super(null);
-        cloneState(base);
+        cloneState(original);
     }
 
 }

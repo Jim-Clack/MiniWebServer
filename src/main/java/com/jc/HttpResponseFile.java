@@ -10,7 +10,7 @@ import java.nio.file.Path;
 public class HttpResponseFile extends HttpResponseBase {
 
     /** The HTTP that requested the file. */
-    private final HttpRequestBase request;
+    private final HttpRequestPojo request;
 
     /** Configuration settings. */
     private final Configuration configuration;
@@ -29,7 +29,7 @@ public class HttpResponseFile extends HttpResponseBase {
      * @param request The HTTP that requested the file.
      * @param configuration Configuration settings.
      */
-    public HttpResponseFile(HttpRequestBase request, Configuration configuration) {
+    public HttpResponseFile(HttpRequestPojo request, Configuration configuration) {
         this.request = request;
         this.configuration = configuration;
         this.headerBuffer = new StringBuilder();
@@ -67,8 +67,8 @@ public class HttpResponseFile extends HttpResponseBase {
      */
     private void assembleResponseWithFile(Path pathToFile) {
         byte[] content = readFile(pathToFile);
-        if (content == null || content.length <= 0) {
-            responseCode = ResponseCode.RC_UNAUTHORIZED;
+        if (content == null || content.length == 0) {
+            responseCode = ResponseCode.RC_NOT_FOUND;
             generateLine1AndHeaders(0);
             return;
         }

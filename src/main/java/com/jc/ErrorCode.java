@@ -1,5 +1,8 @@
 package com.jc;
 
+/**
+ * Error codes returned from parsing an HTTP Request.
+ */
 public enum ErrorCode {
     OK,
     EMPTY_BODY,

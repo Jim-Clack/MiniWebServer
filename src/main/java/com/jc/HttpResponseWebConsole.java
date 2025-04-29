@@ -13,7 +13,7 @@ import java.net.Socket;
 public class HttpResponseWebConsole extends HttpResponseBase {
 
     /** The HttpRequestXxx that requested this response. */
-    private final HttpRequestBase request;
+    private final HttpRequestPojo request;
 
     /** The top-level object that knows about all sessions. */
     private final ServerManager manager;
@@ -29,7 +29,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      * @param request The HttpRequestXxx that requested this response.
      * @param manager The top-level object that knows about all sessions.
      */
-    public HttpResponseWebConsole(HttpRequestBase request, ServerManager manager) {
+    public HttpResponseWebConsole(HttpRequestPojo request, ServerManager manager) {
         this.request = request;
         this.headerBuffer = new StringBuilder();
         this.bodyBuffer = new StringBuilder();

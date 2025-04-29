@@ -2,9 +2,9 @@ package com.jc;
 
 public class HttpRequestSoap extends HttpRequestBase {
 
-    public HttpRequestSoap(HttpRequestBase base) {
+    public HttpRequestSoap(HttpRequestPojo original) {
         super(null);
-        cloneState(base);
+        cloneState(original);
     }
 
     // TODO - deal with a SOAP body

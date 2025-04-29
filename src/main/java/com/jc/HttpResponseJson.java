@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class HttpResponseJson extends HttpResponseBase {
 
-    public HttpResponseJson(HttpRequestBase request, Configuration configuration) {
+    public HttpResponseJson(HttpRequestPojo request, Configuration configuration) {
         // TODO
     }
 
