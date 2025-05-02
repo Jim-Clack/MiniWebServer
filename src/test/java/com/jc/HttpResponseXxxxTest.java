@@ -15,16 +15,16 @@ public class HttpResponseXxxxTest extends TestCase {
                     "<html><body>Hello</body></html>\n";
 
     public void testGenerateContent() {
-        HttpRequestBase rq = TransactionType.getHttpRequest(bufferWithQuery, null);
-        HttpResponseBase rs = TransactionType.getTypedResponse(rq, new Configuration(), null);
+        HttpRequestBase rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
+        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, new Configuration(), null);
         Assert.assertEquals(HttpResponseFile.class, rs.getClass());
     }
 
     public void testGetFilePath() {
         Configuration cf = new Configuration();
         cf.setRootPath("/xxx");
-        HttpRequestBase rq = TransactionType.getHttpRequest(bufferWithQuery, null);
-        HttpResponseBase rs = TransactionType.getTypedResponse(rq, new Configuration(), null);
+        HttpRequestBase rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
+        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, new Configuration(), null);
         String fp = rs.getFilePath("abc", false, cf, null).toString().replaceAll("\\\\", "/");
         Assert.assertEquals("/xxx/abc", fp);
     }

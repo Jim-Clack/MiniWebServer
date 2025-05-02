@@ -23,7 +23,7 @@ public abstract class HttpResponseBase {
     public abstract ResponseCode generateContent(Socket socket);
 
     /**
-     * Get the response that was assembled by the gernateContent() call.
+     * Get the response that was assembled by the generateContent() call.
      * @return A socket-ready HTTP response.
      */
     public abstract byte[] getContent();
@@ -53,7 +53,7 @@ public abstract class HttpResponseBase {
     }
 
     /**
-     * Read a file in, such as a, HTML. JPEG, or PNG file.
+     * Read a file in, such as a HTML. JPEG, or PNG file.
      * @param pathToFile Absolute path of the file.
      * @return File content.
      */

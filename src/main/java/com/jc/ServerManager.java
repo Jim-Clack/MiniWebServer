@@ -15,13 +15,14 @@ public class ServerManager {
 
     /**
      * Main method to create a new session, and thereby a SessionTread then SessionHandler.
+     * @param protocol HTTP or HTTPS
      * @param socket Connection to receive requests and send responses to.
      * @param configuration Configuration - settings.
      */
-    public void createSession(Socket socket, Configuration configuration) {
+    public void createSession(String protocol, Socket socket, Configuration configuration) {
         SessionThread sessionThread;
         try {
-            sessionThread = new SessionThread(socket, configuration, this);
+            sessionThread = new SessionThread(protocol, socket, configuration, this);
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
@@ -63,9 +64,10 @@ public class ServerManager {
         buffer.append("--------------------------------------\n");
         for(SessionThread sessionThread : sessions) {
             buffer.append(sessionThread.getThreadName() + "\n");
-            buffer.append("  Alive:   " + sessionThread.isAlive() + "\n");
-            buffer.append("  Idle:    " + sessionThread.beenIdleForHowLong() + "\n");
-            buffer.append("  Client:  " + sessionThread.getAddressAndPort() + "\n");
+            buffer.append("  Alive:    " + sessionThread.isAlive() + "\n");
+            buffer.append("  Protocol: " + sessionThread.getProtocol() + "\n");
+            buffer.append("  Idle:     " + sessionThread.beenIdleForHowLong() + "\n");
+            buffer.append("  Client:   " + sessionThread.getAddressAndPort() + "\n");
             buffer.append("  ------------------------------------\n");
             if(sessionThread.isAlive()) {
                 threadCount++;

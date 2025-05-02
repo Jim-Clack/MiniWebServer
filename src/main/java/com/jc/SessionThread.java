@@ -1,5 +1,8 @@
 package com.jc;
 
+import javax.net.ssl.HandshakeCompletedListener;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.Socket;
 
@@ -19,7 +22,7 @@ public class SessionThread extends Thread {
     /** Name of this thread. (Also same as Thread.currentThread.getName().) */
     private String threadName = "?";
 
-    /** SessionThread will create this to handle the sesssion. */
+    /** SessionThread will create this to handle the session. */
     private final SessionHandler handler;
 
     /** Stash the Ip address and port of the remote client for reference. */
@@ -28,15 +31,21 @@ public class SessionThread extends Thread {
     /** All of our web communication for this connection goes over this socket. */
     private final Socket socket;
 
+    /** HTTP or HTTPS. */
+    private final String protocol;
+
     /**
      * ctor.
+     * @param protocol HTTP or HTTPS
      * @param socket Connection accepted by server.
      * @param configuration For fetching configuration settings.
      * @param manager This is the Top Dog that knows everything about the server.
      * @throws IOException If we cannot recover, we will give up and throw this.
      */
-    public SessionThread(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
+    public SessionThread(String protocol, Socket socket,
+                  Configuration configuration, ServerManager manager) throws IOException {
         this.setDaemon(true);
+        this.protocol = protocol;
         this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
         Logger.INFO("Starting - connection with " + clientIp);
@@ -90,6 +99,14 @@ public class SessionThread extends Thread {
      */
     public String getAddressAndPort() {
         return clientIp;
+    }
+
+    /**
+     * Get the protocol.
+     * @return HTTP or HTTPS.
+     */
+    public String getProtocol() {
+        return protocol;
     }
 
 }

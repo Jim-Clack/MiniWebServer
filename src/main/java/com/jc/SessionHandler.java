@@ -74,10 +74,10 @@ public class SessionHandler extends SocketIOBase {
             Thread.currentThread().interrupt();
             return;
         }
-        request = TransactionType.getTypedRequest(request); // clone to correct type
-        HttpResponseBase response = TransactionType.getTypedResponse(request, configuration, manager);
+        request = HttpActionType.getTypedRequest(request); // clone to correct type
+        HttpResponseBase response = HttpActionType.getTypedResponse(request, configuration, manager);
         ResponseCode code = response.generateContent(socket);
-        Logger.DEBUG("Processed request, code=" + code + ", type=" + TransactionType.getRequestKind(request));
+        Logger.DEBUG("Processed request, code=" + code + ", type=" + HttpActionType.getRequestKind(request));
         send(response.getContent());
     }
 

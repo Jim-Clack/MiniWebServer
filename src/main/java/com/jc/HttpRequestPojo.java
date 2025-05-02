@@ -1,15 +1,13 @@
 package com.jc;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * HTTP Request class hierarchy...
- *   HttpRequestXxxx -> HttpRequestBase -> HttpRequestPojo
- *     Xxxx = Pojo - A lightweight class for state that can be cloned.
- *     Xxxx = Base - Socket HTTP Request message parsing methods.
- *     Xxxx = File - File transfer request or other kind of request.
+ * HttpRequestXxxx -> HttpRequestBase -> HttpRequestPojo
+ *   Xxxx = Pojo - A lightweight class for state that can be cloned.
+ *   Xxxx = Base - Socket HTTP Request message parsing methods.
+ *   Xxxx = File - File transfer request or other kind of request.
  */
 public class HttpRequestPojo {
 

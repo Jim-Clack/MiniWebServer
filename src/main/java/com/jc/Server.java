@@ -8,7 +8,6 @@ import java.io.IOException;
  *   full exception/error handling
  *   HTTP > 1.1
  *   basic auth
- *   https
  *   plugins
  *   web services, JSON, SOAP
  *   JEE servlets JSP
@@ -17,8 +16,9 @@ import java.io.IOException;
  * ---------------------------------------------------------------------------
  * You can pass in configuration settings or put them into the java properties
  *    Setting          arg[n] Java property              Default
- *    IP port to listen   0    MiniWebServer.portNumber  12345
- *    Website root path   1    MiniWebServer.rootPath    /Users/[home]/webroot
+ *    IP port to listen   0  MiniWebServer.portNumber    12345
+ *    SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)
+ *    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
  * ---------------------------------------------------------------------------
  * You may link with this in order to create an embedded web server or run it
  * under "App,java" as a standalone web server. To call it, do this:
@@ -50,15 +50,24 @@ public class Server
     public void start() throws IOException, InterruptedException {
         Configuration configuration = getConfiguration(args);
         ServerManager manager = new ServerManager();
-        ListenerThread listener = new ListenerThread(manager, configuration);
-        listener.start();
-        LocalServerConsole console = new LocalServerConsole(manager, listener);
+
+        // Start HTTP listener
+        ListenerThread httpListener = new ListenerThread("HTTP", manager, configuration);
+        httpListener.start();
+
+        // Start HTTPS listener
+        if(configuration.getSslPortNumber() > 0) {
+            ListenerThread httpsListener = new ListenerThread("HTTPS", manager, configuration);
+            httpsListener.start();
+        }
+
+        LocalServerConsole console = new LocalServerConsole(manager, httpListener);
         Thread.sleep(1000);
         console.interact();
         manager.killIdleSessions(0L);
         Thread.yield();
         System.out.println("Done!");
-        listener.interrupt();
+        httpListener.interrupt();
     }
 
     /**
@@ -71,7 +80,10 @@ public class Server
         if(args.length > 0) {
             configuration.setPortNumber(Integer.parseInt(args[0]));
             if(args.length > 1) {
-                configuration.setRootPath(args[1]);
+                configuration.setSslPortNumber(Integer.parseInt(args[1]));
+            }
+            if(args.length > 2) {
+                configuration.setRootPath(args[2]);
             }
         }
         return configuration;

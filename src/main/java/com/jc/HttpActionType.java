@@ -3,16 +3,28 @@ package com.jc;
 /**
  * Simple static methods to assist with creating HTTP requests and responses.
  */
-public class TransactionType {
+public class HttpActionType {
 
     /**
      * What kind of request is this?
      */
     public enum RequestType {
         RQ_FILE_GET,
-        RQ_WS_SOAP,
-        RQ_WS_JSON,
+        RQ_FILE_POST,   // not yet handled
         RQ_WEB_CONSOLE,
+        RQ_WS_SOAP,     // not yet implemented
+        RQ_WS_JSON,     // not yet implemented
+    }
+
+    /**
+     * Create an HttpRequestXxxx of the appropriate type, based on header values.
+     * @param content HTTP Request as received from a socket.
+     * @param manager The top level manager that knows about all sessions.
+     * @return The appropriate type of HttpRequestXxxx,
+     */
+    public static HttpRequestBase getHttpRequest(String content, ServerManager manager) {
+        HttpRequestBase request = new HttpRequestFile(content, manager);
+        return getTypedRequest(request);
     }
 
     /**
@@ -31,19 +43,10 @@ public class TransactionType {
             return RequestType.RQ_WS_JSON;
         } else if(request.getFilePath().startsWith("/webconsole")) {
             return RequestType.RQ_WEB_CONSOLE;
+        } else if(request.getMethod().equals("POST")) {
+            return RequestType.RQ_FILE_POST;
         }
         return RequestType.RQ_FILE_GET;
-    }
-
-    /**
-     * Create an HttpRequestXxxx of the appropriate type, based on header values.
-     * @param content HTTP Request as received from a socket.
-     * @param manager The top level manager that knows about all sessions.
-     * @return The appropriate type of HttpRequestXxxx,
-     */
-    public static HttpRequestBase getHttpRequest(String content, ServerManager manager) {
-        HttpRequestBase request = new HttpRequestFile(content, manager);
-        return getTypedRequest(request);
     }
 
     /**

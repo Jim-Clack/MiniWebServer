@@ -3,7 +3,7 @@ package com.jc;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class TransactionTypeTest extends TestCase {
+public class HttpActionTypeTest extends TestCase {
 
     private final String bufferWithQuery =
             "GET /index.html?qu=samp&qty=1 HTTP/1.1\n" +
@@ -15,19 +15,19 @@ public class TransactionTypeTest extends TestCase {
                     "<html><body>Hello</body></html>\n";
 
     public void testGetHttpRequestFile() {
-        HttpRequestBase rq = TransactionType.getHttpRequest(bufferWithQuery, null);
+        HttpRequestBase rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
         Assert.assertEquals(HttpRequestFile.class, rq.getClass());
     }
 
     public void testGetHttpRequestSoap() {
         String buffer2 = bufferWithQuery.replace("Host", "Content-Type: text/xml\nHost");
-        HttpRequestBase rq = TransactionType.getHttpRequest(buffer2, null);
+        HttpRequestBase rq = HttpActionType.getHttpRequest(buffer2, null);
         Assert.assertEquals(HttpRequestSoap.class, rq.getClass());
     }
 
     public void testGetHttpRequestJson() {
         String buffer2 = bufferWithQuery.replace("Host", "Content-Type: application/json\nHost");
-        HttpRequestBase rq = TransactionType.getHttpRequest(buffer2, null);
+        HttpRequestBase rq = HttpActionType.getHttpRequest(buffer2, null);
         Assert.assertEquals(HttpRequestJson.class, rq.getClass());
     }
 
@@ -37,7 +37,7 @@ public class TransactionTypeTest extends TestCase {
         rq.parseLineOne(lines);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        HttpRequestBase rb = TransactionType.getTypedRequest(rq);
+        HttpRequestBase rb = HttpActionType.getTypedRequest(rq);
         Assert.assertEquals(HttpRequestFile.class, rb.getClass());
     }
 
@@ -47,7 +47,7 @@ public class TransactionTypeTest extends TestCase {
         rq.parseLineOne(lines);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        HttpResponseBase rs = TransactionType.getTypedResponse(rq, new Configuration(), rq.manager);
+        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, new Configuration(), rq.manager);
         Assert.assertEquals(HttpResponseFile.class, rs.getClass());
     }
 }
