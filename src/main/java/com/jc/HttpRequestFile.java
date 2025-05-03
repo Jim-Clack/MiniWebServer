@@ -14,7 +14,7 @@ public class HttpRequestFile extends HttpRequestBase {
     public HttpRequestFile(String content, ServerManager manager) {
         super(manager);
         String[] lines = content.split("\n");
-        parseLineOne(lines[0]);
+        parseStatusLine(lines[0]);
         int lineIndex = parseHeaders(lines);
         parseBody(lineIndex, lines);
     }

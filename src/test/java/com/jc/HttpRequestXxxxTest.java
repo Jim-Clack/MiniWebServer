@@ -19,7 +19,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetRequestKind() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         HttpActionType.RequestType rk = HttpActionType.getRequestKind(rq);
@@ -29,7 +29,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetFilePath() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String fp = rq.getFilePath();
@@ -39,7 +39,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetQueryValue() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String qv = rq.getQueryValue("qu", "???");
@@ -51,7 +51,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetHeader() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String[] hosts = rq.getHeader("Host");
@@ -62,7 +62,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetBody() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String bod = rq.getBody();
@@ -72,7 +72,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetMethod() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String mth = rq.getMethod();
@@ -82,7 +82,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetErrorCode() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         ErrorCode ec = rq.getErrorCode();
@@ -92,7 +92,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetUrl() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String url = rq.getUrl();
@@ -102,7 +102,7 @@ public class HttpRequestXxxxTest extends TestCase {
     public void testGetVersion() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String ver = rq.getVersion();
@@ -113,7 +113,7 @@ public class HttpRequestXxxxTest extends TestCase {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
         String[] lines2 = Arrays.copyOfRange(lines, 0, 5);
-        rq.parseLineOne(lines2);
+        rq.parseStatusLine(lines2[0]);
         int lineIndex = rq.parseHeaders(lines2);
         rq.parseBody(lineIndex, lines2);
         ErrorCode ec = rq.getErrorCode();
@@ -124,7 +124,7 @@ public class HttpRequestXxxxTest extends TestCase {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
         lines[0] = "GET /index.html?qu=samp&qty=1 HTTP/2.0";
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         ErrorCode ec = rq.getErrorCode();
@@ -135,7 +135,7 @@ public class HttpRequestXxxxTest extends TestCase {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
         lines[0] = "BLUMP /index.html?qu=samp&qty=1 HTTP/1.1";
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         ErrorCode ec = rq.getErrorCode();

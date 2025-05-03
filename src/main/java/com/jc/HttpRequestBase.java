@@ -35,7 +35,7 @@ public class HttpRequestBase extends HttpRequestPojo {
      * Process the first line of the raw HTTP request.
      * @param line the raw data
      */
-    protected void parseLineOne(String line) {
+    protected void parseStatusLine(String line) {
         String[] tokens = line.split(" ");
         if(tokens.length < 3) {
             errorCode = ErrorCode.BAD_FIRST_LINE;

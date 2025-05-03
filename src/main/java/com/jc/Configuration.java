@@ -3,7 +3,25 @@ package com.jc;
 import java.io.File;
 
 /**
- * Simple class just for testing.
+ * Simple settings class just for testing.
+ * ---------------------------------------------------------------------------
+ * To enable HTTPS, acquire a certificate from a certificate authority based
+ * on your deployed environment, and install it via the following properties:
+ *  javax.net.ssl.keyStore
+ *  javax.net.ssl.keyStorePassword
+ * You may want to set some of these properties as well.
+ *  javax.net.ssl.trustStore
+ *  javax.net.ssl.trustStorePassword
+ *  javax.net.ssl.keyStoreType
+ *  javax.net.ssl.trustStoreType
+ *  javax.net.debug
+ *  javax.net.ssl.sessionCacheSize
+ *  javax.net.ssl.sessionTimeout
+ *  jdk.tls.server.protocols
+ *  jdk.tls.disabledAlgorithms
+ *  https.protocols
+ *  https.proxyHost
+ *  https.proxyPort
  */
 public class Configuration {
 
@@ -12,6 +30,10 @@ public class Configuration {
     private String rootPath = ".";
 
     public Configuration() {
+        // System.setProperty("javax.net.ssl.keyStore", "/somepath/kstore.key");
+        // System.setProperty("javax.net.ssl.keyStorePassword", "T@Zz932105");
+        // System.setProperty("javax.net.ssl.trustStore", "/somepath/tstore.key");
+        // System.setProperty("javax.net.ssl.trustStorePassword", "T@Zz932105");
         String userHome = System.getProperty("user.home");
         rootPath = userHome + File.separator + "webroot";
         this.portNumber = Integer.parseInt(

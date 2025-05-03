@@ -3,6 +3,8 @@ package com.jc;
 import java.io.IOException;
 
 /**
+ * In order to support SSL/HTTPS, you have to set certain Java properties, as
+ * listed in Configuration.java.
  * ---------------------------------------------------------------------------
  * Very basic server, does NOT yet support...
  *   full exception/error handling

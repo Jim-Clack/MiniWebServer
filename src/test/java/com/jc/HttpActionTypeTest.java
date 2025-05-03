@@ -34,7 +34,7 @@ public class HttpActionTypeTest extends TestCase {
     public void testGetTypedRequest() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         HttpRequestBase rb = HttpActionType.getTypedRequest(rq);
@@ -44,7 +44,7 @@ public class HttpActionTypeTest extends TestCase {
     public void testGetTypedResponse() {
         HttpRequestBase rq = new HttpRequestBase(null);
         String[] lines = bufferWithQuery.split("\n");
-        rq.parseLineOne(lines);
+        rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         HttpResponseBase rs = HttpActionType.getTypedResponse(rq, new Configuration(), rq.manager);
