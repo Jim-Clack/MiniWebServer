@@ -47,7 +47,7 @@ public class HttpActionTypeTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, new Configuration(), rq.manager);
+        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, rq.manager);
         Assert.assertEquals(HttpResponseFile.class, rs.getClass());
     }
 }

@@ -23,20 +23,15 @@ public class SessionHandler extends SocketIOBase {
     /** Top level manager over all sessions. */
     private final ServerManager manager;
 
-    /** Configuration - settings. */
-    private final Configuration configuration;
-
     /**
      * Ctor.
      * @param socket Our connection to the client.
-     * @param configuration Configuration - settings.
      * @param manager Top level manager over all sessions.
      * @throws IOException Only if a non-recoverable communication error occurs.
      */
-    public SessionHandler(Socket socket, Configuration configuration, ServerManager manager) throws IOException {
+    public SessionHandler(Socket socket, ServerManager manager) throws IOException {
         super(socket);
         this.manager = manager;
-        this.configuration = configuration;
         this.socket = socket;
     }
 
@@ -75,7 +70,7 @@ public class SessionHandler extends SocketIOBase {
             return;
         }
         request = HttpActionType.getTypedRequest(request); // clone to correct type
-        HttpResponseBase response = HttpActionType.getTypedResponse(request, configuration, manager);
+        HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
         Logger.DEBUG("Processed request, code=" + code + ", type=" + HttpActionType.getRequestKind(request));
         send(response.getContent());

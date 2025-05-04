@@ -1,5 +1,6 @@
 package com.jc;
 
+import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,9 +16,6 @@ public class ListenerThread extends Thread {
     /** Top level server manager. */
     private final ServerManager manager;
 
-    /** The configuration - for IP port, path to web files. */
-    private final Configuration configuration;
-
     /** The server socket that we listen on. */
     private final ServerSocket serverSocket;
 
@@ -31,21 +29,20 @@ public class ListenerThread extends Thread {
      * Ctor.
      * @param manager Top level server manager.
      * @param protocol HTTP or HTTPS.
-     * @param configuration The configuration - for IP port, path to web files.
      * @throws IOException Fatal problem starting server/listener.
      */
-    public ListenerThread(String protocol, ServerManager manager, Configuration configuration) throws IOException {
+    public ListenerThread(String protocol, ServerManager manager) throws IOException {
         this.protocol = protocol.trim().toUpperCase();
         this.manager = manager;
-        this.configuration = configuration;
         InetAddress address = InetAddress.getByName("localhost");
         if(protocol.equals("HTTPS")) {
-            this.portNumber = configuration.getSslPortNumber();
+            this.portNumber = Configuration.getInstance().getSslPortNumber();
             this.serverSocket = SSLServerSocketFactory.getDefault().
                     createServerSocket(portNumber, 100, address);
         } else {
-            this.portNumber = configuration.getPortNumber();
-            this.serverSocket = new ServerSocket(portNumber, 100, address);
+            this.portNumber = Configuration.getInstance().getPortNumber();
+            this.serverSocket = ServerSocketFactory.getDefault().
+                    createServerSocket(portNumber, 100, address);
         }
         this.setDaemon(true);
     }
@@ -64,7 +61,7 @@ public class ListenerThread extends Thread {
                 Logger.DEBUG("Listener accept(): " + e.getMessage());
             }
             if(socket != null) {
-                manager.createSession(protocol, socket, configuration);
+                manager.createSession(protocol, socket);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.jc;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,19 +35,11 @@ public class HttpRequestPojo {
 
     /**
      * Get the specified file path from the URL passed in line 1.
+     * @param mustExist True if file is expected to exist, such as for read.
      * @return file to transfer.
      */
-    public String getFilePath() {
-        int colon = url.indexOf(":");
-        int question = url.indexOf("?");
-        int justPast = url.length();
-        if(colon > 0) {
-            justPast = colon;
-        }
-        if(question > 0) {
-            justPast = question;
-        }
-        return url.substring(0, justPast);
+    public String getFilePath(boolean mustExist) {
+        return UriParser.getFilePath(url, true);
     }
 
     /**
@@ -56,15 +49,7 @@ public class HttpRequestPojo {
      * @return the value of that key.
      */
     public String getQueryValue(String key, String defaultValue) {
-        int index = url.indexOf(key + "=") + 1;
-        if(index <= 0) {
-            return defaultValue;
-        }
-        int pastValue = url.indexOf("&", index + key.length());
-        if(pastValue == -1) {
-            pastValue = url.length();
-        }
-        return url.substring(index + key.length(), pastValue);
+        return UriParser.queryString(url, key, defaultValue);
     }
 
     /**

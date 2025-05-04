@@ -17,12 +17,11 @@ public class ServerManager {
      * Main method to create a new session, and thereby a SessionTread then SessionHandler.
      * @param protocol HTTP or HTTPS
      * @param socket Connection to receive requests and send responses to.
-     * @param configuration Configuration - settings.
      */
-    public void createSession(String protocol, Socket socket, Configuration configuration) {
+    public void createSession(String protocol, Socket socket) {
         SessionThread sessionThread;
         try {
-            sessionThread = new SessionThread(protocol, socket, configuration, this);
+            sessionThread = new SessionThread(protocol, socket, this);
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {

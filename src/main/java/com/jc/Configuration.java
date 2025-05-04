@@ -9,6 +9,7 @@ import java.io.File;
  * on your deployed environment, and install it via the following properties:
  *  javax.net.ssl.keyStore
  *  javax.net.ssl.keyStorePassword
+ * https://docs.oracle.com/javadb/10.10.1.2/adminguide/cadminsslserver.html
  * You may want to set some of these properties as well.
  *  javax.net.ssl.trustStore
  *  javax.net.ssl.trustStorePassword
@@ -25,15 +26,21 @@ import java.io.File;
  */
 public class Configuration {
 
+    private static Configuration instance = null;
     private int portNumber = 12345;
     private int sslPortNumber = 0; // 0 = SSL disabled
     private String rootPath = ".";
 
-    public Configuration() {
-        // System.setProperty("javax.net.ssl.keyStore", "/somepath/kstore.key");
+    public static Configuration getInstance() {
+        if(instance == null) {
+            instance = new Configuration();
+        }
+        return instance;
+    }
+
+    private Configuration() {
+        // System.setProperty("javax.net.ssl.keyStore", "/somepath/keystore.key");
         // System.setProperty("javax.net.ssl.keyStorePassword", "T@Zz932105");
-        // System.setProperty("javax.net.ssl.trustStore", "/somepath/tstore.key");
-        // System.setProperty("javax.net.ssl.trustStorePassword", "T@Zz932105");
         String userHome = System.getProperty("user.home");
         rootPath = userHome + File.separator + "webroot";
         this.portNumber = Integer.parseInt(

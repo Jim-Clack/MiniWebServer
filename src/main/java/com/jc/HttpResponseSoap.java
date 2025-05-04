@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class HttpResponseSoap extends HttpResponseBase {
 
-    public HttpResponseSoap(HttpRequestPojo request, Configuration configuration) {
+    public HttpResponseSoap(HttpRequestPojo request) {
         // TODO
     }
 

@@ -38,19 +38,17 @@ public class SessionThread extends Thread {
      * ctor.
      * @param protocol HTTP or HTTPS
      * @param socket Connection accepted by server.
-     * @param configuration For fetching configuration settings.
      * @param manager This is the Top Dog that knows everything about the server.
      * @throws IOException If we cannot recover, we will give up and throw this.
      */
-    public SessionThread(String protocol, Socket socket,
-                  Configuration configuration, ServerManager manager) throws IOException {
+    public SessionThread(String protocol, Socket socket, ServerManager manager) throws IOException {
         this.setDaemon(true);
         this.protocol = protocol;
         this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
         Logger.INFO("Starting - connection with " + clientIp);
         System.out.println("\n### Connection with " + clientIp);
-        handler = new SessionHandler(socket, configuration, manager);
+        handler = new SessionHandler(socket, manager);
     }
 
     /**

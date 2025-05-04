@@ -32,7 +32,7 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        String fp = rq.getFilePath();
+        String fp = rq.getFilePath(true);
         Assert.assertEquals("/index.html", fp);
     }
 

@@ -3,18 +3,19 @@ package com.jc;
 import java.io.IOException;
 
 /**
+ * Very basic web server.
  * In order to support SSL/HTTPS, you have to set certain Java properties, as
  * listed in Configuration.java.
  * ---------------------------------------------------------------------------
- * Very basic server, does NOT yet support...
+ * Does NOT yet support...
  *   full exception/error handling
+ *   multi-tenant directory trees
  *   HTTP > 1.1
- *   basic auth
+ *   basic auth, URL-based credentials
  *   plugins
  *   web services, JSON, SOAP
- *   JEE servlets JSP
- *   multi-tenant directory trees
- *   zip/jar deployment
+ *   JEE, servlets, JSP
+ *   zip/jar/was/aar deployment
  * ---------------------------------------------------------------------------
  * You can pass in configuration settings or put them into the java properties
  *    Setting          arg[n] Java property              Default
@@ -50,16 +51,16 @@ public class Server
      * @throws InterruptedException if an interrupt occurs where not expected.
      */
     public void start() throws IOException, InterruptedException {
-        Configuration configuration = getConfiguration(args);
+        setConfiguration(args);
         ServerManager manager = new ServerManager();
 
         // Start HTTP listener
-        ListenerThread httpListener = new ListenerThread("HTTP", manager, configuration);
+        ListenerThread httpListener = new ListenerThread("HTTP", manager);
         httpListener.start();
 
         // Start HTTPS listener
-        if(configuration.getSslPortNumber() > 0) {
-            ListenerThread httpsListener = new ListenerThread("HTTPS", manager, configuration);
+        if(Configuration.getInstance().getSslPortNumber() > 0) {
+            ListenerThread httpsListener = new ListenerThread("HTTPS", manager);
             httpsListener.start();
         }
 
@@ -75,20 +76,17 @@ public class Server
     /**
      * This handles command-line args and reading the configuration.
      * @param args portNumber and rootPath - both are optional.
-     * @return the populated Configuration.
      */
-    private Configuration getConfiguration(String[] args) {
-        Configuration configuration = new Configuration();
+    private void setConfiguration(String[] args) {
         if(args.length > 0) {
-            configuration.setPortNumber(Integer.parseInt(args[0]));
+            Configuration.getInstance().setPortNumber(Integer.parseInt(args[0]));
             if(args.length > 1) {
-                configuration.setSslPortNumber(Integer.parseInt(args[1]));
+                Configuration.getInstance().setSslPortNumber(Integer.parseInt(args[1]));
             }
             if(args.length > 2) {
-                configuration.setRootPath(args[2]);
+                Configuration.getInstance().setRootPath(args[2]);
             }
         }
-        return configuration;
     }
 
 }

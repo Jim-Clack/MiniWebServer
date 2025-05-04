@@ -12,9 +12,6 @@ public class HttpResponseFile extends HttpResponseBase {
     /** The HTTP that requested the file. */
     private final HttpRequestPojo request;
 
-    /** Configuration settings. */
-    private final Configuration configuration;
-
     /** The response header gets assembled into this. */
     private final StringBuilder headerBuffer;
 
@@ -27,11 +24,9 @@ public class HttpResponseFile extends HttpResponseBase {
     /**
      * Ctor.
      * @param request The HTTP that requested the file.
-     * @param configuration Configuration settings.
      */
-    public HttpResponseFile(HttpRequestPojo request, Configuration configuration) {
+    public HttpResponseFile(HttpRequestPojo request) {
         this.request = request;
-        this.configuration = configuration;
         this.headerBuffer = new StringBuilder();
     }
 
@@ -42,8 +37,7 @@ public class HttpResponseFile extends HttpResponseBase {
      */
     public ResponseCode generateContent(Socket socket) {
         responseCode = ResponseCode.RC_OK;
-        Path pathToFile = getFilePath(request.getFilePath(), true, configuration,
-                "index.html", "index.htm", "default.htm", "default.html");
+        String pathToFile = request.getFilePath(true);
         Logger.INFO("Sending " + pathToFile + " to " + socket);
         if(pathToFile == null) {
             responseCode = ResponseCode.RC_NOT_FOUND;
@@ -65,7 +59,7 @@ public class HttpResponseFile extends HttpResponseBase {
      * Assemble the HTTP response, line1, headers, and read the file in.
      * @param pathToFile Absolute or relative path to file to be read.
      */
-    private void assembleResponseWithFile(Path pathToFile) {
+    private void assembleResponseWithFile(String pathToFile) {
         byte[] content = readFile(pathToFile);
         if (content == null || content.length == 0) {
             responseCode = ResponseCode.RC_NOT_FOUND;

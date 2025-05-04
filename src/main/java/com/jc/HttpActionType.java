@@ -41,7 +41,7 @@ public class HttpActionType {
             return RequestType.RQ_WS_SOAP;
         } else if(contentType.contains("/json")) {
             return RequestType.RQ_WS_JSON;
-        } else if(request.getFilePath().startsWith("/webconsole")) {
+        } else if(request.getUrl().startsWith("/webconsole")) {
             return RequestType.RQ_WEB_CONSOLE;
         } else if(request.getMethod().equals("POST")) {
             return RequestType.RQ_FILE_POST;
@@ -67,21 +67,19 @@ public class HttpActionType {
     /**
      * Instantiate a HttpResponseXxxxx based on the request.
      * @param request Any kind of HttpRequestXxxx
-     * @param configuration Settings.
      * @param manager Top level manager that is aware of all sessions.
      * @return An initialized HttpResponseXxxxx suitable for this request.
      */
-    public static HttpResponseBase getTypedResponse(
-            HttpRequestPojo request, Configuration configuration, ServerManager manager) {
+    public static HttpResponseBase getTypedResponse(HttpRequestPojo request, ServerManager manager) {
         RequestType requestType = getRequestKind(request);
         if (requestType == RequestType.RQ_WS_SOAP) {
-            return new HttpResponseSoap(request, configuration);
+            return new HttpResponseSoap(request);
         } else if (requestType == RequestType.RQ_WS_JSON) {
-            return new HttpResponseJson(request, configuration);
+            return new HttpResponseJson(request);
         } else if (requestType == RequestType.RQ_WEB_CONSOLE) {
             return new HttpResponseWebConsole(request, manager);
         }
-        return new HttpResponseFile(request, configuration);
+        return new HttpResponseFile(request);
     }
 
 }

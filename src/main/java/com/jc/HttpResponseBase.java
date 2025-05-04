@@ -29,36 +29,12 @@ public abstract class HttpResponseBase {
     public abstract byte[] getContent();
 
     /**
-     * Get the path to the requested file.
-     * @param url The file path, may be relative. Generally passed from an HTTP request.
-     * @param mustExist True if the file must exist. (i.e. prep for reading)
-     * @param configuration Configuration settings.
-     * @param defaultTo List of files to search for if mustExist is true.
-     * @return THe path to the file, null on error.
-     */
-    @SuppressWarnings("all")
-    protected Path getFilePath(String url, boolean mustExist, Configuration configuration, String... defaultTo) {
-        Path pathToFile = Paths.get(configuration.getRootPath(), url);
-        if(mustExist && !pathToFile.toFile().exists()) {
-            for (String defaultPath : defaultTo) {
-                if (!pathToFile.toFile().exists() || pathToFile.toFile().isDirectory()) {
-                    pathToFile = Paths.get(configuration.getRootPath(), defaultPath);
-                }
-            }
-        }
-        if(mustExist && !pathToFile.toFile().exists()) {
-            return null;
-        }
-        return pathToFile;
-    }
-
-    /**
      * Read a file in, such as a HTML. JPEG, or PNG file.
      * @param pathToFile Absolute path of the file.
      * @return File content.
      */
-    protected byte[] readFile(Path pathToFile) {
-        File fileToReturn = new File(pathToFile.toString());
+    protected byte[] readFile(String pathToFile) {
+        File fileToReturn = new File(pathToFile);
         try (FileInputStream inStream = new FileInputStream(fileToReturn)) {
             return inStream.readAllBytes();
         } catch (IOException e) {
