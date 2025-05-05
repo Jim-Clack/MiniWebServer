@@ -18,6 +18,7 @@ import java.util.List;
 public class SessionThread extends Thread {
 
     /** Logger slf4j. */
+    @SuppressWarnings("all")
     private final Logger logger = LoggerFactory.getLogger(SessionThread.class);
 
     /** [static] For numbering threads. */

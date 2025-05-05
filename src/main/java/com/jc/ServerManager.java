@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.management.ThreadInfo;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
@@ -80,12 +79,13 @@ public class ServerManager {
      * List all threads running in this JVM.
      * @return Multi-line string.
      */
+    @SuppressWarnings("all")
     public String listAllThreads() {
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         for(Thread thread : Thread.getAllStackTraces().keySet()) {
             buffer.append(thread.getName() + " ");
-            buffer.append(thread.getState().toString() + "\n");
+            buffer.append(thread.getState() + "\n");
             ++threadCount;
         }
         buffer.append("Number of threads: " + threadCount + "\n");
