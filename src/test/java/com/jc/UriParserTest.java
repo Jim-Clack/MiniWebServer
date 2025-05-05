@@ -5,8 +5,7 @@ import junit.framework.TestCase;
 
 public class UriParserTest extends TestCase {
 
-    public void testGetFilePath() throws InterruptedException {
-        // System.setProperty("junit.jupiter.execution.parallel.enabled", "false");
+    public void testGetFilePath() {
         Preferences.getInstance().reset();
         String webroot = Preferences.getInstance().getRootPath();
         String path = UriParser.getFilePath("/xyz", false);
