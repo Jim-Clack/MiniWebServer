@@ -56,7 +56,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      */
     @Override
     public byte[] getContent() {
-        headerBuffer.append(bodyBuffer.toString());
+        headerBuffer.append(bodyBuffer);
         return headerBuffer.toString().getBytes();
     }
 
@@ -75,13 +75,19 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      */
     private void generateHtmlAtTop() {
         bodyBuffer.append("<html>\n<head>\n</head>\n<body>\n");
+        bodyBuffer.append("<style>\n");
+        bodyBuffer.append("p {\n");
+        bodyBuffer.append("line-height: 50%;\n");
+        bodyBuffer.append("}\n");
+        bodyBuffer.append("</style>\n");
+        bodyBuffer.append("<p style='line-height: 60%;'>\n");
         bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><p/>\n");
         bodyBuffer.append("<h3>Click a selection...</h3><p/>\n");
         bodyBuffer.append("<form name='myForm' action='/webconsole' method='get'>\n");
         bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
-        bodyBuffer.append("</form><br/>\n");
+        bodyBuffer.append("</form><p/>\n");
     }
 
     /**

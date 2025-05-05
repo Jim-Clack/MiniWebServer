@@ -1,6 +1,5 @@
 package com.jc;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class HttpRequestPojo {
      * @return file to transfer.
      */
     public String getFilePath(boolean mustExist) {
-        return UriParser.getFilePath(url, true);
+        return UriParser.getFilePath(url, mustExist);
     }
 
     /**

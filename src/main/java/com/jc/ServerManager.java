@@ -57,16 +57,28 @@ public class ServerManager {
         return killCount;
     }
 
+    @SuppressWarnings("all")
     public String listAllSessions() {
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         buffer.append("--------------------------------------\n");
         for(SessionThread sessionThread : sessions) {
+            String lastMessage = "(none)";
+            String prevMessage = "(none)";
+            List<String> history = sessionThread.getHistory();
+            if(history.size() > 0) {
+                lastMessage = history.get(history.size() - 1);
+                if(history.size() > 1) {
+                    prevMessage = history.get(history.size() - 2);
+                }
+            }
             buffer.append(sessionThread.getThreadName() + "\n");
             buffer.append("  Alive:    " + sessionThread.isAlive() + "\n");
             buffer.append("  Protocol: " + sessionThread.getProtocol() + "\n");
             buffer.append("  Idle:     " + sessionThread.beenIdleForHowLong() + "\n");
             buffer.append("  Client:   " + sessionThread.getAddressAndPort() + "\n");
+            buffer.append("  Last:     " + lastMessage + "\n");
+            buffer.append("  Previous: " + prevMessage + "\n");
             buffer.append("  ------------------------------------\n");
             if(sessionThread.isAlive()) {
                 threadCount++;

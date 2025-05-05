@@ -89,7 +89,7 @@ public class HttpRequestBase extends HttpRequestPojo {
         if(body.toString().trim().isEmpty()) {
             errorCode = ErrorCode.EMPTY_BODY;
         } else {
-            Logger.TRACE("HttpRequest body=\n" + body.toString());
+            Logger.TRACE("HttpRequest body=\n" + body);
         }
     }
 

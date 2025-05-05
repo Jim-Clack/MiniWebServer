@@ -1,10 +1,8 @@
 package com.jc;
 
-import javax.net.ssl.HandshakeCompletedListener;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * Main per-session thread - one per connection.
@@ -81,6 +79,14 @@ public class SessionThread extends Thread {
      */
     public long beenIdleForHowLong() {
         return handler.beenIdleForHowLong();
+    }
+
+    /**
+     * Get the history of requests/responses.
+     * @return Strings in temporal order.
+     */
+    public List<String> getHistory() {
+        return handler.getHistory();
     }
 
     /**

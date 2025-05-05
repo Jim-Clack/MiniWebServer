@@ -9,7 +9,7 @@ import java.io.File;
  * on your deployed environment, and install it via the following properties:
  *  javax.net.ssl.keyStore
  *  javax.net.ssl.keyStorePassword
- * https://docs.oracle.com/javadb/10.10.1.2/adminguide/cadminsslserver.html
+ * <a href="https://docs.oracle.com/javadb/10.10.1.2/adminguide/cadminsslserver.html">Server Properties</a>
  * You may want to set some of these properties as well.
  *  javax.net.ssl.trustStore
  *  javax.net.ssl.trustStorePassword
@@ -29,7 +29,7 @@ public class Configuration {
     private static Configuration instance = null;
     private int portNumber = 12345;
     private int sslPortNumber = 0; // 0 = SSL disabled
-    private String rootPath = ".";
+    private String rootPath;
 
     public static Configuration getInstance() {
         if(instance == null) {
@@ -51,7 +51,7 @@ public class Configuration {
                 System.getProperty("MiniWebServer.rootPath", this.rootPath);
         File rootPathFile = new File(this.rootPath);
         if(!rootPathFile.exists()) {
-            throw new RuntimeException("Web root path does not exist: " + rootPathFile.toString());
+            throw new RuntimeException("Web root path does not exist: " + rootPathFile);
         }
     }
 

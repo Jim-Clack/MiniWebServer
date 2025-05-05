@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,6 +48,7 @@ public abstract class HttpResponseBase {
      * @param contentLength Length of body. (Yes, you have to generate the body first)
      * @param maxSeconds Cache-control - validity of response in seconds.
      */
+    @SuppressWarnings("all")
     protected void assembleHeaders(
             StringBuilder headerBuffer, String line1, int contentLength, int maxSeconds) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");

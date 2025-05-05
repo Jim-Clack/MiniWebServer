@@ -2,7 +2,6 @@ package com.jc;
 
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 
 /**
  * HTTP Response that simply returns the contents of a file.

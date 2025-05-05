@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is in charge of an HTTP session, reading HTTP requests and then
@@ -22,6 +24,9 @@ public class SessionHandler extends SocketIOBase {
 
     /** Top level manager over all sessions. */
     private final ServerManager manager;
+
+    /** Keep track of history. */
+    private final List<String> history = new LinkedList<>();
 
     /**
      * Ctor.
@@ -61,6 +66,14 @@ public class SessionHandler extends SocketIOBase {
     }
 
     /**
+     * Get the history of requests/responses.
+     * @return Strings in temporal order.
+     */
+    public List<String> getHistory() {
+        return history;
+    }
+
+    /**
      * Receive an HTTP request then send an HTTP response.
      */
     private void handleRequest() {
@@ -73,7 +86,12 @@ public class SessionHandler extends SocketIOBase {
         HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
         Logger.DEBUG("Processed request, code=" + code + ", type=" + HttpActionType.getRequestKind(request));
-        send(response.getContent());
+        if(code == ResponseCode.RC_OK) {
+            String event = request.getMethod() + " " + request.getUrl() + " ==> " +
+                    code.getNumValue() + " " + code.getTextValue();
+            history.add(event);
+            send(response.getContent());
+        }
     }
 
 }

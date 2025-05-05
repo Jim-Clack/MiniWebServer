@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 
 /**
  * Static class for parsing URIs, as in an HTTP request.
- *   https://docs.oracle.com/javase/8/docs/api/java/net/URI.html
+ *   <a href="https://docs.oracle.com/javase/8/docs/api/java/net/URI.html">Oracle URI Docs</a>
  */
 public class UriParser {
 
