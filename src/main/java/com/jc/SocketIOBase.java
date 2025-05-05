@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,6 +17,9 @@ import java.net.Socket;
  *    clearBuffers()            call this between request/response cycles
  */
 class SocketIOBase {
+
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(SocketIOBase.class);
 
     /** Input stream from socket. */
     private final InputStream inStream;
@@ -56,7 +62,7 @@ class SocketIOBase {
             if(Thread.currentThread().isInterrupted()) {
                 return 0;
             }
-            Logger.WARN("receiveIntoInBuffer" + e.getMessage());
+            logger.warn("receiveIntoInBuffer", e);
         }
         return inBuffer.length();
     }
@@ -77,7 +83,7 @@ class SocketIOBase {
         try {
             outStream.write(content);
         } catch (IOException e) {
-            Logger.WARN("sendResponse" + e.getMessage());
+            logger.warn("send() problem", e);
             throw new RuntimeException(e);
         }
     }

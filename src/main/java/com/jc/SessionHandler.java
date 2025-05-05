@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
@@ -13,6 +16,9 @@ import java.util.List;
  */
 public class SessionHandler extends SocketIOBase {
 
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(SessionHandler.class);
+
     /** Keep track of the timestamp of the last HTTP request. */
     private LocalDateTime lastActivity = LocalDateTime.now();
 
@@ -25,7 +31,7 @@ public class SessionHandler extends SocketIOBase {
     /** Top level manager over all sessions. */
     private final ServerManager manager;
 
-    /** Keep track of history. */
+    /** Keep track of history - most recent first. */
     private final List<String> history = new LinkedList<>();
 
     /**
@@ -67,7 +73,7 @@ public class SessionHandler extends SocketIOBase {
 
     /**
      * Get the history of requests/responses.
-     * @return Strings in temporal order.
+     * @return Strings in temporal order with most recent first.
      */
     public List<String> getHistory() {
         return history;
@@ -85,12 +91,15 @@ public class SessionHandler extends SocketIOBase {
         request = HttpActionType.getTypedRequest(request); // clone to correct type
         HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
-        Logger.DEBUG("Processed request, code=" + code + ", type=" + HttpActionType.getRequestKind(request));
+        logger.debug("Processed request, code={}, type={}", code, HttpActionType.getRequestKind(request));
         if(code == ResponseCode.RC_OK) {
             String event = request.getMethod() + " " + request.getUrl() + " ==> " +
                     code.getNumValue() + " " + code.getTextValue();
-            history.add(event);
+            history.add(0, event);
             send(response.getContent());
+            if(history.size() > Preferences.getInstance().getMaxHistory()) {
+                history.remove(history.size() - 1);
+            }
         }
     }
 

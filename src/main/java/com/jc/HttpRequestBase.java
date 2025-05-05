@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class for handling all kinds of HTTP requests. Accepts the raw message and
  * parses out the url, headers, and body.
@@ -8,6 +11,9 @@ package com.jc;
  * calling their ctors or by cloning the state of another HttpRequestXxxx.
  */
 public class HttpRequestBase extends HttpRequestPojo {
+
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(HttpRequestBase.class);
 
     /**
      * Ctor.
@@ -51,7 +57,7 @@ public class HttpRequestBase extends HttpRequestPojo {
         if(!version.equals("HTTP/1.1")) {
             errorCode = ErrorCode.UNSUPPORTED_VERSION;
         }
-        Logger.DEBUG("HttpRequest code=" + errorCode + ", method=" + method + ", url=" + url + ", version=" + version);
+        logger.debug("HttpRequest code={}, method={}, url={}, version={}", errorCode, method, url, version);
     }
 
     /**
@@ -68,11 +74,11 @@ public class HttpRequestBase extends HttpRequestPojo {
             }
             String[] fields = line.split("[:,]", 2);
             if(fields.length < 2) {
-                Logger.WARN("Bad Header in HttpRequest: " + line);
+                logger.warn("Bad Header in HttpRequest: {}", line);
                 errorCode = ErrorCode.BAD_HEADER;
             }
             headers.put(fields[0].trim(), fields[1].trim());
-            Logger.TRACE("HttpRequest header key=" + fields[0].trim() + ", value=" + fields[1].trim());
+            logger.trace("HttpRequest header key={}, value={}", fields[0].trim(), fields[1].trim());
         }
         return lineIndex;
     }
@@ -89,7 +95,7 @@ public class HttpRequestBase extends HttpRequestPojo {
         if(body.toString().trim().isEmpty()) {
             errorCode = ErrorCode.EMPTY_BODY;
         } else {
-            Logger.TRACE("HttpRequest body=\n" + body);
+            logger.trace("HttpRequest body=\n{}", body);
         }
     }
 

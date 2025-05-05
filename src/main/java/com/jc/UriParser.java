@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,6 +13,9 @@ import java.net.URISyntaxException;
  */
 public class UriParser {
 
+    /** Logger slf4j. */
+    private static final Logger logger = LoggerFactory.getLogger(UriParser.class);
+
     /**
      * We are interested in the path, the query, and the path parent (tenant path).
      * @param requestPath From the HTTP request.
@@ -18,13 +24,13 @@ public class UriParser {
      */
     public static String getFilePath(String requestPath, boolean mustExist) {
         String[] defaultFiles = {"index.html", "index.htm", "default.htm", "default.html"};
-        Configuration configuration = Configuration.getInstance();
         try {
             if(requestPath.startsWith("/")) {
                 requestPath = requestPath.substring(1);
             }
             URI requestUri = new URI(new URI(requestPath).getPath());
-            String rootPath = new File(configuration.getRootPath()).getAbsolutePath().replaceAll("\\\\", "/") + "/";
+            String rootPath = new File(
+                    Preferences.getInstance().getRootPath()).getAbsolutePath().replaceAll("\\\\", "/") + "/";
             URI rootUri = new URI("file:///" + rootPath); // authority must have 3 slashes
             URI resolvedUri = rootUri.resolve(requestUri);
             if(mustExist) {
@@ -33,7 +39,7 @@ public class UriParser {
                     return testFile.getAbsolutePath();
                 }
                 for(String defaultFile : defaultFiles) {
-                    Logger.TRACE("Testing existence of: " + resolvedUri.resolve(defaultFile));
+                    logger.trace("Testing existence of: {}", resolvedUri.resolve(defaultFile));
                     testFile = new File(resolvedUri.resolve(defaultFile));
                     if(testFile.exists()) {
                         return testFile.getAbsolutePath();
@@ -41,7 +47,7 @@ public class UriParser {
                 }
                 return null;
             }
-            Logger.TRACE("ResolvedUri: " + resolvedUri);
+            logger.trace("ResolvedUri: {}", resolvedUri);
             String path = resolvedUri.getPath();
             if(path.startsWith("/") && path.charAt(2) == ':') { // for Windows file paths
                 return path.substring(1);

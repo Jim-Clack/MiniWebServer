@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -7,6 +10,9 @@ import java.nio.charset.StandardCharsets;
  * HTTP Response that simply returns the contents of a file.
  */
 public class HttpResponseFile extends HttpResponseBase {
+
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(HttpResponseBase.class);
 
     /** The HTTP that requested the file. */
     private final HttpRequestPojo request;
@@ -37,7 +43,7 @@ public class HttpResponseFile extends HttpResponseBase {
     public ResponseCode generateContent(Socket socket) {
         responseCode = ResponseCode.RC_OK;
         String pathToFile = request.getFilePath(true);
-        Logger.INFO("Sending " + pathToFile + " to " + socket);
+        logger.info("Sending {} to {}", pathToFile, socket);
         if(pathToFile == null) {
             responseCode = ResponseCode.RC_NOT_FOUND;
         } else {

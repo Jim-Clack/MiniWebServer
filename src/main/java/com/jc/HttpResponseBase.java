@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +15,9 @@ import java.util.Date;
  * All HTTP responses are based on this.
  */
 public abstract class HttpResponseBase {
+
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(HttpResponseBase.class);
 
     /**
      * Generate the response with line1, headers, and body.
@@ -36,7 +42,7 @@ public abstract class HttpResponseBase {
         try (FileInputStream inStream = new FileInputStream(fileToReturn)) {
             return inStream.readAllBytes();
         } catch (IOException e) {
-            Logger.ERROR("Problem reading file " + fileToReturn.getAbsolutePath() + " " + e.getMessage());
+            logger.error("Problem reading file {}", fileToReturn.getAbsolutePath(), e);
             throw new RuntimeException(e);
         }
     }

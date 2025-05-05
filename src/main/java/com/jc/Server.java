@@ -5,15 +5,15 @@ import java.io.IOException;
 /**
  * Very basic web server.
  * In order to support SSL/HTTPS, you have to set certain Java properties, as
- * listed in Configuration.java.
+ * listed in ServerSettings.java.
  * ---------------------------------------------------------------------------
- * Does NOT yet support...
- *   full exception/error handling
- *   multi-tenant directory trees
- *   HTTP > 1.1
- *   basic auth, URL-based credentials
+ * Does NOT support...
+ *   full exception/error handling (yet)
+ *   web services, JSON, SOAP (yet)
+ *   basic auth, URL-based credentials (yet)
+ *   websockets
+ *   HTTP other than 1.1
  *   plugins
- *   web services, JSON, SOAP
  *   JEE, servlets, JSP
  *   zip/jar/was/aar deployment
  * ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ public class Server
         httpListener.start();
 
         // Start HTTPS listener
-        if(Configuration.getInstance().getSslPortNumber() > 0) {
+        if(Preferences.getInstance().getSslPortNumber() > 0) {
             ListenerThread httpsListener = new ListenerThread("HTTPS", manager);
             httpsListener.start();
         }
@@ -79,12 +79,12 @@ public class Server
      */
     private void setConfiguration(String[] args) {
         if(args.length > 0) {
-            Configuration.getInstance().setPortNumber(Integer.parseInt(args[0]));
+            Preferences.getInstance().setPortNumber(Integer.parseInt(args[0]));
             if(args.length > 1) {
-                Configuration.getInstance().setSslPortNumber(Integer.parseInt(args[1]));
+                Preferences.getInstance().setSslPortNumber(Integer.parseInt(args[1]));
             }
             if(args.length > 2) {
-                Configuration.getInstance().setRootPath(args[2]);
+                Preferences.getInstance().setRootPath(args[2]);
             }
         }
     }

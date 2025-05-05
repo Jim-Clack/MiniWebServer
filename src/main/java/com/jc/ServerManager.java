@@ -1,6 +1,10 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
+import java.lang.management.ThreadInfo;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +14,18 @@ import java.util.List;
  */
 public class ServerManager {
 
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(ServerManager.class);
+
     /** List of all sessions. */
     private final List<SessionThread> sessions = new LinkedList<>();
+
+    /**
+     * Ctor.
+     */
+    public ServerManager() {
+       new IdleChecker(this).start();
+    }
 
     /**
      * Main method to create a new session, and thereby a SessionTread then SessionHandler.
@@ -25,7 +39,7 @@ public class ServerManager {
             sessionThread.start();
             sessions.add(sessionThread);
         } catch (IOException e) {
-            Logger.ERROR("ServerManager accept session error: " + e.getMessage());
+            logger.error("ServerManager accept() session error", e);
         }
     }
 
@@ -44,6 +58,11 @@ public class ServerManager {
         }
     }
 
+    /**
+     * Kill idle sessions - with no requests/responses for a while.
+     * @param maxIdleSeconds Number of seconds of idle time to tolerate.
+     * @return Number of sessions killed.
+     */
     public int killIdleSessions(long maxIdleSeconds) {
         int killCount = 0;
         for(SessionThread sessionThread : sessions) {
@@ -57,28 +76,43 @@ public class ServerManager {
         return killCount;
     }
 
+    /**
+     * List all threads running in this JVM.
+     * @return Multi-line string.
+     */
+    public String listAllThreads() {
+        int threadCount = 0;
+        StringBuilder buffer = new StringBuilder();
+        for(Thread thread : Thread.getAllStackTraces().keySet()) {
+            buffer.append(thread.getName() + " ");
+            buffer.append(thread.getState().toString() + "\n");
+            ++threadCount;
+        }
+        buffer.append("Number of threads: " + threadCount + "\n");
+        return buffer.toString();
+    }
+
+    /**
+     * List all sessions running in server.
+     * @return Multi-line string.
+     */
     @SuppressWarnings("all")
     public String listAllSessions() {
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         buffer.append("--------------------------------------\n");
         for(SessionThread sessionThread : sessions) {
-            String lastMessage = "(none)";
-            String prevMessage = "(none)";
+            String historyHeader = "  History:  ";
             List<String> history = sessionThread.getHistory();
-            if(history.size() > 0) {
-                lastMessage = history.get(history.size() - 1);
-                if(history.size() > 1) {
-                    prevMessage = history.get(history.size() - 2);
-                }
-            }
             buffer.append(sessionThread.getThreadName() + "\n");
             buffer.append("  Alive:    " + sessionThread.isAlive() + "\n");
             buffer.append("  Protocol: " + sessionThread.getProtocol() + "\n");
             buffer.append("  Idle:     " + sessionThread.beenIdleForHowLong() + "\n");
             buffer.append("  Client:   " + sessionThread.getAddressAndPort() + "\n");
-            buffer.append("  Last:     " + lastMessage + "\n");
-            buffer.append("  Previous: " + prevMessage + "\n");
+            for(String historyLine : history) {
+                buffer.append(historyHeader + historyLine + "\n");
+                historyHeader = "            ";
+            }
             buffer.append("  ------------------------------------\n");
             if(sessionThread.isAlive()) {
                 threadCount++;
@@ -89,5 +123,26 @@ public class ServerManager {
         return buffer.toString();
     }
 
-
+    /**
+     * This kills idle sessions periodically.
+     */
+    static class IdleChecker extends Thread {
+        private final ServerManager manager;
+        IdleChecker(ServerManager manager) {
+            this.manager = manager;
+            setDaemon(true);
+        }
+        @SuppressWarnings("all")
+        public void run() {
+            setName("IdleCheckerThread");
+            while(!isInterrupted()) {
+                try {
+                    sleep(10000); // check every 10 seconds
+                } catch (InterruptedException e) {
+                    // ignore interrupts
+                }
+                manager.killIdleSessions(Preferences.getInstance().getMaxIdleSeconds());
+            }
+        }
+    }
 }

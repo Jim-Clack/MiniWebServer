@@ -39,7 +39,7 @@ public class LocalServerConsole {
         String input;
         while(running) {
             do {
-                System.out.println("Select: [S]essions, [K]illIdle60, [A]ddress, [Q]uit");
+                System.out.println("Select: [S]essions, [T]hreads, [K]illIdle60, [A]ddress, [Q]uit");
                 input = scanner.nextLine().trim().toUpperCase();
             } while(input.isEmpty());
             switch(input.charAt(0)) {
@@ -54,6 +54,9 @@ public class LocalServerConsole {
                     break;
                 case 'S':
                     System.out.println(manager.listAllSessions());
+                    break;
+                case 'T':
+                    System.out.println(manager.listAllThreads());
                     break;
                 default:
                     System.out.println("\nInvalid command\n");

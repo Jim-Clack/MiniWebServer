@@ -24,21 +24,21 @@ import java.io.File;
  *  https.proxyHost
  *  https.proxyPort
  */
-public class Configuration {
+public class Preferences {
 
-    private static Configuration instance = null;
+    private static Preferences instance = null;
     private int portNumber = 12345;
     private int sslPortNumber = 0; // 0 = SSL disabled
     private String rootPath;
 
-    public static Configuration getInstance() {
+    public static Preferences getInstance() {
         if(instance == null) {
-            instance = new Configuration();
+            instance = new Preferences();
         }
         return instance;
     }
 
-    private Configuration() {
+    private Preferences() {
         // System.setProperty("javax.net.ssl.keyStore", "/somepath/keystore.key");
         // System.setProperty("javax.net.ssl.keyStorePassword", "T@Zz932105");
         String userHome = System.getProperty("user.home");
@@ -53,6 +53,14 @@ public class Configuration {
         if(!rootPathFile.exists()) {
             throw new RuntimeException("Web root path does not exist: " + rootPathFile);
         }
+    }
+
+    public int getMaxHistory() {
+        return 12; // not configurable for now
+    }
+
+    public int getMaxIdleSeconds() {
+        return 300; // not configurable for now
     }
 
     public int getPortNumber() {

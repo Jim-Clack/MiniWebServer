@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
@@ -13,6 +16,9 @@ import java.util.List;
  * ---------------------------------------------------------------------------
  */
 public class SessionThread extends Thread {
+
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(SessionThread.class);
 
     /** [static] For numbering threads. */
     private static int ThreadCounter = 0;
@@ -44,7 +50,7 @@ public class SessionThread extends Thread {
         this.protocol = protocol;
         this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
-        Logger.INFO("Starting - connection with " + clientIp);
+        logger.info("Starting - connection with {}", clientIp);
         System.out.println("\n### Connection with " + clientIp);
         handler = new SessionHandler(socket, manager);
     }

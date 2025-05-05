@@ -1,5 +1,8 @@
 package com.jc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
@@ -12,6 +15,9 @@ import java.net.UnknownHostException;
  * Simple listener for a web server.
  */
 public class ListenerThread extends Thread {
+
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(ListenerThread.class);
 
     /** Top level server manager. */
     private final ServerManager manager;
@@ -36,11 +42,11 @@ public class ListenerThread extends Thread {
         this.manager = manager;
         InetAddress address = InetAddress.getByName("localhost");
         if(protocol.equals("HTTPS")) {
-            this.portNumber = Configuration.getInstance().getSslPortNumber();
+            this.portNumber = Preferences.getInstance().getSslPortNumber();
             this.serverSocket = SSLServerSocketFactory.getDefault().
                     createServerSocket(portNumber, 100, address);
         } else {
-            this.portNumber = Configuration.getInstance().getPortNumber();
+            this.portNumber = Preferences.getInstance().getPortNumber();
             this.serverSocket = ServerSocketFactory.getDefault().
                     createServerSocket(portNumber, 100, address);
         }
@@ -58,7 +64,7 @@ public class ListenerThread extends Thread {
             try {
                 socket = serverSocket.accept();
             } catch (IOException e) {
-                Logger.DEBUG("Listener accept(): " + e.getMessage());
+                logger.debug("Listener accept() problem", e);
             }
             if(socket != null) {
                 manager.createSession(protocol, socket);

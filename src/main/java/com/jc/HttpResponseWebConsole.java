@@ -52,7 +52,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
 
     /**
      * Retrieve the HTTP response.
-     * @return The entire reponse includinf line1, headers, and body.
+     * @return The entire response including line1, headers, and body.
      */
     @Override
     public byte[] getContent() {
@@ -91,12 +91,13 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<form name='myForm' action='/webconsole' method='get'>\n");
         bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='T'>&nbsp;Threads&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("</form><p/>\n");
     }
 
     /**
-     * Generate the reponse to the previous menu selection.
+     * Generate the response to the previous menu selection.
      * @param socket Connection - needed for discovering the IP address and port.
      * @apiNote Output is appended to bodyBuffer.
      */
@@ -112,6 +113,9 @@ public class HttpResponseWebConsole extends HttpResponseBase {
                 break;
             case 'S':
                 toBodyAsHtml(manager.listAllSessions() + "\n");
+                break;
+            case 'T':
+                toBodyAsHtml(manager.listAllThreads() + "\n");
                 break;
             default:
                 toBodyAsHtml("Invalid command " + selection + "\n");
