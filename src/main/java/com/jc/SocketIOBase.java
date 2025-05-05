@@ -3,6 +3,8 @@ package com.jc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,7 +24,7 @@ class SocketIOBase {
     private final Logger logger = LoggerFactory.getLogger(SocketIOBase.class);
 
     /** Input stream from socket. */
-    private final InputStream inStream;
+    private InputStream inStream;
 
     /** Buffer for reading. */
     private StringBuilder inBuffer;
@@ -30,12 +32,16 @@ class SocketIOBase {
     /** Output stream from socket. */
     private final OutputStream outStream;
 
+    /** The socket itself. */
+    private final Socket socket;
+
     /**
      * Ctor.
      * @param socket to be read from or written to.
      * @throws IOException only on unexpected exceptions.
      */
     protected SocketIOBase(Socket socket) throws IOException {
+        this.socket = socket;
         this.inStream = socket.getInputStream();
         this.outStream = socket.getOutputStream();
     }
@@ -47,17 +53,30 @@ class SocketIOBase {
      */
     protected int read() {
         byte[] buffer = new byte[10000];
+        if(inStream == null) {
+            return 0;
+        }
         try {
             int bytesRead = Math.max(1, inStream.available()); // try to read at least one char
-            while(bytesRead > 0) {
+            while (bytesRead > 0) {
                 bytesRead = inStream.read(buffer, 0, bytesRead);
-                if(bytesRead <= 0) { // just in case
+                if (bytesRead <= 0) {
                     return inBuffer.length();
                 }
                 String content = new String(buffer, 0, bytesRead);
                 inBuffer.append(content);
                 bytesRead = Math.min(buffer.length, inStream.available());
             }
+        } catch (SSLException e) {
+            logger.error("SSL problem, shutting down thread {}", Thread.currentThread().getName());
+            Thread.currentThread().interrupt();
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                // ignore any exception
+            }
+            inStream = null;
+            return 0;
         } catch (IOException e) {
             if(Thread.currentThread().isInterrupted()) {
                 return 0;

@@ -4,18 +4,21 @@ import java.io.IOException;
 
 /**
  * Very basic web server.
+ *   TODO: HttpResponseFile never returns RC_NOTFOUND - fix!
  * In order to support SSL/HTTPS, you have to set certain Java properties, as
- * listed in ServerSettings.java.
+ * listed in Preferences.java.
  * ---------------------------------------------------------------------------
  * Does NOT support...
  *   full exception/error handling (yet)
- *   web services, JSON, SOAP (yet)
+ *   web services, JSON, SOAP, etc. (yet)
  *   basic auth, URL-based credentials (yet)
  *   websockets
- *   HTTP other than 1.1
+ *   HTTP other than 1.1, overlapping requests
  *   plugins
  *   JEE, servlets, JSP
  *   zip/jar/was/aar deployment
+ *   load balancing
+ *   alternate connections (non-HTTP)
  * ---------------------------------------------------------------------------
  * You can pass in configuration settings or put them into the java properties
  *    Setting          arg[n] Java property              Default
@@ -52,6 +55,7 @@ public class Server
      */
     public void start() throws IOException, InterruptedException {
         setConfiguration(args);
+        Thread.currentThread().setName("WebServer MainServerThread");
         ServerManager manager = new ServerManager();
 
         // Start HTTP listener

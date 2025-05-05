@@ -23,7 +23,7 @@ public class IdleLoopThread extends Thread {
     @SuppressWarnings("all")
     public void run() {
         int maxIdle = Preferences.getInstance().getMaxIdleSeconds();
-        setName("MiniWebServer-" + maxIdle + "-IdleLoopThread");
+        setName("WebServer " + maxIdle + "-IdleLoopThread");
         while(!isInterrupted()) {
             try {
                 sleep(10000); // check every 10 seconds

@@ -57,7 +57,7 @@ public class ListenerThread extends Thread {
      * Run loop for thread.
      */
     public void run() {
-        this.setName("MiniWebServer-" + protocol + "-ListenerThread-" + portNumber);
+        this.setName("WebServer " + protocol + portNumber + "-ListenerThread");
         System.out.println(protocol + " listening on port: " + this.portNumber);
         while (!isInterrupted()) {
             Socket socket = null;

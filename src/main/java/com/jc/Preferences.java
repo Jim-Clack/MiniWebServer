@@ -3,10 +3,11 @@ package com.jc;
 import java.io.File;
 
 /**
- * Simple settings class just for testing.
+ * Simple settings class.
  * ---------------------------------------------------------------------------
  * To enable HTTPS, acquire a certificate from a certificate authority based
- * on your deployed environment, and install it via the following properties:
+ * on your deployed environment, and install it via the following properties
+ * in the reset() method below.
  *  javax.net.ssl.keyStore
  *  javax.net.ssl.keyStorePassword
  * <a href="https://docs.oracle.com/javadb/10.10.1.2/adminguide/cadminsslserver.html">Server Properties</a>
@@ -39,6 +40,14 @@ public class Preferences {
     }
 
     private Preferences() {
+        reset();
+        File rootPathFile = new File(this.rootPath);
+        if(!rootPathFile.exists()) {
+            throw new RuntimeException("Web root path does not exist: " + rootPathFile);
+        }
+    }
+
+    public void reset() {
         // System.setProperty("javax.net.ssl.keyStore", "/somepath/keystore.key");
         // System.setProperty("javax.net.ssl.keyStorePassword", "T@Zz932105");
         String userHome = System.getProperty("user.home");
@@ -49,10 +58,6 @@ public class Preferences {
                 System.getProperty("MiniWebServer.sslPortNumber", ""+this.sslPortNumber));
         this.rootPath =
                 System.getProperty("MiniWebServer.rootPath", this.rootPath);
-        File rootPathFile = new File(this.rootPath);
-        if(!rootPathFile.exists()) {
-            throw new RuntimeException("Web root path does not exist: " + rootPathFile);
-        }
     }
 
     public int getMaxHistory() {

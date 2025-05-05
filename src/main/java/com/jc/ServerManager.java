@@ -84,8 +84,14 @@ public class ServerManager {
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         for(Thread thread : Thread.getAllStackTraces().keySet()) {
-            buffer.append(thread.getName() + " ");
-            buffer.append(thread.getState() + "\n");
+            String classPath = "";
+            StackTraceElement[] element = thread.getStackTrace();
+            if(element.length > 2) {
+                classPath = element[2].getClassName();
+                classPath = classPath.substring(classPath.lastIndexOf(".") + 1);
+            }
+            String checkMark = thread.getName().startsWith("WebServer ") ? "*" : " ";
+            buffer.append(String.format("%s%-37s%-14s%s\n", checkMark, thread.getName(), thread.getState(), classPath));
             ++threadCount;
         }
         buffer.append("Number of threads: " + threadCount + "\n");

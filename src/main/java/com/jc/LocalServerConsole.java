@@ -47,10 +47,10 @@ public class LocalServerConsole {
                     running = false;
                     break;
                 case 'K':
-                    System.out.println("\nNumber of sessions killed: " + manager.killIdleSessions(60) + "\n");
+                    System.out.println("Number of sessions killed: " + manager.killIdleSessions(60) + "\n");
                     break;
                 case 'A': case 'P':
-                    System.out.println("\nServer address and port: " + listener.getAddressAndPort() + "\n");
+                    System.out.println("Server address and port: " + listener.getAddressAndPort() + "\n");
                     break;
                 case 'S':
                     System.out.println(manager.listAllSessions());
@@ -59,7 +59,7 @@ public class LocalServerConsole {
                     System.out.println(manager.listAllThreads());
                     break;
                 default:
-                    System.out.println("\nInvalid command\n");
+                    System.out.println("Invalid command\n");
                     break;
             }
         }
