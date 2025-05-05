@@ -23,7 +23,7 @@ public class ServerManager {
      * Ctor.
      */
     public ServerManager() {
-       new IdleChecker(this).start();
+       new IdleLoopThread(this).start();
     }
 
     /**
@@ -98,9 +98,10 @@ public class ServerManager {
      */
     @SuppressWarnings("all")
     public String listAllSessions() {
+        String dashes = "--------------------------------------\n";
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
-        buffer.append("--------------------------------------\n");
+        buffer.append(dashes);
         for(SessionThread sessionThread : sessions) {
             String historyHeader = "  History:  ";
             List<String> history = sessionThread.getHistory();
@@ -113,7 +114,7 @@ public class ServerManager {
                 buffer.append(historyHeader + historyLine + "\n");
                 historyHeader = "            ";
             }
-            buffer.append("  ------------------------------------\n");
+            buffer.append(dashes);
             if(sessionThread.isAlive()) {
                 threadCount++;
             }
@@ -123,26 +124,4 @@ public class ServerManager {
         return buffer.toString();
     }
 
-    /**
-     * This kills idle sessions periodically.
-     */
-    static class IdleChecker extends Thread {
-        private final ServerManager manager;
-        IdleChecker(ServerManager manager) {
-            this.manager = manager;
-            setDaemon(true);
-        }
-        @SuppressWarnings("all")
-        public void run() {
-            setName("IdleCheckerThread");
-            while(!isInterrupted()) {
-                try {
-                    sleep(10000); // check every 10 seconds
-                } catch (InterruptedException e) {
-                    // ignore interrupts
-                }
-                manager.killIdleSessions(Preferences.getInstance().getMaxIdleSeconds());
-            }
-        }
-    }
 }

@@ -62,7 +62,7 @@ public class SessionThread extends Thread {
      */
     @SuppressWarnings({"all"})
     public void run() {
-        threadName = "SessionThread" + (++ThreadCounter);
+        threadName = "MiniWebServer-" + protocol + "-SessionThread-T" + (++ThreadCounter);
         Thread.currentThread().setName(threadName);
         while(!isInterrupted()) {
             handler.sessionLoop();

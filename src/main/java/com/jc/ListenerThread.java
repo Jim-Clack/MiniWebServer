@@ -57,7 +57,7 @@ public class ListenerThread extends Thread {
      * Run loop for thread.
      */
     public void run() {
-        this.setName(protocol + "-ListenerThread");
+        this.setName("MiniWebServer-" + protocol + "-ListenerThread-" + portNumber);
         System.out.println(protocol + " listening on port: " + this.portNumber);
         while (!isInterrupted()) {
             Socket socket = null;
@@ -78,7 +78,7 @@ public class ListenerThread extends Thread {
      */
     public String getAddressAndPort() {
         try {
-            InetAddress address = InetAddress.getByName("localhost");
+            InetAddress address = InetAddress.getLocalHost();
             return address.getHostAddress() + ":" + portNumber;
         } catch (UnknownHostException e) {
             // default below
