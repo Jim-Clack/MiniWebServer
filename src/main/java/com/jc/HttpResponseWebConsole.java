@@ -77,8 +77,13 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<html>\n<head>\n</head>\n<body>\n");
         bodyBuffer.append("<style>\n");
         bodyBuffer.append("p {\n");
-        bodyBuffer.append("line-height: 50%;\n");
-        bodyBuffer.append("}\n");
+        bodyBuffer.append(" line-height: 50%;\n");
+        bodyBuffer.append(" }\n");
+        bodyBuffer.append(".m {\n");
+        bodyBuffer.append(" font-family: 'Courier New';\n");
+        bodyBuffer.append(" font-weight: bold;\n");
+        bodyBuffer.append(" font-size: small;\n");
+        bodyBuffer.append(" }\n");
         bodyBuffer.append("</style>\n");
         bodyBuffer.append("<p style='line-height: 60%;'>\n");
         bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><p/>\n");
@@ -96,6 +101,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      * @apiNote Output is appended to bodyBuffer.
      */
     private void generateHtmlMessage(Socket socket) {
+        bodyBuffer.append("<div class='m'>\n");
         char selection = request.getQueryValue("selection", "S").charAt(0);
         switch (selection) {
             case 'K':
@@ -111,6 +117,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
                 toBodyAsHtml("Invalid command " + selection + "\n");
                 break;
         }
+        bodyBuffer.append("</div>\n");
     }
 
     /**
@@ -127,7 +134,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      * @apiNote Output is appended to bodyBuffer.
      */
     private void toBodyAsHtml(String text) {
-        bodyBuffer.append(text.replace("\n  ", "\n&nbsp;&nbsp;").replaceAll("\n", "<p/>\n"));
+        bodyBuffer.append(text.replace(" ", "&nbsp;").replaceAll("\n", "<p/>\n"));
     }
 
 }
