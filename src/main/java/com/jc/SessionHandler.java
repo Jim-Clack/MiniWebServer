@@ -92,7 +92,7 @@ public class SessionHandler extends SocketIOBase {
         HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
         logger.debug("Processed request, code={}, type={}", code, HttpActionType.getRequestKind(request));
-        if(code == ResponseCode.RC_OK) {
+        if(code != ResponseCode.RC_SWITCHING_PROTOCOLS) {
             String event = request.getMethod() + " " + request.getUrl() + " ==> " +
                     code.getNumValue() + " " + code.getTextValue();
             history.add(0, event);

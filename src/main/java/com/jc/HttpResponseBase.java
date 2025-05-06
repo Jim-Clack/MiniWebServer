@@ -39,6 +39,9 @@ public abstract class HttpResponseBase {
      */
     protected byte[] readFile(String pathToFile) {
         File fileToReturn = new File(pathToFile);
+        if(!fileToReturn.exists()) {
+            return new byte[0];
+        }
         try (FileInputStream inStream = new FileInputStream(fileToReturn)) {
             return inStream.readAllBytes();
         } catch (IOException e) {
@@ -52,15 +55,16 @@ public abstract class HttpResponseBase {
      * @param headerBuffer For results. You may pre-populate this with additional headers.
      * @param line1 First line, ending with an endline, such as: "HTTP/1.1 200 OK\n".
      * @param contentLength Length of body. (Yes, you have to generate the body first)
+     * @param mimeType Type of content in body
      * @param maxSeconds Cache-control - validity of response in seconds.
      */
     @SuppressWarnings("all")
-    protected void assembleHeaders(
-            StringBuilder headerBuffer, String line1, int contentLength, int maxSeconds) {
+    protected void assembleHeaders(StringBuilder headerBuffer, String line1,
+            int contentLength, ContentMimeType mimeType, int maxSeconds) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
         String now = dateFormat.format(new Date());
         headerBuffer.insert(0, line1);
-        headerBuffer.append("content-type: text/html; charset=UTF-8\n");
+        headerBuffer.append("content-type: " + mimeType.getMimeType() + "\n");
         headerBuffer.append("date: " + now + "\n");
         headerBuffer.append("cache-control: public, max-age=" + maxSeconds + "\n");
         headerBuffer.append("server: mini\n");

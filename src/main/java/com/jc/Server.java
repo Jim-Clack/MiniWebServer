@@ -4,14 +4,14 @@ import java.io.IOException;
 
 /**
  * Very basic web server.
- *   TODO: HttpResponseFile never returns RC_NOTFOUND - fix!
  * In order to support SSL/HTTPS, you have to set certain Java properties, as
  * listed in Preferences.java.
+ * Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
  * ---------------------------------------------------------------------------
  * Does NOT support...
- *   full exception/error handling (yet)
- *   web services, JSON, SOAP, etc. (yet)
+ *   needs better error/exception handling
  *   basic auth, URL-based credentials (yet)
+ *   web services, JSON, SOAP, etc. (yet)
  *   websockets
  *   HTTP other than 1.1, overlapping requests
  *   plugins

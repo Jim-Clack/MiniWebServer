@@ -68,10 +68,10 @@ public class HttpResponseFile extends HttpResponseBase {
         byte[] content = readFile(pathToFile);
         if (content == null || content.length == 0) {
             responseCode = ResponseCode.RC_NOT_FOUND;
-            generateLine1AndHeaders(0);
-            return;
+            content = new byte[0];
         }
-        generateLine1AndHeaders(content.length);
+        ContentMimeType mimeType = ContentMimeType.mimeTypeFromSuffix(pathToFile);
+        generateLine1AndHeaders(content.length, mimeType);
         // now switch to binary I/O...
         responseBuffer = java.util.Arrays.copyOf(
                 headerBuffer.toString().getBytes(StandardCharsets.UTF_8),
@@ -83,10 +83,10 @@ public class HttpResponseFile extends HttpResponseBase {
      * Assemble line1 and headers.
      * @param contentLength Size of body - file to be returned.
      */
-    private void generateLine1AndHeaders(int contentLength) {
+    private void generateLine1AndHeaders(int contentLength, ContentMimeType mimeType) {
         String line1 = request.getVersion() + " " +
                 responseCode.getNumValue() + " " + responseCode.getTextValue() + "\n";
-        assembleHeaders(headerBuffer, line1, contentLength, 15);
+        assembleHeaders(headerBuffer, line1, contentLength, mimeType, 15);
     }
 
 }

@@ -17,12 +17,13 @@ public class UriParser {
     private static final Logger logger = LoggerFactory.getLogger(UriParser.class);
 
     /**
+     * ONE REALLY UGLY METHOD...
      * We are interested in the path, the query, and the path parent (tenant path).
      * @param requestPath From the HTTP request.
-     * @param mustExist True to insert "index.html" (or other default file) if not specified.
+     * @param canDefault True to insert "index.html" (or other default file) if not specified.
      * @return the absolute path to the file, null otherwise.
      */
-    public static String getFilePath(String requestPath, boolean mustExist) {
+    public static String getFilePath(String requestPath, boolean canDefault) {
         String[] defaultFiles = {"index.html", "index.htm", "default.htm", "default.html"};
         try {
             if(requestPath.startsWith("/")) {
@@ -33,7 +34,7 @@ public class UriParser {
                     Preferences.getInstance().getRootPath()).getAbsolutePath().replaceAll("\\\\", "/") + "/";
             URI rootUri = new URI("file:///" + rootPath); // authority must have 3 slashes
             URI resolvedUri = rootUri.resolve(requestUri);
-            if(mustExist) {
+            if(canDefault && resolvedUri.getPath().endsWith("/")) {
                 File testFile = new File(resolvedUri.getPath());
                 if(testFile.exists() && testFile.isFile()) {
                     return testFile.getAbsolutePath();
