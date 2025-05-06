@@ -51,11 +51,13 @@ public enum ContentMimeType {
         return MIME_NONE;
     }
 
+    @SuppressWarnings("ALL")
     public int getOrdinal() {
         return ordinal;
     }
 
-    public String getTitle() {
+    @SuppressWarnings("ALL")
+    public String getSuffix() {
         return suffix;
     }
 
