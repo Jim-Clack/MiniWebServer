@@ -4,15 +4,18 @@ import java.io.IOException;
 
 /**
  * Very basic web server.
- * In order to support SSL/HTTPS, you have to set certain Java properties, as
- * listed in Preferences.java.
+ * Put the files from webroot into /users/<yourname>/webroot, then try these URLs...
+ *   localhost:12345/index.html
+ *   localhost:12345/webconsole
  * Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
  * ---------------------------------------------------------------------------
  * Does NOT support...
- *   needs better error/exception handling
+ *   better error/exception handling (yet)
+ *   sessions per remote IP or per user (yet)
  *   basic auth, URL-based credentials (yet)
  *   web services, JSON, SOAP, etc. (yet)
  *   websockets
+ *   multi-part messages
  *   HTTP other than 1.1, overlapping requests
  *   plugins
  *   JEE, servlets, JSP
@@ -25,6 +28,8 @@ import java.io.IOException;
  *    IP port to listen   0  MiniWebServer.portNumber    12345
  *    SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)
  *    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
+ * In order to support SSL/HTTPS, you have to set certain Java properties, as
+ * listed in Preferences.java.
  * ---------------------------------------------------------------------------
  * You may link with this in order to create an embedded web server or run it
  * under "App,java" as a standalone web server. To call it, do this:
@@ -86,9 +91,9 @@ public class Server
             Preferences.getInstance().setPortNumber(Integer.parseInt(args[0]));
             if(args.length > 1) {
                 Preferences.getInstance().setSslPortNumber(Integer.parseInt(args[1]));
-            }
-            if(args.length > 2) {
-                Preferences.getInstance().setRootPath(args[2]);
+                if (args.length > 2) {
+                    Preferences.getInstance().setRootPath(args[2]);
+                }
             }
         }
     }

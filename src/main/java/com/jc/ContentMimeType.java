@@ -13,10 +13,11 @@ public enum ContentMimeType {
     MIME_XML(12, "XML", "application/xml"),
     // -----------------------------------------
     MIME_JPEG(20, "JPEG", "image/jpeg"),
-    MIME_PNG(21, "PNG", "image/png"),
-    MIME_GIF(22, "GIF", "image/gif"),
-    MIME_WEBP(23, "PNG", "image/webp"),
-    MIME_AVI(24, "AVI", "image/avif"),
+    MIME_JPG(21, "JPG", "image/jpeg"),
+    MIME_PNG(22, "PNG", "image/png"),
+    MIME_GIF(23, "GIF", "image/gif"),
+    MIME_WEBP(24, "PNG", "image/webp"),
+    MIME_AVI(25, "AVI", "image/avif"),
     // -----------------------------------------
     MIME_MULTIPART(50, "MULTIPART", "multipart/form-data; boundary=----------SEPARATOR----------");
 
