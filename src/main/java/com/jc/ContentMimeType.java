@@ -1,45 +1,42 @@
 package com.jc;
 
 public enum ContentMimeType {
-    MIME_NONE(0, "NONE", "text/plain"),
+    MIME_NONE("NONE", "text/plain"),
     // -----------------------------------------
-    MIME_TEXT(1, "TEXT", "text/plain; charset=UTF-8"),
-    MIME_HTML(2, "HTML", "text/html; charset=UTF-8"),
-    MIME_HTM(3, "HTM", "text/html; charset=UTF-8"),
-    MIME_CSS(4, "CSS", "text/css"),
+    MIME_TEXT("TEXT", "text/plain; charset=UTF-8"),
+    MIME_HTML("HTML", "text/html; charset=UTF-8"),
+    MIME_HTM("HTM", "text/html; charset=UTF-8"),
+    MIME_CSS("CSS", "text/css"),
+    MIME_JS("JS", "text/javascript"),
     // -----------------------------------------
-    MIME_JS(10, "JS", "text/javascript"),
-    MIME_JSON(11, "JSON", "application/json"),
-    MIME_XML(12, "XML", "application/xml"),
+    MIME_JSON("JSON", "application/json"),
+    MIME_XML("XML", "application/xml"),
     // -----------------------------------------
-    MIME_JPEG(20, "JPEG", "image/jpeg"),
-    MIME_JPG(21, "JPG", "image/jpeg"),
-    MIME_PNG(22, "PNG", "image/png"),
-    MIME_GIF(23, "GIF", "image/gif"),
-    MIME_WEBP(24, "PNG", "image/webp"),
-    MIME_AVI(25, "AVI", "image/avif"),
+    MIME_JPEG("JPEG", "image/jpeg"),
+    MIME_JPG("JPG", "image/jpeg"),
+    MIME_PNG("PNG", "image/png"),
+    MIME_GIF("GIF", "image/gif"),
+    MIME_WEBP("PNG", "image/webp"),
+    MIME_AVI("AVI", "image/avif"),
     // -----------------------------------------
-    MIME_MULTIPART(50, "MULTIPART", "multipart/form-data; boundary=----------SEPARATOR----------");
+    MIME_MULTIPART("MULTIPART", "multipart/form-data; boundary=----------SEPARATOR----------");
 
-    private final int ordinal;
     private final String suffix;
     private final String mimeType;
 
     /**
      * Ctor.
-     * @param ordinal Index into values.
      * @param suffix File suffix for this type.
      * @param mimeType Mime type per HTTP header.
      */
-    ContentMimeType(int ordinal, String suffix, String mimeType) {
-        this.ordinal = ordinal;
+    ContentMimeType(String suffix, String mimeType) {
         this.suffix = suffix;
         this.mimeType = mimeType;
     }
 
     /**
      * [static] Get the Mime Type for a particular file.
-     * @param fileName name of file ending in revealing suffix.
+     * @param fileName name of file ending in a dot (.) followed by the revealing suffix.
      * @return Mime type for file, possibly MIME_NONE.
      */
     public static ContentMimeType mimeTypeFromSuffix(String fileName) {
@@ -52,14 +49,26 @@ public enum ContentMimeType {
         return MIME_NONE;
     }
 
+    /**
+     * [static] Get the file suffix for a given mime type.
+     * @param mimeTypeString String containing the mime type, such as "...text/html...".
+     * @return A file suffix with a leading dot (.), or null if not found.
+     */
     @SuppressWarnings("ALL")
-    public int getOrdinal() {
-        return ordinal;
-    }
-
-    @SuppressWarnings("ALL")
-    public String getSuffix() {
-        return suffix;
+    public static String fileSuffixFromMimeType(String mimeTypeString) {
+        String mimeTypeBase = mimeTypeString.toLowerCase();
+        if(mimeTypeBase.contains(";")) {
+            mimeTypeBase = mimeTypeBase.substring(0, mimeTypeBase.indexOf(";"));
+        }
+        for (ContentMimeType mimeType : ContentMimeType.values()) {
+            if(mimeType == ContentMimeType.MIME_HTM || mimeType == ContentMimeType.MIME_JPG) {
+                continue; // skip short-forms of suffixes
+            }
+            if(mimeType.mimeType.contains(mimeTypeBase)) {
+                return "." + mimeType.suffix.toLowerCase();
+            }
+        }
+        return null;
     }
 
     public String getMimeType() {

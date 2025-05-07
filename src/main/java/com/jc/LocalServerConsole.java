@@ -9,6 +9,7 @@ import java.util.Scanner;
  *    [Enter]     Help, show commands
  *    A [Enter]   Show IP Address and port of this server
  *    S [Enter]   Show all sessions
+ *    T [Enter]   Show all threads
  *    K [Enter]   Kill sessions that have been inactive for 60 seconds or more
  *    Q [Enter]   Quit - shut down the server
  */

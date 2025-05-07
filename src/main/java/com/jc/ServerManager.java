@@ -104,18 +104,18 @@ public class ServerManager {
      * @return Multi-line string.
      */
     @SuppressWarnings("all")
-    public String listAllSessions() {
+    public synchronized String listAllSessions() {
         String dashes = "--------------------------------------\n";
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
         for(SessionThread sessionThread : sessions) {
-            String historyHeader = "  History:  ";
             buffer.append(sessionThread.getThreadName() + "\n");
             buffer.append("  Alive:    " + sessionThread.isAlive() + "\n");
             buffer.append("  Protocol: " + sessionThread.getProtocol() + "\n");
             buffer.append("  Idle:     " + sessionThread.beenIdleForHowLong() + "\n");
             buffer.append("  Client:   " + sessionThread.getAddressAndPort() + "\n");
+            String historyHeader = "  History:  ";
             ConcurrentLinkedDeque<String> history = sessionThread.getHistory();
             for(String historyLine : history) {
                 buffer.append(historyHeader + historyLine + "\n");
