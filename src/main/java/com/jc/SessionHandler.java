@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Date;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * This class is in charge of an HTTP session, reading HTTP requests and then
@@ -31,8 +33,11 @@ public class SessionHandler extends SocketIOBase {
     /** Top level manager over all sessions. */
     private final ServerManager manager;
 
+    /** For history timestamps. */
+    private final DateFormat dateFormat = new SimpleDateFormat("kk:mm:ss ");
+
     /** Keep track of history - most recent first. */
-    private final List<String> history = new LinkedList<>();
+    private final ConcurrentLinkedDeque<String> history = new ConcurrentLinkedDeque<>();
 
     /**
      * Ctor.
@@ -50,12 +55,15 @@ public class SessionHandler extends SocketIOBase {
      * Here is the main loop for the session. (see handleRequest)
      */
     public void sessionLoop() {
+        HttpRequestBase dummyRequest = new HttpRequestFile("(NONE) / HTTP\n", manager);
         clearBuffers();
         if(read() > 0) {
             synchronized (lastActivityLock) {
                 lastActivity = LocalDateTime.now();
             }
             handleRequest();
+        } else {
+            updateHistory(dummyRequest, ResponseCode.RC_NO_CONTENT);
         }
     }
 
@@ -75,7 +83,7 @@ public class SessionHandler extends SocketIOBase {
      * Get the history of requests/responses.
      * @return Strings in temporal order with most recent first.
      */
-    public List<String> getHistory() {
+    public ConcurrentLinkedDeque<String> getHistory() {
         return history;
     }
 
@@ -85,6 +93,7 @@ public class SessionHandler extends SocketIOBase {
     private void handleRequest() {
         HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
         if(request.getErrorCode() == ErrorCode.UNINITIALIZED) {
+            updateHistory(request, ResponseCode.RC_UNKNOWN_ERROR);
             Thread.currentThread().interrupt();
             return;
         }
@@ -92,14 +101,23 @@ public class SessionHandler extends SocketIOBase {
         HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
         logger.debug("Processed request, code={}, type={}", code, HttpActionType.getRequestKind(request));
+        updateHistory(request, code);
         if(code != ResponseCode.RC_SWITCHING_PROTOCOLS) {
-            String event = request.getMethod() + " " + request.getUrl() + " ==> " +
-                    code.getNumValue() + " " + code.getTextValue();
-            history.add(0, event);
             send(response.getContent());
-            if(history.size() > Preferences.getInstance().getMaxHistory()) {
-                history.remove(history.size() - 1);
-            }
+        }
+    }
+
+    /**
+     * Keep track of session history.
+     * @param request As received and parsed.
+     * @param code Per response.
+     */
+    private void updateHistory(HttpRequestPojo request, ResponseCode code) {
+        String now = dateFormat.format(new Date());
+        history.addFirst(now + request.getMethod() + " " + request.getUrl() + " ==> " +
+                code.getNumValue() + " " + code.getTextValue());
+        if(history.size() > Preferences.getInstance().getMaxHistory()) {
+            history.removeLast();
         }
     }
 

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Main per-session thread - one per connection.
@@ -92,7 +92,7 @@ public class SessionThread extends Thread {
      * Get the history of requests/responses.
      * @return Strings in temporal order.
      */
-    public List<String> getHistory() {
+    public ConcurrentLinkedDeque<String> getHistory() {
         return handler.getHistory();
     }
 

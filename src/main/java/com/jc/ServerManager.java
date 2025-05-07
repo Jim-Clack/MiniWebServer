@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * Top level class to manage all sessions.
@@ -110,12 +111,12 @@ public class ServerManager {
         buffer.append(dashes);
         for(SessionThread sessionThread : sessions) {
             String historyHeader = "  History:  ";
-            List<String> history = sessionThread.getHistory();
             buffer.append(sessionThread.getThreadName() + "\n");
             buffer.append("  Alive:    " + sessionThread.isAlive() + "\n");
             buffer.append("  Protocol: " + sessionThread.getProtocol() + "\n");
             buffer.append("  Idle:     " + sessionThread.beenIdleForHowLong() + "\n");
             buffer.append("  Client:   " + sessionThread.getAddressAndPort() + "\n");
+            ConcurrentLinkedDeque<String> history = sessionThread.getHistory();
             for(String historyLine : history) {
                 buffer.append(historyHeader + historyLine + "\n");
                 historyHeader = "            ";

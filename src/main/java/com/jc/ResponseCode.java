@@ -2,6 +2,7 @@ package com.jc;
 
 public enum ResponseCode {
 
+    RC_UNKNOWN_ERROR(0, "Unrecognized Error"),
     RC_CONTINUE(100, "Continue"),
     RC_SWITCHING_PROTOCOLS(101, "Switching Protocols"),
     RC_OK(200, "OK"),
