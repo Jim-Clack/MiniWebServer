@@ -37,7 +37,7 @@ In order to support SSL/HTTPS, you have to set certain Java properties, as\
 listed in Preferences.java.
 ---------------------------------------------------------------------------
 ## You may link with this in order to create an embedded web server or run it
-under "App,java" as a standalone web server. To call it, do this:\
+**Under "App,java" as a standalone web server. To call it, do this:**\
 ```
    new Server(args).start();\
 ```
