@@ -36,8 +36,7 @@ Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
 In order to support SSL/HTTPS, you have to set certain Java properties, as\
 listed in Preferences.java.\
 **===========================================================================**
-## You may link with this in order to create an embedded web server or run it
-Under "App,java" as a standalone web server. To call it, do this:\
+## You may link as an embedded web server or run it as a standalone web server.\
 ```
    new Server(args).start();\
 ```
