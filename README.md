@@ -38,4 +38,4 @@ listed in Preferences.java.
 ```
 You will have to catch IOException and InterruptedException, although all\
 recoverable exceptions will be handled by the server without throwing.\
-I'm 75 and wrote this when I was 74, so I hope it's not too old-fashioned.
+I'm 75 and  just wrote this, so I hope it's not too old-fashioned.
