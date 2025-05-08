@@ -1,4 +1,3 @@
-**===========================================================================**
 ## Basic web server - lightweight and easy to use.
   Handles HTML, PNG, JPEG, JS, CSS, etc.\
   Supports both HTTP and HTTPS. (TLS/SSL)\
@@ -10,8 +9,7 @@
 Put the files from webroot into /users/<yourname>/webroot, then try these URLs...\
   localhost:12345/index.html\
   localhost:12345/webconsole\
-Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
-**===========================================================================**
+Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
 ## Does NOT support...
   sessions based on a cookie and a sessionId (yet)\
   basic auth, URL-based credentials (yet)\
@@ -24,8 +22,7 @@ Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
   zip/jar/was/aar deployment\
   load balancing\
   alternate connections (non-HTTP)\
-  could also use more thorough exception/error handling\
-**===========================================================================**
+  could also use more thorough exception/error handling
 ## You can pass in configuration settings or put them into the java properties
 ```
    Setting          arg[n] Java property              Default
@@ -34,12 +31,10 @@ Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
 ```
 In order to support SSL/HTTPS, you have to set certain Java properties, as\
-listed in Preferences.java.\
-**===========================================================================**
+listed in Preferences.java.
 ## You may link as an embedded web server or run it as a standalone web server.
 ```
    new Server(args).start();
 ```
 You will have to catch IOException and InterruptedException, although all\
-recoverable exceptions will be handled by the server without throwing.\
-**===========================================================================**
+recoverable exceptions will be handled by the server without throwing.
