@@ -3,7 +3,12 @@ package com.ablestrategies.web;
 import java.io.IOException;
 
 /**
- * Basic web server.
+ * Basic web server - lightweight and easy to use.
+ *   Handles HTML, PNG, JPEG, JS, CSS, etc,
+ *   Supports both HTTP and HTTPS. (TLS/SSL)
+ *   Has a local and a web console for managing the server.
+ *   Can be embedded or standalone.
+ *   Requires no extra code libraries except slf4j.
  * Put the files from webroot into /users/<yourname>/webroot, then try these URLs...
  *   localhost:12345/index.html
  *   localhost:12345/webconsole
