@@ -1,5 +1,5 @@
----------------------------------------------------------------------------\
-## Basic web server - lightweight and easy to use.\
+---------------------------------------------------------------------------
+## Basic web server - lightweight and easy to use.
   Handles HTML, PNG, JPEG, JS, CSS, etc.\
   Supports both HTTP and HTTPS. (TLS/SSL)\
   Has a local and a web console for managing the server.\
@@ -11,8 +11,8 @@ Put the files from webroot into /users/<yourname>/webroot, then try these URLs..
   localhost:12345/index.html\
   localhost:12345/webconsole\
 Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
----------------------------------------------------------------------------\
-## Does NOT support...\
+---------------------------------------------------------------------------
+## Does NOT support...
   sessions based on a cookie and a sessionId (yet)\
   basic auth, URL-based credentials (yet)\
   web services, JSON, SOAP, etc. (yet)\
@@ -25,16 +25,18 @@ Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
   load balancing\
   alternate connections (non-HTTP)\
   could also use more thorough exception/error handling\
----------------------------------------------------------------------------\
-## You can pass in configuration settings or put them into the java properties\
+---------------------------------------------------------------------------
+## You can pass in configuration settings or put them into the java properties
+```
    Setting          arg[n] Java property              Default\
    IP port to listen   0  MiniWebServer.portNumber    12345\
    SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)\
    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot\
+```
 In order to support SSL/HTTPS, you have to set certain Java properties, as\
 listed in Preferences.java.\
----------------------------------------------------------------------------\
-You may link with this in order to create an embedded web server or run it
+---------------------------------------------------------------------------
+## You may link with this in order to create an embedded web server or run it
 under "App,java" as a standalone web server. To call it, do this:
    new Server(args).start();
 You will have to catch IOException and InterruptedException, although all
