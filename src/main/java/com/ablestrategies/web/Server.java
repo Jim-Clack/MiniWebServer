@@ -9,6 +9,8 @@ import java.io.IOException;
  *   Has a local and a web console for managing the server.
  *   Can be embedded or standalone.
  *   Requires no extra code libraries except slf4j.
+ *   Unit tests for classes that provide underlying functionality.
+ *   Decently readable with a good maintainability index.
  * Put the files from webroot into /users/<yourname>/webroot, then try these URLs...
  *   localhost:12345/index.html
  *   localhost:12345/webconsole
