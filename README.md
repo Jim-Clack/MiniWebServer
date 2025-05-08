@@ -5,11 +5,11 @@
   Can be embedded or standalone.\
   Requires no extra code libraries except slf4j.\
   Unit tests for classes that provide underlying functionality.\
-  Decently readable with a good maintainability index.\
-Put the files from webroot into /users/<yourname>/webroot, then try these URLs...\
+  Decently readable with a good maintainability index.
+## Put files from webroot into /users/<yourname>/webroot, then try...
   localhost:12345/index.html\
   localhost:12345/webconsole\
-Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
+*Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)*
 ## Does NOT support...
   sessions based on a cookie and a sessionId (yet)\
   basic auth, URL-based credentials (yet)\
