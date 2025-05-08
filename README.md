@@ -28,17 +28,17 @@ Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)\
 **===========================================================================**
 ## You can pass in configuration settings or put them into the java properties
 ```
-   Setting          arg[n] Java property              Default\
-   IP port to listen   0  MiniWebServer.portNumber    12345\
-   SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)\
-   Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot\
+   Setting          arg[n] Java property              Default
+   IP port to listen   0  MiniWebServer.portNumber    12345
+   SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)
+   Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
 ```
 In order to support SSL/HTTPS, you have to set certain Java properties, as\
 listed in Preferences.java.\
 **===========================================================================**
 ## You may link as an embedded web server or run it as a standalone web server.\
 ```
-   new Server(args).start();\
+   new Server(args).start();
 ```
 You will have to catch IOException and InterruptedException, although all\
 recoverable exceptions will be handled by the server without throwing.\
