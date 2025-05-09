@@ -21,8 +21,10 @@ import java.io.IOException;
  *   basic auth, URL-based credentials (yet)
  *   web services, JSON, SOAP, etc. (yet)
  *   websockets
+ *   FTP or other protocols
+ *   brokering requests for an application server
  *   multi-part messages
- *   HTTP other than 1.1, overlapping requests
+ *   HTTP other than 1.1
  *   plugins
  *   JEE, servlets, JSP
  *   zip/jar/was/aar deployment
@@ -84,7 +86,7 @@ public class Server
         LocalServerConsole console = new LocalServerConsole(manager, httpListener);
         Thread.sleep(1000);
         console.interact();
-        manager.killIdleSessions(0L);
+        manager.killIdleConnections(0L);
         Thread.yield();
         System.out.println("Done!");
         httpListener.interrupt();

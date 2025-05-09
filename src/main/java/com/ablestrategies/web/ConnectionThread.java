@@ -5,21 +5,21 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.List;
 
 /**
- * Main per-session thread - one per connection.
+ * Main per-connection thread.
  * ---------------------------------------------------------------------------
- * A session (IP Address:port pair) is tied to a SessionThread by its socket.
+ * Connection (IP Address:port pair) is tied to ConnectionThread by its socket.
  * It is expected that, when the server accepts a connection, it will be
  * passed to this object to deal with any further communications.
  * ---------------------------------------------------------------------------
  */
-public class SessionThread extends Thread {
+public class ConnectionThread extends Thread {
 
     /** Logger slf4j. */
     @SuppressWarnings("all")
-    private final Logger logger = LoggerFactory.getLogger(SessionThread.class);
+    private final Logger logger = LoggerFactory.getLogger(ConnectionThread.class);
 
     /** [static] For numbering threads. */
     private static int ThreadCounter = 0;
@@ -27,8 +27,8 @@ public class SessionThread extends Thread {
     /** Name of this thread. (Also same as Thread.currentThread.getName().) */
     private String threadName = "?";
 
-    /** SessionThread will create this to handle the session. */
-    private final SessionHandler handler;
+    /** Create this to handle the connection. */
+    private final ConnectionHandler handler;
 
     /** Stash the Ip address and port of the remote client for reference. */
     private final String clientIp;
@@ -46,14 +46,14 @@ public class SessionThread extends Thread {
      * @param manager This is the Top Dog that knows everything about the server.
      * @throws IOException If we cannot recover, we will give up and throw this.
      */
-    public SessionThread(String protocol, Socket socket, ServerManager manager) throws IOException {
+    public ConnectionThread(String protocol, Socket socket, ServerManager manager) throws IOException {
         this.setDaemon(true);
         this.protocol = protocol;
         this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
         logger.info("Starting - connection with {}", clientIp);
         System.out.println("\n### Connection with " + clientIp);
-        handler = new SessionHandler(socket, manager);
+        handler = new ConnectionHandler(socket, manager);
     }
 
     /**
@@ -62,10 +62,10 @@ public class SessionThread extends Thread {
      */
     @SuppressWarnings({"all"})
     public void run() {
-        threadName = "WebServer " + protocol + "-SessionThread" + (++ThreadCounter);
+        threadName = "WebServer " + protocol + "-ConnectionThread" + (++ThreadCounter);
         Thread.currentThread().setName(threadName);
         while(!isInterrupted()) {
-            handler.sessionLoop();
+            handler.connectionLoop();
         }
     }
 
@@ -92,7 +92,7 @@ public class SessionThread extends Thread {
      * Get the history of requests/responses.
      * @return Strings in temporal order.
      */
-    public ConcurrentLinkedDeque<String> getHistory() {
+    public List<String> getHistory() {
         return handler.getHistory();
     }
 
@@ -106,7 +106,7 @@ public class SessionThread extends Thread {
 
     /**
      * Get the address and port of the client.
-     * @return string containing address and port of remote host on this session.
+     * @return string containing address and port of remote host on this connection.
      */
     public String getAddressAndPort() {
         return clientIp;

@@ -9,7 +9,7 @@ public class HttpRequestFile extends HttpRequestBase {
     /**
      * Ctor.
      * @param content A HTTP request as read from a socket.
-     * @param manager Top-level class that manages all sessions.
+     * @param manager Top-level class that manages all connections.
      */
     public HttpRequestFile(String content, ServerManager manager) {
         super(manager);

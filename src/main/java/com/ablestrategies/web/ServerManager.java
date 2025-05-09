@@ -7,18 +7,17 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
- * Top level class to manage all sessions.
+ * Top level class to manage all connections.
  */
 public class ServerManager {
 
     /** Logger slf4j. */
     private final Logger logger = LoggerFactory.getLogger(ServerManager.class);
 
-    /** List of all sessions. */
-    private final List<SessionThread> sessions = new LinkedList<>();
+    /** List of all connections. */
+    private final List<ConnectionThread> connections = new LinkedList<>();
 
     /**
      * Ctor.
@@ -28,51 +27,51 @@ public class ServerManager {
     }
 
     /**
-     * Main method to create a new session, and thereby a SessionTread then SessionHandler.
+     * Main method to create a new connection, and thereby a ConnectionThread/Handler.
      * @param protocol HTTP or HTTPS
      * @param socket Connection to receive requests and send responses to.
      */
-    public void createSession(String protocol, Socket socket) {
-        SessionThread sessionThread;
+    public void createConnection(String protocol, Socket socket) {
+        ConnectionThread connection;
         try {
-            sessionThread = new SessionThread(protocol, socket, this);
-            sessionThread.start();
-            sessions.add(sessionThread);
+            connection = new ConnectionThread(protocol, socket, this);
+            connection.start();
+            connections.add(connection);
         } catch (IOException e) {
-            logger.error("ServerManager accept() session error", e);
+            logger.error("ServerManager accept() connection error", e);
         }
     }
 
     /**
-     * Find sessions that are dead and remove them from the list.
+     * Find connections that are dead and remove them from the list.
      */
-    public void discardDeadSessions() {
-        List<SessionThread> deadSessions = new LinkedList<>();
-        for(SessionThread sessionThread : sessions) {
-            if(!sessionThread.isAlive()) {
-                deadSessions.add(sessionThread);
+    public void discardDeadConnections() {
+        List<ConnectionThread> deadConnections = new LinkedList<>();
+        for(ConnectionThread connection : connections) {
+            if(!connection.isAlive()) {
+                deadConnections.add(connection);
             }
         }
-        for(SessionThread deadThread : deadSessions) {
-            sessions.remove(deadThread);
+        for(ConnectionThread deadThread : deadConnections) {
+            connections.remove(deadThread);
         }
     }
 
     /**
-     * Kill idle sessions - with no requests/responses for a while.
+     * Kill idle connections - with no requests/responses for a while.
      * @param maxIdleSeconds Number of seconds of idle time to tolerate.
-     * @return Number of sessions killed.
+     * @return Number of connections killed.
      */
-    public int killIdleSessions(long maxIdleSeconds) {
+    public int killIdleConnections(long maxIdleSeconds) {
         int killCount = 0;
-        for(SessionThread sessionThread : sessions) {
-            if(sessionThread.beenIdleForHowLong() >= maxIdleSeconds) {
-                sessionThread.interrupt();
-                sessionThread.closeSocket();
+        for(ConnectionThread connection : connections) {
+            if(connection.beenIdleForHowLong() >= maxIdleSeconds) {
+                connection.interrupt();
+                connection.closeSocket();
                 ++killCount;
             }
         }
-        discardDeadSessions();
+        discardDeadConnections();
         return killCount;
     }
 
@@ -100,34 +99,34 @@ public class ServerManager {
     }
 
     /**
-     * List all sessions running in server.
+     * List all connections that are presentm, whether alive or dead.
      * @return Multi-line string.
      */
     @SuppressWarnings("all")
-    public synchronized String listAllSessions() {
+    public synchronized String listAllConnections() {
         String dashes = "--------------------------------------\n";
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
-        for(SessionThread sessionThread : sessions) {
-            buffer.append(sessionThread.getThreadName() + "\n");
-            buffer.append("  Alive:    " + sessionThread.isAlive() + "\n");
-            buffer.append("  Protocol: " + sessionThread.getProtocol() + "\n");
-            buffer.append("  Idle:     " + sessionThread.beenIdleForHowLong() + "\n");
-            buffer.append("  Client:   " + sessionThread.getAddressAndPort() + "\n");
+        for(ConnectionThread connection : connections) {
+            buffer.append(connection.getThreadName() + "\n");
+            buffer.append("  Alive:    " + connection.isAlive() + "\n");
+            buffer.append("  Protocol: " + connection.getProtocol() + "\n");
+            buffer.append("  Idle:     " + connection.beenIdleForHowLong() + "\n");
+            buffer.append("  Client:   " + connection.getAddressAndPort() + "\n");
             String historyHeader = "  History:  ";
-            ConcurrentLinkedDeque<String> history = sessionThread.getHistory();
+            List<String> history = connection.getHistory();
             for(String historyLine : history) {
                 buffer.append(historyHeader + historyLine + "\n");
                 historyHeader = "            ";
             }
             buffer.append(dashes);
-            if(sessionThread.isAlive()) {
+            if(connection.isAlive()) {
                 threadCount++;
             }
         }
-        buffer.append("Number of sessions Alive: " + threadCount + "\n");
-        discardDeadSessions();
+        buffer.append("Number of connections Alive: " + threadCount + "\n");
+        discardDeadConnections();
         return buffer.toString();
     }
 

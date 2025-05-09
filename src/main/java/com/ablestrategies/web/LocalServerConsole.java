@@ -8,14 +8,14 @@ import java.util.Scanner;
  * Commands:
  *    [Enter]     Help, show commands
  *    A [Enter]   Show IP Address and port of this server
- *    S [Enter]   Show all sessions
- *    T [Enter]   Show all threads
- *    K [Enter]   Kill sessions that have been inactive for 60 seconds or more
+ *    C [Enter]   Show all Connections
+ *    T [Enter]   Show all Threads
+ *    K [Enter]   Kill connections that have been inactive for 60 seconds or more
  *    Q [Enter]   Quit - shut down the server
  */
 public class LocalServerConsole {
 
-    /** The top-level object that knows about all sessions. */
+    /** The top-level object that knows about all connections. */
     private final ServerManager manager;
 
     /** The server's listener thread. */
@@ -23,7 +23,7 @@ public class LocalServerConsole {
 
     /**
      * Ctor.
-     * @param manager The top-level object that knows about all sessions.
+     * @param manager The top-level object that knows about all connections.
      * @param listener The server's listener thread.
      */
     public LocalServerConsole(ServerManager manager, ListenerThread listener) {
@@ -40,7 +40,7 @@ public class LocalServerConsole {
         String input;
         while(running) {
             do {
-                System.out.println("Select: [S]essions, [T]hreads, [K]illIdle60, [A]ddress, [Q]uit");
+                System.out.println("Select: [C]onnections, [T]hreads, [K]illIdle60, [A]ddress, [Q]uit");
                 input = scanner.nextLine().trim().toUpperCase();
             } while(input.isEmpty());
             switch(input.charAt(0)) {
@@ -48,13 +48,13 @@ public class LocalServerConsole {
                     running = false;
                     break;
                 case 'K':
-                    System.out.println("Number of sessions killed: " + manager.killIdleSessions(60) + "\n");
+                    System.out.println("Number of connections killed: " + manager.killIdleConnections(60) + "\n");
                     break;
                 case 'A': case 'P':
                     System.out.println("Server address and port: " + listener.getAddressAndPort() + "\n");
                     break;
-                case 'S':
-                    System.out.println(manager.listAllSessions());
+                case 'C':
+                    System.out.println(manager.listAllConnections());
                     break;
                 case 'T':
                     System.out.println(manager.listAllThreads());

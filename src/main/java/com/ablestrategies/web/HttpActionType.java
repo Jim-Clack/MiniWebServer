@@ -19,7 +19,7 @@ public class HttpActionType {
     /**
      * Create an HttpRequestXxxx of the appropriate type, based on header values.
      * @param content HTTP Request as received from a socket.
-     * @param manager The top level manager that knows about all sessions.
+     * @param manager The top level manager that knows about all connections.
      * @return The appropriate type of HttpRequestXxxx,
      */
     public static HttpRequestBase getHttpRequest(String content, ServerManager manager) {
@@ -32,7 +32,10 @@ public class HttpActionType {
      * @return RequestKind, typically based on the Content-Type header.
      */
     public static RequestType getRequestKind(HttpRequestPojo request) {
-        String[] contentTypes = request.getHeader("Content-Type");
+        String[] contentTypes = request.getHeader("Accept");
+        if(contentTypes == null || contentTypes.length == 0) {
+            contentTypes = request.getHeader("Content-Type");
+        }
         String contentType = "text/html";
         if(contentTypes != null && contentTypes.length > 0) {
             contentType = contentTypes[0];
@@ -67,7 +70,7 @@ public class HttpActionType {
     /**
      * Instantiate a HttpResponseXxxxx based on the request.
      * @param request Any kind of HttpRequestXxxx
-     * @param manager Top level manager that is aware of all sessions.
+     * @param manager Top level manager that is aware of all connections.
      * @return An initialized HttpResponseXxxxx suitable for this request.
      */
     public static HttpResponseBase getTypedResponse(HttpRequestPojo request, ServerManager manager) {

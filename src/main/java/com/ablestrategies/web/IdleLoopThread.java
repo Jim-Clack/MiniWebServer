@@ -1,16 +1,16 @@
 package com.ablestrategies.web;
 
 /**
- * This does periodical cleanup, like killing idle sessions.
+ * This does periodical cleanup, like killing idle connections.
  */
 public class IdleLoopThread extends Thread {
 
-    /** Need to call the server manager to kill idle sessions. */
+    /** Need to call the server manager to kill idle connections. */
     private final ServerManager manager;
 
     /**
      * Ctor.
-     * @param manager The server manager.
+     * @param manager The server manager to be called for cleanup.
      */
     IdleLoopThread(ServerManager manager) {
         this.manager = manager;
@@ -30,7 +30,7 @@ public class IdleLoopThread extends Thread {
             } catch (InterruptedException e) {
                 // ignore interrupts
             }
-            manager.killIdleSessions(maxIdle);
+            manager.killIdleConnections(maxIdle);
         }
     }
 }

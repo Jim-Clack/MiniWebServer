@@ -10,16 +10,17 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * This class is in charge of an HTTP session, reading HTTP requests and then
+ * This class is in charge of an HTTP connection, reading HTTP requests and then
  * sending the corresponding HTTP responses.
  */
-public class SessionHandler extends SocketIOBase {
+public class ConnectionHandler extends SocketIOBase {
 
     /** Logger slf4j. */
-    private final Logger logger = LoggerFactory.getLogger(SessionHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
 
     /** Keep track of the timestamp of the last HTTP request. */
     private LocalDateTime lastActivity = LocalDateTime.now();
@@ -30,31 +31,36 @@ public class SessionHandler extends SocketIOBase {
     /** Our connection to the client. */
     private final Socket socket;
 
-    /** Top level manager over all sessions. */
+    /** Top level manager over all connections. */
     private final ServerManager manager;
 
     /** For history timestamps. */
-    private final DateFormat dateFormat = new SimpleDateFormat("kk:mm:ss ");
+    private final DateFormat dateFormat = new SimpleDateFormat("kk:mm:ss.SSS ");
 
-    /** Keep track of history - most recent first. */
-    private final ConcurrentLinkedDeque<String> history = new ConcurrentLinkedDeque<>();
+    /**
+     * Keep track of history - most recent first.
+     * BTW - ConcurrentLinkedDeque is not a good solution here because of implied
+     * iteration over the collection in getHistory() and that causes some bizarre
+     * conflicts. So, instead, we just synchronize access to the collection.
+     */
+    private final List<String> history = new LinkedList<>();
 
     /**
      * Ctor.
      * @param socket Our connection to the client.
-     * @param manager Top level manager over all sessions.
+     * @param manager Top level manager over all connections.
      * @throws IOException Only if a non-recoverable communication error occurs.
      */
-    public SessionHandler(Socket socket, ServerManager manager) throws IOException {
+    public ConnectionHandler(Socket socket, ServerManager manager) throws IOException {
         super(socket);
         this.manager = manager;
         this.socket = socket;
     }
 
     /**
-     * Here is the main loop for the session. (see handleRequest)
+     * Here is the main loop for the connection. (see handleRequest)
      */
-    public void sessionLoop() {
+    public void connectionLoop() {
         HttpRequestBase dummyRequest = new HttpRequestFile("(NONE) / HTTP\n", manager);
         clearBuffers();
         if(read() > 0) {
@@ -62,8 +68,6 @@ public class SessionHandler extends SocketIOBase {
                 lastActivity = LocalDateTime.now();
             }
             handleRequest();
-        } else {
-            updateHistory(dummyRequest, ResponseCode.RC_NO_CONTENT);
         }
     }
 
@@ -83,8 +87,12 @@ public class SessionHandler extends SocketIOBase {
      * Get the history of requests/responses.
      * @return Strings in temporal order with most recent first.
      */
-    public ConcurrentLinkedDeque<String> getHistory() {
-        return history;
+    public List<String> getHistory() {
+        // Synchronized collections have issues with iteration, so we synchronize
+        // it here (in the LinkedList ctor) to return a copy of the list.
+        synchronized (this) {
+            return new LinkedList<>(history);
+        }
     }
 
     /**
@@ -108,16 +116,18 @@ public class SessionHandler extends SocketIOBase {
     }
 
     /**
-     * Keep track of session history.
+     * Keep track of connection history.
      * @param request As received and parsed.
      * @param code Per response.
      */
     private void updateHistory(HttpRequestPojo request, ResponseCode code) {
         String now = dateFormat.format(new Date());
-        history.addFirst(now + request.getMethod() + " " + request.getUrl() + " ==> " +
-                code.getNumValue() + " " + code.getTextValue());
-        if(history.size() > Preferences.getInstance().getMaxHistory()) {
-            history.removeLast();
+        synchronized (this) {
+            history.add(0, now + request.getMethod() + " " + request.getUrl() + " ==> " +
+                    code.getNumValue() + " " + code.getTextValue());
+            if (history.size() > Preferences.getInstance().getMaxHistory()) {
+                history.remove(history.size() - 1);
+            }
         }
     }
 

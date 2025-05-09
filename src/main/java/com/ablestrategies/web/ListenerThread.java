@@ -67,7 +67,7 @@ public class ListenerThread extends Thread {
                 logger.debug("Listener accept() problem", e);
             }
             if(socket != null) {
-                manager.createSession(protocol, socket);
+                manager.createConnection(protocol, socket);
             }
         }
     }

@@ -7,15 +7,16 @@ import java.net.Socket;
  * ---------------------------------------------------------------------------
  * Menu:
  *    Address:Port   Show IP Address and port of this server
- *    Sessions       Show all sessions
- *    Kill Idle 60   Kill sessions that have been inactive for 60 seconds or more
+ *    Connections    Show all Connections
+ *    Threads        Show all Threads
+ *    Kill Idle 60   Kill connections that have been inactive for 60 seconds or more
  */
 public class HttpResponseWebConsole extends HttpResponseBase {
 
     /** The HttpRequestXxx that requested this response. */
     private final HttpRequestPojo request;
 
-    /** The top-level object that knows about all sessions. */
+    /** The top-level object that knows about all connections. */
     private final ServerManager manager;
 
     /** Buffer for assembling the HTTP header. */
@@ -27,7 +28,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
     /**
      * Ctor.
      * @param request The HttpRequestXxx that requested this response.
-     * @param manager The top-level object that knows about all sessions.
+     * @param manager The top-level object that knows about all connections.
      */
     public HttpResponseWebConsole(HttpRequestPojo request, ServerManager manager) {
         this.request = request;
@@ -90,7 +91,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<h3>Click a selection...</h3><p/>\n");
         bodyBuffer.append("<form name='myForm' action='/webconsole' method='get'>\n");
         bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
-        bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='C'>&nbsp;Connections&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='T'>&nbsp;Threads&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("</form><p/>\n");
@@ -106,13 +107,13 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         char selection = request.getQueryValue("selection", "S").charAt(0);
         switch (selection) {
             case 'K':
-                toBodyAsHtml("Number of sessions killed: " + manager.killIdleSessions(60) + "\n");
+                toBodyAsHtml("Number of connections killed: " + manager.killIdleConnections(60) + "\n");
                 break;
             case 'A': case 'P':
                 toBodyAsHtml("Server address and port: " + socket.getRemoteSocketAddress().toString() + "\n");
                 break;
-            case 'S':
-                toBodyAsHtml(manager.listAllSessions() + "\n");
+            case 'C':
+                toBodyAsHtml(manager.listAllConnections() + "\n");
                 break;
             case 'T':
                 toBodyAsHtml(manager.listAllThreads() + "\n");
