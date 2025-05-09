@@ -16,6 +16,7 @@
   web services, JSON, SOAP, etc. (yet)\
   brokering requests for an application server\
   websockets\
+  ftp\
   multi-part messages\
   HTTP other than 1.1, overlapping requests\
   plugins\
