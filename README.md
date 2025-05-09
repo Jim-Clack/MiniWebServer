@@ -14,6 +14,7 @@
   sessions based on a cookie and a sessionId (yet)\
   basic auth, URL-based credentials (yet)\
   web services, JSON, SOAP, etc. (yet)\
+  brokering requests for an application server\
   websockets\
   multi-part messages\
   HTTP other than 1.1, overlapping requests\
