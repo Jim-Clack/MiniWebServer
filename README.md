@@ -20,7 +20,7 @@
   HTTP other than 1.1, overlapping requests\
   plugins\
   JEE, servlets, JSP\
-  zip/jar/was/aar deployment\
+  zip/jar/was/aar/ear deployment\
   load balancing\
   alternate connections (non-HTTP)\
   could also use more thorough exception/error handling
