@@ -12,7 +12,7 @@ public class SessionContext {
     private boolean isFresh = true;
 
     /** Stored state values. */
-    private final Map<String, String> stringValues = new HashMap<String, String>();
+    private final Map<String, String> stringValues = new HashMap<>();
 
     /**
      * Ctor.

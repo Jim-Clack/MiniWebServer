@@ -9,7 +9,7 @@ import java.util.*;
 public class SessionManager {
 
     /** Keep track of session contexts. */
-    private final Map<String, SessionContext> contexts = new HashMap<String, SessionContext>();
+    private final Map<String, SessionContext> contexts = new HashMap<>();
 
     /** Counter to guarantee uniqueness. */
     private long sessionCount = System.currentTimeMillis() % 0x7FFFFFFFFFFFFFFFL;

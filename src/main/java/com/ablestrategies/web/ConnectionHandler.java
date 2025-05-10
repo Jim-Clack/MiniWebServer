@@ -61,7 +61,6 @@ public class ConnectionHandler extends SocketIOBase {
      * Here is the main loop for the connection. (see handleRequest)
      */
     public void connectionLoop() {
-        HttpRequestBase dummyRequest = new HttpRequestFile("(NONE) / HTTP\n", manager);
         clearBuffers();
         if(read() > 0) {
             synchronized (lastActivityLock) {

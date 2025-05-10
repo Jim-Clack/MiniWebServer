@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 public class SessionManagerTest extends TestCase {
 
+    @SuppressWarnings("ALL")
     public void testSessionIdUniqueness() {
         SessionManager sessionManager = new SessionManager();
         HashSet<String> sessionIds = new HashSet<String>();
@@ -34,7 +35,6 @@ public class SessionManagerTest extends TestCase {
         String sessionId1 = context1.getSessionId();
         SessionContext context2 = sessionManager.newSession();
         assertNotNull(context2);
-        String sessionId2 = context2.getSessionId();
         SessionContext context1b = sessionManager.getSession(sessionId1);
         assertNotNull(context1b);
         String sessionId1b = context1b.getSessionId();
@@ -45,7 +45,7 @@ public class SessionManagerTest extends TestCase {
 
     public void testGetOrCreateSession() {
         long now = System.currentTimeMillis();
-        String sessionId0 = "S" + now++;
+        String sessionId0 = "S" + now;
         SessionManager sessionManager = new SessionManager();
         SessionContext context1 = sessionManager.getOrCreateSession(sessionId0); // doesn't exist, so create
         assertNotNull(context1);
