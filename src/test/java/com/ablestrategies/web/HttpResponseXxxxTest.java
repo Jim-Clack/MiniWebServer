@@ -1,5 +1,9 @@
 package com.ablestrategies.web;
 
+import com.ablestrategies.web.conn.HttpActionType;
+import com.ablestrategies.web.resp.HttpResponseBase;
+import com.ablestrategies.web.resp.HttpResponseFile;
+import com.ablestrategies.web.rqst.HttpRequestBase;
 import junit.framework.TestCase;
 
 public class HttpResponseXxxxTest extends TestCase {

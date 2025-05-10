@@ -1,4 +1,4 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.conn;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,7 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
+
+import com.ablestrategies.web.ServerManager;
+import com.ablestrategies.web.conn.SessionContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +24,7 @@ public class HttpRequestPojo {
     protected StringBuilder body = new StringBuilder();
 
     /** This holds a code that indicates the state of this request. */
-    protected ErrorCode errorCode = ErrorCode.UNINITIALIZED;
+    protected RequestError errorCode = RequestError.UNINITIALIZED;
 
     /** The request method, such as GET. */
     protected String method = "?";
@@ -116,7 +119,7 @@ public class HttpRequestPojo {
      * Get the error code.
      * @return ErrorCode.Xxxx, hopefully OK or EMPTY_BODY.
      */
-    public ErrorCode getErrorCode() {
+    public RequestError getErrorCode() {
         return errorCode;
     }
 

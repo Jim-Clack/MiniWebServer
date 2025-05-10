@@ -1,10 +1,12 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.resp;
+
+import com.ablestrategies.web.rqst.HttpRequestPojo;
 
 import java.net.Socket;
 
-public class HttpResponseJson extends HttpResponseBase {
+public class HttpResponsePlugin extends HttpResponseBase {
 
-    public HttpResponseJson(HttpRequestPojo request) {
+    public HttpResponsePlugin(HttpRequestPojo request) {
         // TODO
     }
 

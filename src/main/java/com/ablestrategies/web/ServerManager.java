@@ -1,5 +1,7 @@
 package com.ablestrategies.web;
 
+import com.ablestrategies.web.conn.ConnectionThread;
+import com.ablestrategies.web.conn.SessionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,7 @@ public class ServerManager {
     private final List<ConnectionThread> connections = new LinkedList<>();
 
     /** For tracking user/browser sessions. */
-    private final SessionManager sessionManager = new SessionManager();
+    private final SessionHandler sessionHandler = new SessionHandler();
 
     /**
      * Ctor.
@@ -49,8 +51,8 @@ public class ServerManager {
      * Get the session manager over all sessions.
      * @return The session manager that tracks all user/browser sessions.
      */
-    public SessionManager getSessionManager() {
-        return sessionManager;
+    public SessionHandler getSessionManager() {
+        return sessionHandler;
     }
 
     /**

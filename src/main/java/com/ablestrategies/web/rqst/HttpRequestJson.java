@@ -1,4 +1,4 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
 
 public class HttpRequestJson extends HttpRequestBase {
 

@@ -1,5 +1,6 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
 
+import com.ablestrategies.web.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,18 +45,18 @@ public class HttpRequestBase extends HttpRequestPojo {
     protected void parseStatusLine(String line) {
         String[] tokens = line.split(" ");
         if(tokens.length < 3) {
-            errorCode = ErrorCode.BAD_FIRST_LINE;
+            errorCode = RequestError.BAD_FIRST_LINE;
         } else {
-            errorCode = ErrorCode.OK;
+            errorCode = RequestError.OK;
             method = tokens[0].trim();
             url = tokens[1].trim();
             version = tokens[2].trim();
         }
         if(!method.equals("GET")) {
-            errorCode = ErrorCode.ILLEGAL_METHOD;
+            errorCode = RequestError.ILLEGAL_METHOD;
         }
         if(!version.equals("HTTP/1.1")) {
-            errorCode = ErrorCode.UNSUPPORTED_VERSION;
+            errorCode = RequestError.UNSUPPORTED_VERSION;
         }
         logger.debug("HttpRequest code={}, method={}, url={}, version={}", errorCode, method, url, version);
     }
@@ -75,7 +76,7 @@ public class HttpRequestBase extends HttpRequestPojo {
             String[] fields = line.split("[:,]", 2);
             if(fields.length < 2) {
                 logger.warn("Bad Header in HttpRequest: {}", line);
-                errorCode = ErrorCode.BAD_HEADER;
+                errorCode = RequestError.BAD_HEADER;
             }
             headers.put(fields[0].trim().toLowerCase(), fields[1].trim());
             logger.trace("HttpRequest header key={}, value={}", fields[0].trim().toLowerCase(), fields[1].trim());
@@ -93,7 +94,7 @@ public class HttpRequestBase extends HttpRequestPojo {
             body.append(lines[lineIndex]).append("\n");
         }
         if(body.toString().trim().isEmpty()) {
-            errorCode = ErrorCode.EMPTY_BODY;
+            errorCode = RequestError.EMPTY_BODY;
         } else {
             logger.trace("HttpRequest body=\n{}", body);
         }

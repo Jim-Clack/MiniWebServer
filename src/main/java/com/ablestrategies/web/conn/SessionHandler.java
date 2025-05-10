@@ -1,4 +1,4 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.conn;
 
 import java.util.*;
 
@@ -6,7 +6,7 @@ import java.util.*;
  * This keeps track of sessions (with a given browser) via a session-id in
  * the header. All session state should be preserved herein.
  */
-public class SessionManager {
+public class SessionHandler {
 
     /** Keep track of session contexts. */
     private final Map<String, SessionContext> contexts = new HashMap<>();
@@ -14,10 +14,13 @@ public class SessionManager {
     /** Counter to guarantee uniqueness. */
     private long sessionCount = System.currentTimeMillis() % 0x7FFFFFFFFFFFFFFFL;
 
+    /** Used to detect NON-threadsafe code. (cannot make methods private because of unit tests.) */
+    private boolean developerWarning = true;
+
     /**
      * Ctor.
      */
-    public SessionManager() {
+    public SessionHandler() {
         // Wisdom of Confucius...
         //  Step in the river.
         //  But the water has moved on.
@@ -30,6 +33,7 @@ public class SessionManager {
      * @return A valid session.
      */
     public synchronized SessionContext getOrCreateSession(String sessionId) {
+        developerWarning = false;
         SessionContext context = null;
         if(sessionId != null && !sessionId.trim().isEmpty()) {
             context = contexts.get(sessionId);
@@ -37,6 +41,7 @@ public class SessionManager {
         if (context == null) {
             context = newSession();
         }
+        developerWarning = true;
         return context;
     }
 
@@ -45,7 +50,10 @@ public class SessionManager {
      * @return Newly created session context.
      * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    SessionContext newSession() {
+    public SessionContext newSession() {
+        if(developerWarning) {
+            throw new RuntimeException("Don't call newSession() directly!");
+        }
         sessionCount = (sessionCount + 3L) & 0x0000FFFFFFFFFFFFL;
         long hi4bits = ((sessionCount * 2111L) & 0x7FFFL) * 0x1000000000000L;
         long reversedId = sessionCount | hi4bits;
@@ -66,7 +74,10 @@ public class SessionManager {
      * @return the session context, possibly null if not found.
      * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    SessionContext getSession(String sessionId) {
+    public SessionContext getSession(String sessionId) {
+        if(developerWarning) {
+            throw new RuntimeException("Don't call getSession() directly!");
+        }
         return contexts.get(sessionId);
     }
 

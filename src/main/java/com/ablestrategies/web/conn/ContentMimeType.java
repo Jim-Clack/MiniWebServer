@@ -1,4 +1,4 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.conn;
 
 public enum ContentMimeType {
     MIME_NONE("NONE", "text/plain"),

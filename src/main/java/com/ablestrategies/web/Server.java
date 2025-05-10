@@ -17,20 +17,20 @@ import java.io.IOException;
  * Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
  * ---------------------------------------------------------------------------
  * Does NOT support...
- *   sessions based on a cookie and a sessionId (yet)
  *   basic auth, URL-based credentials (yet)
  *   web services, JSON, SOAP, etc. (yet)
- *   websockets
+ *   websockets (yet)
+ *   plugins (yet)
+ *   brokering requests for an application server (yet)
+ *   multi-part messages (yet)
  *   FTP or other protocols
- *   brokering requests for an application server
- *   multi-part messages
  *   HTTP other than 1.1
- *   plugins
  *   JEE, servlets, JSP
  *   zip/jar/was/aar deployment
- *   load balancing
  *   alternate connections (non-HTTP)
  *   could also use more thorough exception/error handling
+ *   should make use of a thread pool
+ *   load balancing
  * ---------------------------------------------------------------------------
  * You can pass in configuration settings or put them into the java properties
  *    Setting          arg[n] Java property              Default
@@ -40,6 +40,9 @@ import java.io.IOException;
  * In order to support SSL/HTTPS, you have to set certain Java properties, as
  * listed in Preferences.java.
  * ---------------------------------------------------------------------------
+ * Note the following distinction in the sources:
+ *   Connection - Client-Server match-up based on IP-Address-and-Port
+ *   Session - Client-Server match-up based on sessionId(mws) cookie
  * You may link with this in order to create an embedded web server or run it
  * under "App,java" as a standalone web server. To call it, do this:
  *    new Server(args).start();

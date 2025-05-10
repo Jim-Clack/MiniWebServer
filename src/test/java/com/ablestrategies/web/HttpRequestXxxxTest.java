@@ -1,5 +1,8 @@
 package com.ablestrategies.web;
 
+import com.ablestrategies.web.conn.HttpActionType;
+import com.ablestrategies.web.rqst.RequestError;
+import com.ablestrategies.web.rqst.HttpRequestBase;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -85,8 +88,8 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        ErrorCode ec = rq.getErrorCode();
-        assertEquals(ErrorCode.OK, ec);
+        RequestError ec = rq.getErrorCode();
+        assertEquals(RequestError.OK, ec);
     }
 
     public void testGetUrl() {
@@ -116,8 +119,8 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines2[0]);
         int lineIndex = rq.parseHeaders(lines2);
         rq.parseBody(lineIndex, lines2);
-        ErrorCode ec = rq.getErrorCode();
-        assertEquals(ErrorCode.EMPTY_BODY, ec);
+        RequestError ec = rq.getErrorCode();
+        assertEquals(RequestError.EMPTY_BODY, ec);
     }
 
     public void testErrorCodeBadVersion() {
@@ -127,8 +130,8 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        ErrorCode ec = rq.getErrorCode();
-        assertEquals(ErrorCode.UNSUPPORTED_VERSION, ec);
+        RequestError ec = rq.getErrorCode();
+        assertEquals(RequestError.UNSUPPORTED_VERSION, ec);
     }
 
     public void testErrorCodeBadMethod() {
@@ -138,7 +141,7 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        ErrorCode ec = rq.getErrorCode();
-        assertEquals(ErrorCode.ILLEGAL_METHOD, ec);
+        RequestError ec = rq.getErrorCode();
+        assertEquals(RequestError.ILLEGAL_METHOD, ec);
     }
 }

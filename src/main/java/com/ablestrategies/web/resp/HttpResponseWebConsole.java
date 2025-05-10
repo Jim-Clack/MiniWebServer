@@ -1,4 +1,8 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.resp;
+
+import com.ablestrategies.web.conn.ContentMimeType;
+import com.ablestrategies.web.ServerManager;
+import com.ablestrategies.web.rqst.HttpRequestPojo;
 
 import java.net.Socket;
 

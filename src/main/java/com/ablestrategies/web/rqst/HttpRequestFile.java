@@ -1,4 +1,6 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
+
+import com.ablestrategies.web.ServerManager;
 
 /**
  * File request AS WELL AS any unknown type of request.

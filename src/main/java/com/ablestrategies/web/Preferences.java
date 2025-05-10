@@ -1,6 +1,8 @@
 package com.ablestrategies.web;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Simple settings class.
@@ -60,6 +62,16 @@ public class Preferences {
                 System.getProperty("MiniWebServer.sslPortNumber", ""+this.sslPortNumber));
         this.rootPath =
                 System.getProperty("MiniWebServer.rootPath", this.rootPath);
+    }
+
+    /**
+     * Read in PluginPojo JSON files.
+     * @return List of PluginPojos.
+     */
+    public List<PluginPojo> getPluginPojos() {
+        List<PluginPojo> pluginPojos = new LinkedList<PluginPojo>();
+        // TODO
+        return pluginPojos;
     }
 
     public int getMaxHistory() {

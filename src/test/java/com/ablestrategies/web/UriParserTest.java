@@ -1,5 +1,6 @@
 package com.ablestrategies.web;
 
+import com.ablestrategies.web.rqst.UriParser;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

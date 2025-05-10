@@ -1,4 +1,6 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.resp;
+
+import com.ablestrategies.web.rqst.HttpRequestPojo;
 
 import java.net.Socket;
 

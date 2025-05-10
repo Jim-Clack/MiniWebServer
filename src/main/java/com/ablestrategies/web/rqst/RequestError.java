@@ -1,9 +1,9 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
 
 /**
  * Error codes returned from parsing an HTTP Request.
  */
-public enum ErrorCode {
+public enum RequestError {
     OK,
     EMPTY_BODY,
     UNINITIALIZED,

@@ -1,5 +1,7 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.resp;
 
+import com.ablestrategies.web.conn.ContentMimeType;
+import com.ablestrategies.web.rqst.HttpRequestPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +63,7 @@ public abstract class HttpResponseBase {
      */
     @SuppressWarnings("all")
     protected void assembleHeaders(HttpRequestPojo request, StringBuilder headerBuffer,
-            String line1, int contentLength, ContentMimeType mimeType, int maxSeconds) {
+                                   String line1, int contentLength, ContentMimeType mimeType, int maxSeconds) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
         String now = dateFormat.format(new Date());
         headerBuffer.insert(0, line1);

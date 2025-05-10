@@ -1,5 +1,6 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
 
+import com.ablestrategies.web.Preferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

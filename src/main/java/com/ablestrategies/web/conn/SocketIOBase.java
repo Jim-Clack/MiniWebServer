@@ -1,4 +1,4 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.conn;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

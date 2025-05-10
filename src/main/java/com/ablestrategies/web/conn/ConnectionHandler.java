@@ -1,5 +1,13 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.conn;
 
+import com.ablestrategies.web.Preferences;
+import com.ablestrategies.web.resp.ResponseCode;
+import com.ablestrategies.web.ServerManager;
+import com.ablestrategies.web.resp.HttpResponseBase;
+import com.ablestrategies.web.rqst.RequestError;
+import com.ablestrategies.web.rqst.HttpRequestBase;
+import com.ablestrategies.web.rqst.HttpRequestFile;
+import com.ablestrategies.web.rqst.HttpRequestPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +33,7 @@ public class ConnectionHandler extends SocketIOBase {
     /** Keep track of the timestamp of the last HTTP request. */
     private LocalDateTime lastActivity = LocalDateTime.now();
 
-    /** Synch-lock for access to lastActivity. */
+    /** Synchlock for access to lastActivity. */
     private final Integer lastActivityLock = 0;
 
     /** Our connection to the client. */
@@ -99,7 +107,7 @@ public class ConnectionHandler extends SocketIOBase {
      */
     private void handleRequest() {
         HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
-        if(request.getErrorCode() == ErrorCode.UNINITIALIZED) {
+        if(request.getErrorCode() == RequestError.UNINITIALIZED) {
             updateHistory(request, ResponseCode.RC_UNKNOWN_ERROR);
             Thread.currentThread().interrupt();
             return;

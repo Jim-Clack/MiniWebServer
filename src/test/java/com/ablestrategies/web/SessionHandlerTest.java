@@ -1,17 +1,19 @@
 package com.ablestrategies.web;
 
+import com.ablestrategies.web.conn.SessionContext;
+import com.ablestrategies.web.conn.SessionHandler;
 import junit.framework.TestCase;
 
 import java.util.HashSet;
 
-public class SessionManagerTest extends TestCase {
+public class SessionHandlerTest extends TestCase {
 
     @SuppressWarnings("ALL")
     public void testSessionIdUniqueness() {
-        SessionManager sessionManager = new SessionManager();
+        SessionHandler sessionHandler = new SessionHandler();
         HashSet<String> sessionIds = new HashSet<String>();
         for(int i = 0; i < 10000; i++) {
-            String sessionId = sessionManager.newSession().getSessionId();
+            String sessionId = sessionHandler.newSession().getSessionId();
             //System.out.println(sessionId);
             if(sessionIds.contains(sessionId)) {
                 fail("Duplicate session id: " + sessionId);
@@ -21,21 +23,21 @@ public class SessionManagerTest extends TestCase {
     }
 
     public void testNewSession() {
-        SessionManager sessionManager = new SessionManager();
-        SessionContext context = sessionManager.newSession();
+        SessionHandler sessionHandler = new SessionHandler();
+        SessionContext context = sessionHandler.newSession();
         assertNotNull(context);
         String sessionId = context.getSessionId();
         assertNotNull(sessionId);
     }
 
     public void testGetSession() {
-        SessionManager sessionManager = new SessionManager();
-        SessionContext context1 = sessionManager.newSession();
+        SessionHandler sessionHandler = new SessionHandler();
+        SessionContext context1 = sessionHandler.newSession();
         assertNotNull(context1);
         String sessionId1 = context1.getSessionId();
-        SessionContext context2 = sessionManager.newSession();
+        SessionContext context2 = sessionHandler.newSession();
         assertNotNull(context2);
-        SessionContext context1b = sessionManager.getSession(sessionId1);
+        SessionContext context1b = sessionHandler.getSession(sessionId1);
         assertNotNull(context1b);
         String sessionId1b = context1b.getSessionId();
         assertEquals(sessionId1, sessionId1b);
@@ -46,15 +48,15 @@ public class SessionManagerTest extends TestCase {
     public void testGetOrCreateSession() {
         long now = System.currentTimeMillis();
         String sessionId0 = "S" + now;
-        SessionManager sessionManager = new SessionManager();
-        SessionContext context1 = sessionManager.getOrCreateSession(sessionId0); // doesn't exist, so create
+        SessionHandler sessionHandler = new SessionHandler();
+        SessionContext context1 = sessionHandler.getOrCreateSession(sessionId0); // doesn't exist, so create
         assertNotNull(context1);
         String sessionId1 = context1.getSessionId();
         assertNotSame(sessionId0, sessionId1);
-        SessionContext context2 = sessionManager.getOrCreateSession(null); // doesn't exist, so create
+        SessionContext context2 = sessionHandler.getOrCreateSession(null); // doesn't exist, so create
         assertNotNull(context2);
         assertNotSame(sessionId1, context2.getSessionId());
-        SessionContext context3 = sessionManager.getOrCreateSession(sessionId1); // exists, so get
+        SessionContext context3 = sessionHandler.getOrCreateSession(sessionId1); // exists, so get
         assertNotNull(context3);
         assertEquals(sessionId1, context3.getSessionId()); // should have gotten sessionId1
 

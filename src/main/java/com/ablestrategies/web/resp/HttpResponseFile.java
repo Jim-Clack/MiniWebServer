@@ -1,5 +1,7 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.resp;
 
+import com.ablestrategies.web.conn.ContentMimeType;
+import com.ablestrategies.web.rqst.HttpRequestPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
