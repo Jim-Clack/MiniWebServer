@@ -1,8 +1,6 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.resp;
 
-import com.ablestrategies.web.conn.HttpActionType;
-import com.ablestrategies.web.resp.HttpResponseBase;
-import com.ablestrategies.web.resp.HttpResponseFile;
+import com.ablestrategies.web.rqst.HttpActionType;
 import com.ablestrategies.web.rqst.HttpRequestBase;
 import junit.framework.TestCase;
 

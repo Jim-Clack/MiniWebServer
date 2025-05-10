@@ -1,12 +1,7 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
 
-import com.ablestrategies.web.conn.HttpActionType;
 import com.ablestrategies.web.resp.HttpResponseBase;
 import com.ablestrategies.web.resp.HttpResponseFile;
-import com.ablestrategies.web.rqst.HttpRequestBase;
-import com.ablestrategies.web.rqst.HttpRequestFile;
-import com.ablestrategies.web.rqst.HttpRequestJson;
-import com.ablestrategies.web.rqst.HttpRequestSoap;
 import junit.framework.TestCase;
 
 public class HttpActionTypeTest extends TestCase {

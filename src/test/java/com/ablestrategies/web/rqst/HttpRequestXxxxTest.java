@@ -1,8 +1,5 @@
-package com.ablestrategies.web;
+package com.ablestrategies.web.rqst;
 
-import com.ablestrategies.web.conn.HttpActionType;
-import com.ablestrategies.web.rqst.RequestError;
-import com.ablestrategies.web.rqst.HttpRequestBase;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

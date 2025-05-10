@@ -4,6 +4,7 @@ import com.ablestrategies.web.rqst.HttpRequestPojo;
 
 import java.net.Socket;
 
+@SuppressWarnings("ALL") // Until we flesh this class out
 public class HttpResponsePlugin extends HttpResponseBase {
 
     public HttpResponsePlugin(HttpRequestPojo request) {

@@ -15,7 +15,7 @@ public class SessionHandler {
     private long sessionCount = System.currentTimeMillis() % 0x7FFFFFFFFFFFFFFFL;
 
     /** Used to detect NON-threadsafe code. (cannot make methods private because of unit tests.) */
-    private boolean developerWarning = true;
+    protected boolean developerWarning = true;
 
     /**
      * Ctor.
@@ -50,7 +50,7 @@ public class SessionHandler {
      * @return Newly created session context.
      * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    public SessionContext newSession() {
+    protected SessionContext newSession() {
         if(developerWarning) {
             throw new RuntimeException("Don't call newSession() directly!");
         }
@@ -74,7 +74,7 @@ public class SessionHandler {
      * @return the session context, possibly null if not found.
      * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    public SessionContext getSession(String sessionId) {
+    protected SessionContext getSession(String sessionId) {
         if(developerWarning) {
             throw new RuntimeException("Don't call getSession() directly!");
         }

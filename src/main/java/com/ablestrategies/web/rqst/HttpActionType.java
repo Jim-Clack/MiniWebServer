@@ -1,8 +1,7 @@
-package com.ablestrategies.web.conn;
+package com.ablestrategies.web.rqst;
 
 import com.ablestrategies.web.ServerManager;
 import com.ablestrategies.web.resp.*;
-import com.ablestrategies.web.rqst.*;
 
 /**
  * Simple static methods to assist with creating HTTP requests and responses.

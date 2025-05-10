@@ -1,5 +1,6 @@
 package com.ablestrategies.web;
 
+@SuppressWarnings("ALL") // Until we flesh this class out
 public class PluginHandler {
 
     private PluginHandler instance = null;

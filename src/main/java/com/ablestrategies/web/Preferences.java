@@ -68,8 +68,9 @@ public class Preferences {
      * Read in PluginPojo JSON files.
      * @return List of PluginPojos.
      */
+    @SuppressWarnings("ALL") // Until we flesh this method out
     public List<PluginPojo> getPluginPojos() {
-        List<PluginPojo> pluginPojos = new LinkedList<PluginPojo>();
+        List<PluginPojo> pluginPojos = new LinkedList<>();
         // TODO
         return pluginPojos;
     }

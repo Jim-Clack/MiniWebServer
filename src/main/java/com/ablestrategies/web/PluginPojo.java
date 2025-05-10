@@ -1,8 +1,11 @@
 package com.ablestrategies.web;
 
+import java.util.Map;
+
 /**
  * Generally, this is read from a local JSON file.
  */
+@SuppressWarnings("ALL") // Until we flesh this class out
 public class PluginPojo {
     String name = null;                // i.e. PHP
     String description = null;
