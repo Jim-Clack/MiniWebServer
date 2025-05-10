@@ -1,7 +1,5 @@
 package com.ablestrategies.web;
 
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalField;
 import java.util.*;
 
 /**
@@ -11,23 +9,52 @@ import java.util.*;
 public class SessionManager {
 
     /** Keep track of session contexts. */
-    private Map<String, SessionContext> contexts = new HashMap<String, SessionContext>();
+    private final Map<String, SessionContext> contexts = new HashMap<String, SessionContext>();
 
     /** Counter to guarantee uniqueness. */
     private long sessionCount = System.currentTimeMillis() % 0x7FFFFFFFFFFFFFFFL;
 
     /**
+     * Ctor.
+     */
+    public SessionManager() {
+        // Wisdom of Confucius...
+        //  Step in the river.
+        //  But the water has moved on.
+        //  There's nothing to see.
+    }
+
+    /**
+     * Get a session or create it if it does not exist.
+     * @param sessionId To be fetched, or null to force it to create a new onw.
+     * @return A valid session.
+     */
+    public synchronized SessionContext getOrCreateSession(String sessionId) {
+        SessionContext context = null;
+        if(sessionId != null && !sessionId.trim().isEmpty()) {
+            context = contexts.get(sessionId);
+        }
+        if (context == null) {
+            context = newSession();
+        }
+        return context;
+    }
+
+    /**
      * Get a unique session context.
      * @return Newly created session context.
+     * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    public SessionContext newSession() {
-        sessionCount = (sessionCount + 1) & 0x7FFFFFFFFFFFFFFFL;
-        String sessionString = String.format("%16x", sessionCount);
+    SessionContext newSession() {
+        sessionCount = (sessionCount + 3L) & 0x0000FFFFFFFFFFFFL;
+        long hi4bits = ((sessionCount * 2111L) & 0x7FFFL) * 0x1000000000000L;
+        long reversedId = sessionCount | hi4bits;
+        String sessionString = String.format("%016x", reversedId);
         StringBuilder buffer = new StringBuilder();
         for(byte byt : sessionString.getBytes()) {
-            buffer.insert(0, byt);
+            buffer.insert(0, (char)byt);
         }
-        String sessionId = buffer.toString();
+        String sessionId = new String(buffer);
         SessionContext context = new SessionContext(sessionId);
         contexts.put(sessionId, context);
         return context;
@@ -37,8 +64,9 @@ public class SessionManager {
      * Get or create a session context.
      * @param sessionId The unique session ID.
      * @return the session context, possibly null if not found.
+     * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    public SessionContext getSession(String sessionId) {
+    SessionContext getSession(String sessionId) {
         return contexts.get(sessionId);
     }
 

@@ -123,8 +123,8 @@ public class ConnectionHandler extends SocketIOBase {
     private void updateHistory(HttpRequestPojo request, ResponseCode code) {
         String now = dateFormat.format(new Date());
         synchronized (this) {
-            history.add(0, now + request.getMethod() + " " + request.getUrl() + " ==> " +
-                    code.getNumValue() + " " + code.getTextValue());
+            history.add(0, now + request.getSessionId() + " " + request.getMethod() + " " +
+                request.getUrl() + " ==> " + code.getNumValue() + " " + code.getTextValue());
             if (history.size() > Preferences.getInstance().getMaxHistory()) {
                 history.remove(history.size() - 1);
             }

@@ -67,7 +67,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      */
     private void generateHeaders() {
         String line1 = request.getVersion() + " 200 OK\n";
-        assembleHeaders(headerBuffer, line1, bodyBuffer.length(), ContentMimeType.MIME_HTML, 1);
+        assembleHeaders(request, headerBuffer, line1, bodyBuffer.length(), ContentMimeType.MIME_HTML, 1);
     }
 
     /**

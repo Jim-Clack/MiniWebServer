@@ -19,6 +19,9 @@ public class ServerManager {
     /** List of all connections. */
     private final List<ConnectionThread> connections = new LinkedList<>();
 
+    /** For tracking user/browser sessions. */
+    private final SessionManager sessionManager = new SessionManager();
+
     /**
      * Ctor.
      */
@@ -40,6 +43,14 @@ public class ServerManager {
         } catch (IOException e) {
             logger.error("ServerManager accept() connection error", e);
         }
+    }
+
+    /**
+     * Get the session manager over all sessions.
+     * @return The session manager that tracks all user/browser sessions.
+     */
+    public SessionManager getSessionManager() {
+        return sessionManager;
     }
 
     /**

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * Test app for the MiniWebServer.
- * @see Server for more details
+ * @see Server for more details.
  */
 public class App {
 

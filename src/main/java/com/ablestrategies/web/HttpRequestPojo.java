@@ -32,6 +32,36 @@ public class HttpRequestPojo {
     /** Typically "HTTP/1.1". */
     protected String version = "?";
 
+    /** The current user/browser session. */
+    private SessionContext context = null;
+
+    /**
+     * Get the session ID.
+     * @return Session ID for tracking user/browser sessions.
+     */
+    public String getSessionId() {
+        return getContext().getSessionId();
+    }
+
+    /**
+     * Get the session context, creating it if it does not already exist.
+     * @return A valid and current session context.
+     */
+    public SessionContext getContext() {
+        String sessionId = null;
+        String[] cookies = getHeader("cookie");
+        for (String cookie : cookies) {
+            if (cookie.contains("sessionid-mws=")) {
+                sessionId = cookie.split("=")[1].trim();
+                break;
+            }
+        }
+        if(context == null) {
+            context = manager.getSessionManager().getOrCreateSession(sessionId);
+        }
+        return context;
+    }
+
     /**
      * Get the specified file path from the URL passed in line 1.
      * @param mustExist True if file is expected to exist, such as for read.
@@ -57,7 +87,7 @@ public class HttpRequestPojo {
      * @return the value of that key. There may be multiple comma-separated-values.
      */
     public String[] getHeader(String key) {
-        String headers = this.headers.get(key);
+        String headers = this.headers.get(key.toLowerCase());
         if(headers == null || headers.isEmpty()) {
             String[] stringArray = new String[1];
             stringArray[0] = "";

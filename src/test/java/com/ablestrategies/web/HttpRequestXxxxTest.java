@@ -33,7 +33,7 @@ public class HttpRequestXxxxTest extends TestCase {
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
         String fp = rq.getFilePath(true);
-        Assert.assertEquals("C:\\Users\\jimcl\\webroot\\index.html", fp);
+        Assert.assertEquals("C:/Users/jimcl/webroot/index.html", fp);
     }
 
     public void testGetQueryValue() {

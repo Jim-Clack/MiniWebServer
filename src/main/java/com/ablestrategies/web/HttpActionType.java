@@ -32,17 +32,18 @@ public class HttpActionType {
      * @return RequestKind, typically based on the Content-Type header.
      */
     public static RequestType getRequestKind(HttpRequestPojo request) {
-        String[] contentTypes = request.getHeader("Accept");
-        if(contentTypes == null || contentTypes.length == 0) {
-            contentTypes = request.getHeader("Content-Type");
+        String[] acceptContents = request.getHeader("Accept");
+        if(acceptContents == null || acceptContents.length == 0) {
+            acceptContents = request.getHeader("Content-Type");
         }
-        String contentType = "text/html";
-        if(contentTypes != null && contentTypes.length > 0) {
-            contentType = contentTypes[0];
+        // TODO iterate over all contentTypes[]
+        String acceptContent = "text/html";
+        if(acceptContents != null && acceptContents.length > 0) {
+            acceptContent = acceptContents[0];
         }
-        if(contentType.contains("/xml")) {
+        if(acceptContent.contains("/xml")) {
             return RequestType.RQ_WS_SOAP;
-        } else if(contentType.contains("/json")) {
+        } else if(acceptContent.contains("/json")) {
             return RequestType.RQ_WS_JSON;
         } else if(request.getUrl().startsWith("/webconsole")) {
             return RequestType.RQ_WEB_CONSOLE;

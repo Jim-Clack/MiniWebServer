@@ -77,8 +77,8 @@ public class HttpRequestBase extends HttpRequestPojo {
                 logger.warn("Bad Header in HttpRequest: {}", line);
                 errorCode = ErrorCode.BAD_HEADER;
             }
-            headers.put(fields[0].trim(), fields[1].trim());
-            logger.trace("HttpRequest header key={}, value={}", fields[0].trim(), fields[1].trim());
+            headers.put(fields[0].trim().toLowerCase(), fields[1].trim());
+            logger.trace("HttpRequest header key={}, value={}", fields[0].trim().toLowerCase(), fields[1].trim());
         }
         return lineIndex;
     }
