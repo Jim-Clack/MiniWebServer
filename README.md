@@ -1,3 +1,4 @@
+ LOOKING FOR COLLABORATORS/CONTRIBUTORS - jim.clack@ablestrategies.com
 ## Basic web server - lightweight and easy to use.
   Handles HTML, PNG, JPEG, JS, CSS, etc.\
   Supports both HTTP and HTTPS. (TLS/SSL)\
@@ -38,6 +39,10 @@ listed in Preferences.java.
 ```
    new Server(args).start();
 ```
+Note the following distinction in the sources:
+- Connection - Client-Server match-up based on IP-Address-and-Port
+- Session - Client-Server match-up based on sessionId(mws) cookie
+
 You will have to catch IOException and InterruptedException, although all\
 recoverable exceptions will be handled by the server without throwing.\
 I'm 75 and  just wrote this, so I hope it's not too old-fashioned.
