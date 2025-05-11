@@ -10,9 +10,6 @@ import java.util.Map;
 
 public class ConsoleSupport {
 
-    /** Logger slf4j. */
-    private final Logger logger = LoggerFactory.getLogger(ServerManager.class);
-
     /** We need to get a lot of data from our server manager. */
     private final ServerManager manager;
 

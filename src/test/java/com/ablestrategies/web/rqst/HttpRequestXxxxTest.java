@@ -55,7 +55,7 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        String[] hosts = rq.getHeader("Host");
+        String[] hosts = rq.getHeaderValues("Host");
         Assert.assertEquals(1, hosts.length);
         Assert.assertEquals("localhost", hosts[0]);
     }

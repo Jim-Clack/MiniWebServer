@@ -25,7 +25,7 @@ public class ServerManager {
     private final SessionHandler sessionHandler = new SessionHandler();
 
     /** Support for the server management console. */
-    private ConsoleSupport console;
+    private final ConsoleSupport console;
 
     /**
      * Ctor.
