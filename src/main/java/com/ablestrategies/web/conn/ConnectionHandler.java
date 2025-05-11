@@ -104,9 +104,10 @@ public class ConnectionHandler extends SocketIOBase {
      */
     private void handleRequest() {
         HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
-        if(request.getErrorCode() == RequestError.UNINITIALIZED) {
+        if(request.getErrorCode() != RequestError.OK) {
             updateHistory(request, null, ResponseCode.RC_UNKNOWN_ERROR);
             Thread.currentThread().interrupt();
+            // TODO - send an error response
             return;
         }
         request = HttpActionType.getTypedRequest(request); // clone to correct type
@@ -127,18 +128,28 @@ public class ConnectionHandler extends SocketIOBase {
      */
     private void updateHistory(HttpRequestPojo request, HttpResponseBase response, ResponseCode code) {
         String now = dateFormat.format(new Date());
-        String requestSpecs = now + request.getSessionId() + " " + request.getMethod() + " " + request.getUrl();
-        String responseSpecs = "(no response)";
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(now);
+        buffer.append(request.getSessionId(false));
+        buffer.append(" ");
+        buffer.append(request.getMethod());
+        buffer.append(" ");
+        buffer.append(request.getUrl());
         if(response != null) {
-            responseSpecs = response.getDescription() + " " + code.getNumValue() + " " + code.getTextValue();
+            buffer.append(" ==> ");
+            buffer.append(response.getDescription());
+            buffer.append(" ");
+            buffer.append(code.getNumValue());
+            buffer.append(" ");
+            buffer.append(code.getTextValue());
         }
         synchronized (this) {
-            history.add(0, requestSpecs + " ==> " + responseSpecs);
+            history.add(0, buffer.toString());
             if (history.size() > Preferences.getInstance().getMaxHistory()) {
                 history.remove(history.size() - 1);
             }
         }
-        logger.debug("### " + requestSpecs + " ==> " + responseSpecs);
+        logger.debug("### " + buffer.toString());
     }
 
 }

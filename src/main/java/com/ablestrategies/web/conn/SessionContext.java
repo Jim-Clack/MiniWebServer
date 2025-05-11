@@ -1,5 +1,7 @@
 package com.ablestrategies.web.conn;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,12 @@ public class SessionContext {
 
     /** Stored state values. */
     private final Map<String, String> stringValues = new HashMap<>();
+
+    /** Keep track of the timestamp of the last HTTP request. */
+    private LocalDateTime lastActivity = LocalDateTime.now();
+
+    /** Synchlock for access to lastActivity. */
+    private final Integer lastActivityLock = 0;
 
     /**
      * Ctor.
@@ -54,6 +62,27 @@ public class SessionContext {
      */
     public void setStringValue(String key, String value) {
         stringValues.put(key, value);
+    }
+
+    /**
+     * Update activity timer.
+     */
+    public void setActivityNow() {
+        synchronized (lastActivityLock) {
+            lastActivity = LocalDateTime.now();
+        }
+    }
+
+    /**
+     * How long since the last request was handled?
+     * @return number of seconds since last activity.
+     */
+    public long beenIdleForHowLong() {
+        long seconds;
+        synchronized (lastActivityLock) {
+            seconds = ChronoUnit.SECONDS.between(lastActivity, LocalDateTime.now());
+        }
+        return seconds;
     }
 
     /**

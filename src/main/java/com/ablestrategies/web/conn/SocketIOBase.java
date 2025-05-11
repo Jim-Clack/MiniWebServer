@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -46,43 +44,80 @@ class SocketIOBase {
     }
 
     /**
-     * Read - generally an HTTP request.
+     * Read into inBuffer - generally an HTTP request.
      * @return length of received message.
      * @apiNote on failure, returns nothing, but does not treat it as an error.
      */
     protected int read() {
-        byte[] buffer = new byte[10000];
         if(inStream == null) {
             return 0;
         }
         try {
-            int bytesRead = Math.max(1, inStream.available()); // try to read at least one char
-            while (bytesRead > 0) {
-                bytesRead = inStream.read(buffer, 0, bytesRead);
-                if (bytesRead <= 0) {
-                    return inBuffer.length();
-                }
-                String content = new String(buffer, 0, bytesRead);
-                inBuffer.append(content);
-                bytesRead = Math.min(buffer.length, inStream.available());
-            }
+            return populateInBuffer();
         } catch (SSLException e) {
-            logger.error("SSL problem, shutting down thread {}", Thread.currentThread().getName());
-            Thread.currentThread().interrupt();
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                // ignore any exception
-            }
-            inStream = null;
+            handleSslException(e);
             return 0;
         } catch (IOException e) {
             if(Thread.currentThread().isInterrupted()) {
                 return 0;
             }
             logger.warn("receiveIntoInBuffer", e);
+        //} catch (InterruptedException e) {
+        //    // ignore - Java needs to close socket to handle an interrupt
+        }
+        return 0;
+    }
+
+    private int populateInBuffer() throws IOException {
+        byte[] buffer = new byte[10000];
+        int bytesRead = Math.max(1, inStream.available()); // try to read at least one char
+        while (bytesRead > 0) {
+            bytesRead = inStream.read(buffer, 0, bytesRead);
+            if (bytesRead <= 0) {
+                return inBuffer.length();
+            }
+            String content = new String(buffer, 0, bytesRead);
+            inBuffer.append(content);
+            bytesRead = Math.min(buffer.length, inStream.available());
         }
         return inBuffer.length();
+    }
+
+    /**
+     * Read the socket via inStream.
+     * @return number of bytes in inBuffer.
+     * @throws IOException If non-recoverable problem.
+     * @throws InterruptedException If interrupted.
+     */
+    /*
+    @SuppressWarnings("ALL")
+    private int readSocketToInBuffer() throws IOException, InterruptedException {
+        inBuffer = new StringBuilder();
+        String inputLine = null;
+        while((inputLine = inStream.readLine()) != null) {
+            inBuffer.append(inputLine);
+            inBuffer.append("\n");
+        }
+        if (inBuffer.length() == 0) {
+            Thread.sleep(50); // don't Bogart the thread
+        }
+        return inBuffer.length();
+    }
+    */
+
+    /**
+     * Deal with an SSL exception.
+     * @param e The exception.
+     */
+    private void handleSslException(SSLException e) {
+        logger.error("SSL problem, shutting down thread {} - {}", Thread.currentThread().getName(), e.getMessage());
+        Thread.currentThread().interrupt();
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            // ignore any exception
+        }
+        inStream = null;
     }
 
     /**
@@ -100,6 +135,7 @@ class SocketIOBase {
     protected void send(byte[] content) {
         try {
             outStream.write(content);
+            outStream.flush();
         } catch (IOException e) {
             logger.warn("send() problem", e);
             throw new RuntimeException(e);

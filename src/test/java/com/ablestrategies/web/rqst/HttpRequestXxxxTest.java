@@ -117,7 +117,7 @@ public class HttpRequestXxxxTest extends TestCase {
         int lineIndex = rq.parseHeaders(lines2);
         rq.parseBody(lineIndex, lines2);
         RequestError ec = rq.getErrorCode();
-        assertEquals(RequestError.EMPTY_BODY, ec);
+        assertEquals(RequestError.OK, ec);
     }
 
     public void testErrorCodeBadVersion() {

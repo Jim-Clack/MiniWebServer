@@ -40,17 +40,25 @@ public class HttpRequestPojo {
 
     /**
      * Get the session ID.
+     * @param createIfNotExist true to create a new session if necessary.
      * @return Session ID for tracking user/browser sessions.
      */
-    public String getSessionId() {
-        return getContext().getSessionId();
+    public String getSessionId(boolean createIfNotExist) {
+        SessionContext context = getContext(createIfNotExist);
+        if (context == null) {
+            return null;
+        }
+       return context.getSessionId();
     }
 
     /**
      * Get the session context, creating it if it does not already exist.
      * @return A valid and current session context.
      */
-    public SessionContext getContext() {
+    public SessionContext getContext(boolean createIfNotExist) {
+        if(context == null && !createIfNotExist) {
+            return null;
+        }
         String sessionId = null;
         String[] cookies = getHeader("cookie");
         for (String cookie : cookies) {

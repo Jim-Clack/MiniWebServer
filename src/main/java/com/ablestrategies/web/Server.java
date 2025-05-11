@@ -4,6 +4,7 @@ import java.io.IOException;
 
 /**
  * LOOKING FOR COLLABORATORS - jim.clack@ablestrategies.com
+ *   TODO - Fix all the SuppressWarnings directives
  * Basic web server - lightweight and easy to use.
  *   Handles HTML, PNG, JPEG, JS, CSS, etc,
  *   Supports both HTTP and HTTPS. (TLS/SSL)

@@ -46,7 +46,7 @@ public class HttpResponseFile extends HttpResponseBase {
     public ResponseCode generateContent(Socket socket) {
         responseCode = ResponseCode.RC_OK;
         String pathToFile = request.getFilePath(true);
-        logger.info("Sending {} to {}", pathToFile, socket);
+        logger.debug("Sending {} to {}", pathToFile, socket);
         if(pathToFile == null) {
             responseCode = ResponseCode.RC_NOT_FOUND;
         } else {
@@ -74,7 +74,7 @@ public class HttpResponseFile extends HttpResponseBase {
             responseCode = ResponseCode.RC_NOT_FOUND;
             content = new byte[0];
         }
-        ContentMimeType mimeType = ContentMimeType.mimeTypeFromSuffix(pathToFile);
+        ContentMimeType mimeType = ContentMimeType.mimeTypeFromFileSuffix(pathToFile);
         generateLine1AndHeaders(content.length, mimeType);
         // now switch to binary I/O...
         responseBuffer = java.util.Arrays.copyOf(

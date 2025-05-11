@@ -12,7 +12,7 @@ public class SessionHandlerTest extends TestCase {
         sessionHandler.developerWarning = false;
         HashSet<String> sessionIds = new HashSet<String>();
         for(int i = 0; i < 10000; i++) {
-            String sessionId = sessionHandler.newSession().getSessionId();
+            String sessionId = sessionHandler.newSession(null).getSessionId();
             //System.out.println(sessionId);
             if(sessionIds.contains(sessionId)) {
                 fail("Duplicate session id: " + sessionId);
@@ -24,7 +24,7 @@ public class SessionHandlerTest extends TestCase {
     public void testNewSession() {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.developerWarning = false;
-        SessionContext context = sessionHandler.newSession();
+        SessionContext context = sessionHandler.newSession(null);
         assertNotNull(context);
         String sessionId = context.getSessionId();
         assertNotNull(sessionId);
@@ -33,10 +33,10 @@ public class SessionHandlerTest extends TestCase {
     public void testGetSession() {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.developerWarning = false;
-        SessionContext context1 = sessionHandler.newSession();
+        SessionContext context1 = sessionHandler.newSession(null);
         assertNotNull(context1);
         String sessionId1 = context1.getSessionId();
-        SessionContext context2 = sessionHandler.newSession();
+        SessionContext context2 = sessionHandler.newSession(null);
         assertNotNull(context2);
         SessionContext context1b = sessionHandler.getSession(sessionId1);
         assertNotNull(context1b);
@@ -54,7 +54,7 @@ public class SessionHandlerTest extends TestCase {
         SessionContext context1 = sessionHandler.getOrCreateSession(sessionId0); // doesn't exist, so create
         assertNotNull(context1);
         String sessionId1 = context1.getSessionId();
-        assertNotSame(sessionId0, sessionId1);
+        assertEquals(sessionId0, sessionId1);
         SessionContext context2 = sessionHandler.getOrCreateSession(null); // doesn't exist, so create
         assertNotNull(context2);
         assertNotSame(sessionId1, context2.getSessionId());

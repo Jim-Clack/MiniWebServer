@@ -77,15 +77,14 @@ public abstract class HttpResponseBase {
                                    String line1, int contentLength, ContentMimeType mimeType, int maxSeconds) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
         String now = dateFormat.format(new Date());
+        String sessionId = request.getSessionId(true);
         headerBuffer.insert(0, line1);
         headerBuffer.append("content-type: " + mimeType.getMimeType() + "\n");
-        headerBuffer.append("set-cookie: sessionid-mws=" + request.getSessionId() + "\n");
+        headerBuffer.append("set-cookie: sessionid-mws=" + sessionId + "\n");
         headerBuffer.append("date: " + now + "\n");
         headerBuffer.append("cache-control: public, max-age=" + maxSeconds + "\n");
-        headerBuffer.append("server: mini\n");
+        headerBuffer.append("server: mws-MiniWebServer/AbleStrategies\n");
         headerBuffer.append("content-length: " + contentLength + "\n");
-        headerBuffer.append("x-xss-protection: 0\n");
-        headerBuffer.append("x-frame-options: SAMEORIGIN\n");
         headerBuffer.append("\n");
     }
 

@@ -95,9 +95,10 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><p/>\n");
         bodyBuffer.append("<h3>Click a selection...</h3><p/>\n");
         bodyBuffer.append("<form name='myForm' action='/webconsole' method='get'>\n");
-        bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='C'>&nbsp;Connections&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='T'>&nbsp;Threads&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("</form><p/>\n");
     }
@@ -119,6 +120,9 @@ public class HttpResponseWebConsole extends HttpResponseBase {
                 break;
             case 'C':
                 toBodyAsHtml(manager.listAllConnections() + "\n");
+                break;
+            case 'S':
+                toBodyAsHtml(manager.listAllSessions() + "\n");
                 break;
             case 'T':
                 toBodyAsHtml(manager.listAllThreads() + "\n");

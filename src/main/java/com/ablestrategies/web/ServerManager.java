@@ -1,6 +1,7 @@
 package com.ablestrategies.web;
 
 import com.ablestrategies.web.conn.ConnectionThread;
+import com.ablestrategies.web.conn.SessionContext;
 import com.ablestrategies.web.conn.SessionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Top level class to manage all connections.
@@ -23,6 +25,9 @@ public class ServerManager {
 
     /** For tracking user/browser sessions. */
     private final SessionHandler sessionHandler = new SessionHandler();
+
+    /** Paragraph separator. */
+    private static final String dashes = "--------------------------------------\n";
 
     /**
      * Ctor.
@@ -71,6 +76,13 @@ public class ServerManager {
     }
 
     /**
+     * Find sessions that are old and remove them from the list.
+     */
+    public void discardIdleSessions(long maxIdleSeconds) {
+        sessionHandler.deleteSessionsIfIdle(maxIdleSeconds);
+    }
+
+    /**
      * Kill idle connections - with no requests/responses for a while.
      * @param maxIdleSeconds Number of seconds of idle time to tolerate.
      * @return Number of connections killed.
@@ -96,6 +108,7 @@ public class ServerManager {
     public String listAllThreads() {
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
+        buffer.append(dashes);
         for(Thread thread : Thread.getAllStackTraces().keySet()) {
             String classPath = "";
             StackTraceElement[] element = thread.getStackTrace();
@@ -107,7 +120,37 @@ public class ServerManager {
             buffer.append(String.format("%s%-37s%-14s%s\n", checkMark, thread.getName(), thread.getState(), classPath));
             ++threadCount;
         }
+        buffer.append(dashes);
         buffer.append("Number of threads: " + threadCount + "\n");
+        return buffer.toString();
+    }
+
+    /**
+     * Assemble a man-readable list of sessions.
+     * @return Multiline text.
+     */
+    @SuppressWarnings("ALL")
+    public synchronized String listAllSessions() {
+        int sessionCount = 0;
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(dashes);
+        for (SessionContext context : sessionHandler.getSessions()) {
+            buffer.append("  Session:  " + context.getSessionId() + "\n");
+            buffer.append("  IsFresh:  " + context.isFresh() + "\n");
+            Map<String, String> values = context.getStringValues();
+            for(String key : values.keySet()) {
+                buffer.append("  " + key + " = " + values.get(key) + "\n");
+            }
+            for(ConnectionThread connection : connections) {
+                List<String> history = connection.getHistory();
+                if(history != null && !history.isEmpty() && history.get(0).contains(context.getSessionId())) {
+                    buffer.append("  " + connection.getThreadName() + "\n");
+                }
+            }
+            buffer.append(dashes);
+            sessionCount++;
+        }
+        buffer.append("Number of sessions: " + sessionCount + "\n");
         return buffer.toString();
     }
 
@@ -117,7 +160,6 @@ public class ServerManager {
      */
     @SuppressWarnings("all")
     public synchronized String listAllConnections() {
-        String dashes = "--------------------------------------\n";
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
@@ -127,11 +169,9 @@ public class ServerManager {
             buffer.append("  Protocol: " + connection.getProtocol() + "\n");
             buffer.append("  Idle:     " + connection.beenIdleForHowLong() + "\n");
             buffer.append("  Client:   " + connection.getAddressAndPort() + "\n");
-            String historyHeader = "  History:  ";
             List<String> history = connection.getHistory();
             for(String historyLine : history) {
-                buffer.append(historyHeader + historyLine + "\n");
-                historyHeader = "            ";
+                buffer.append("  " + historyLine + "\n");
             }
             buffer.append(dashes);
             if(connection.isAlive()) {

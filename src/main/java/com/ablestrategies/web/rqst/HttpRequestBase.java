@@ -93,11 +93,6 @@ public class HttpRequestBase extends HttpRequestPojo {
         for(; lineIndex < lines.length; lineIndex++) {
             body.append(lines[lineIndex]).append("\n");
         }
-        if(body.toString().trim().isEmpty()) {
-            errorCode = RequestError.EMPTY_BODY;
-        } else {
-            logger.trace("HttpRequest body=\n{}", body);
-        }
     }
 
 }

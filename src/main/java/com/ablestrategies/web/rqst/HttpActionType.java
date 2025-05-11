@@ -1,6 +1,7 @@
 package com.ablestrategies.web.rqst;
 
 import com.ablestrategies.web.ServerManager;
+import com.ablestrategies.web.conn.ContentMimeType;
 import com.ablestrategies.web.resp.*;
 
 /**
@@ -31,7 +32,7 @@ public class HttpActionType {
     }
 
     /**
-     * What kind of request is this?
+     * What kind of mimeType is expected in the response for this request?
      * @return RequestKind, typically based on the Content-Type header.
      */
     public static RequestType getRequestKind(HttpRequestPojo request) {
@@ -39,20 +40,16 @@ public class HttpActionType {
         if(acceptContents == null || acceptContents.length == 0) {
             acceptContents = request.getHeader("Content-Type");
         }
-        // TODO iterate over all contentTypes[]
-        String acceptContent = "text/html";
-        if(acceptContents != null && acceptContents.length > 0) {
-            acceptContent = acceptContents[0];
-        }
-        if(acceptContent.contains("/xml")) {
+        ContentMimeType responseMimeType = ContentMimeType.getMimeType(acceptContents);
+        if(responseMimeType == ContentMimeType.MIME_XML) {
             return RequestType.RQ_WS_SOAP;
-        } else if(acceptContent.contains("/json")) {
+        } else if(responseMimeType == ContentMimeType.MIME_JSON) {
             return RequestType.RQ_WS_JSON;
         } else if(request.getUrl().startsWith("/webconsole")) {
             return RequestType.RQ_WEB_CONSOLE;
         } else if(request.getMethod().equals("POST")) {
             return RequestType.RQ_FILE_POST;
-        }
+        } // more to add as we develop more response types
         return RequestType.RQ_FILE_GET;
     }
 
@@ -77,6 +74,7 @@ public class HttpActionType {
      * @param manager Top level manager that is aware of all connections.
      * @return An initialized HttpResponseXxxxx suitable for this request.
      */
+    @SuppressWarnings("ALL")
     public static HttpResponseBase getTypedResponse(HttpRequestPojo request, ServerManager manager) {
         RequestType requestType = getRequestKind(request);
         if (requestType == RequestType.RQ_WS_SOAP) {

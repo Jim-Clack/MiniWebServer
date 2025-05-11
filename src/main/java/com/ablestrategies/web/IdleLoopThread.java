@@ -31,6 +31,7 @@ public class IdleLoopThread extends Thread {
                 // ignore interrupts
             }
             manager.killIdleConnections(maxIdle);
+            manager.discardIdleSessions(maxIdle);
         }
     }
 }

@@ -5,10 +5,10 @@ package com.ablestrategies.web.rqst;
  */
 public enum RequestError {
     OK,
-    EMPTY_BODY,
     UNINITIALIZED,
     ILLEGAL_METHOD,
     UNSUPPORTED_VERSION,
     BAD_FIRST_LINE,
     BAD_HEADER,
+    // EMPTY_BODY, - no, not an error
 }
