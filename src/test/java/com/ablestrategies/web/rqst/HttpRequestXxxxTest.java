@@ -1,5 +1,6 @@
 package com.ablestrategies.web.rqst;
 
+import com.ablestrategies.web.HttpActionType;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

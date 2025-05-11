@@ -60,7 +60,7 @@ public class HttpRequestPojo {
             return null;
         }
         String sessionId = null;
-        String[] cookies = getHeader("cookie");
+        String[] cookies = getHeaderValues("cookie");
         for (String cookie : cookies) {
             if (cookie.contains("sessionid-mws=")) {
                 sessionId = cookie.split("=")[1].trim();
@@ -68,7 +68,15 @@ public class HttpRequestPojo {
             }
         }
         if(context == null) {
-            context = manager.getSessionManager().getOrCreateSession(sessionId);
+            context = manager.getSessionHandler().getOrCreateSession(sessionId);
+        }
+        String userAgent = getHeaderValue("user-agent");
+        if(userAgent != null && !userAgent.isEmpty()) {
+            context.setStringValue("user-agent", userAgent);
+        }
+        String authorization = getHeaderValue("authorization");
+        if(authorization != null && !authorization.isEmpty()) {
+            context.setStringValue("authorization", authorization);
         }
         return context;
     }
@@ -93,11 +101,24 @@ public class HttpRequestPojo {
     }
 
     /**
+     * Fetch a value from the headers.
+     * @param key The name of the header line.
+     * @return the value of that key. There may be multiple comma-separated-values. May return null.
+     */
+    public String getHeaderValue(String key) {
+        String header = this.headers.get(key.toLowerCase());
+        if(header == null || header.isEmpty()) {
+            return null;
+        }
+        return header;
+    }
+
+    /**
      * Fetch values from the headers.
      * @param key The name of the header line.
-     * @return the value of that key. There may be multiple comma-separated-values.
+     * @return the value of that key. There may be multiple values. Never returns null.
      */
-    public String[] getHeader(String key) {
+    public String[] getHeaderValues(String key) {
         String headers = this.headers.get(key.toLowerCase());
         if(headers == null || headers.isEmpty()) {
             String[] stringArray = new String[1];

@@ -7,5 +7,5 @@ public class HttpRequestSoap extends HttpRequestBase {
         cloneState(original);
     }
 
-    // TODO - deal with a SOAP body
+    // Not yet coded
 }

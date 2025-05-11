@@ -119,13 +119,13 @@ public class HttpResponseWebConsole extends HttpResponseBase {
                 toBodyAsHtml("Server address and port: " + socket.getRemoteSocketAddress().toString() + "\n");
                 break;
             case 'C':
-                toBodyAsHtml(manager.listAllConnections() + "\n");
+                toBodyAsHtml(manager.getConsole().listAllConnections() + "\n");
                 break;
             case 'S':
-                toBodyAsHtml(manager.listAllSessions() + "\n");
+                toBodyAsHtml(manager.getConsole().listAllSessions() + "\n");
                 break;
             case 'T':
-                toBodyAsHtml(manager.listAllThreads() + "\n");
+                toBodyAsHtml(manager.getConsole().listAllThreads() + "\n");
                 break;
             default:
                 toBodyAsHtml("Invalid command " + selection + "\n");

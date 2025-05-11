@@ -1,5 +1,6 @@
 package com.ablestrategies.web.rqst;
 
+import com.ablestrategies.web.HttpActionType;
 import com.ablestrategies.web.resp.HttpResponseBase;
 import com.ablestrategies.web.resp.HttpResponseFile;
 import junit.framework.TestCase;

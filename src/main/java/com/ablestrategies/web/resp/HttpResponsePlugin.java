@@ -9,7 +9,7 @@ public class HttpResponsePlugin extends HttpResponseBase {
 
     public HttpResponsePlugin(HttpRequestPojo request) {
         this.description = "Plug-in";
-        // TODO
+        // Not yet coded
     }
 
     @Override

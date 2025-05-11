@@ -9,7 +9,7 @@ public class HttpResponseSoap extends HttpResponseBase {
 
     public HttpResponseSoap(HttpRequestPojo request) {
         this.description = "SOAP";
-        // TODO
+        // Not yet coded
     }
 
     @Override

@@ -9,7 +9,7 @@ public class HttpResponseJson extends HttpResponseBase {
 
     public HttpResponseJson(HttpRequestPojo request) {
         this.description = "JSON";
-        // TODO
+        // Not yet coded
     }
 
     @Override

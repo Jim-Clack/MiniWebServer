@@ -54,13 +54,13 @@ public class LocalServerConsole {
                     System.out.println("Server address and port: " + listener.getAddressAndPort() + "\n");
                     break;
                 case 'C':
-                    System.out.println(manager.listAllConnections());
+                    System.out.println(manager.getConsole().listAllConnections());
                     break;
                 case 'S':
-                    System.out.println(manager.listAllSessions());
+                    System.out.println(manager.getConsole().listAllSessions());
                     break;
                 case 'T':
-                    System.out.println(manager.listAllThreads());
+                    System.out.println(manager.getConsole().listAllThreads());
                     break;
                 default:
                     System.out.println("Invalid command\n");

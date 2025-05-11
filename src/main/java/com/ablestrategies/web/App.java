@@ -9,7 +9,7 @@ import java.io.IOException;
 public class App {
 
     /**
-     * @param args portNumber and rootPath - both are optional.
+     * @param args portNumber, SSL-portNumber, and rootPath - all are optional.
      */
     public static void main(String[] args) {
         try {

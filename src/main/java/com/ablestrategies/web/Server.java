@@ -45,6 +45,7 @@ import java.io.IOException;
  * Note the following distinction in the sources:
  *   Connection - Client-Server match-up based on IP-Address-and-Port
  *   Session - Client-Server match-up based on sessionId(mws) cookie
+ * [[[ The main loop is ConnectionHandler.handleRequest() ]]]
  * You may link with this in order to create an embedded web server or run it
  * under "App,java" as a standalone web server. To call it, do this:
  *    new Server(args).start();

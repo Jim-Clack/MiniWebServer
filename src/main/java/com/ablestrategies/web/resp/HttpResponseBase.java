@@ -79,10 +79,14 @@ public abstract class HttpResponseBase {
         String now = dateFormat.format(new Date());
         String sessionId = request.getSessionId(true);
         headerBuffer.insert(0, line1);
-        headerBuffer.append("content-type: " + mimeType.getMimeType() + "\n");
+        headerBuffer.append("content-type: " + mimeType.getMimeString() + "\n");
         headerBuffer.append("set-cookie: sessionid-mws=" + sessionId + "\n");
         headerBuffer.append("date: " + now + "\n");
-        headerBuffer.append("cache-control: public, max-age=" + maxSeconds + "\n");
+        headerBuffer.append("cache-control: max-age=" + maxSeconds + "\n");
+        if(maxSeconds == 0) {
+            headerBuffer.append("expires: " + now + "\n");
+            headerBuffer.append("pragma: no-cache\n");
+        }
         headerBuffer.append("server: mws-MiniWebServer/AbleStrategies\n");
         headerBuffer.append("content-length: " + contentLength + "\n");
         headerBuffer.append("\n");

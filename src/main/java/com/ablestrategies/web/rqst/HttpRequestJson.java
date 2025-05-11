@@ -7,5 +7,5 @@ public class HttpRequestJson extends HttpRequestBase {
         cloneState(original);
     }
 
-    // TODO - deal with a JSON body
+    // Not yet coded
 }

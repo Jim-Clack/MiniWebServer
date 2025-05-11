@@ -1,5 +1,6 @@
 package com.ablestrategies.web.conn;
 
+import com.ablestrategies.web.HttpActionType;
 import com.ablestrategies.web.Preferences;
 import com.ablestrategies.web.resp.ResponseCode;
 import com.ablestrategies.web.ServerManager;
@@ -104,10 +105,10 @@ public class ConnectionHandler extends SocketIOBase {
      */
     private void handleRequest() {
         HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
-        if(request.getErrorCode() != RequestError.OK) {
+        if(request.getErrorCode() == RequestError.BAD_FIRST_LINE || request.getErrorCode() == RequestError.BAD_HEADER) {
             updateHistory(request, null, ResponseCode.RC_UNKNOWN_ERROR);
             Thread.currentThread().interrupt();
-            // TODO - send an error response
+            // Maybe we should send an error response
             return;
         }
         request = HttpActionType.getTypedRequest(request); // clone to correct type

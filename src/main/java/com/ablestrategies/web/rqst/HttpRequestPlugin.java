@@ -8,5 +8,5 @@ public class HttpRequestPlugin extends HttpRequestBase {
         cloneState(original);
     }
 
-    // TODO - deal with an extension/plugin body
+    // Not yet coded
 }

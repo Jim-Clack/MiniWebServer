@@ -6,7 +6,7 @@ public class PluginHandler {
     private PluginHandler instance = null;
 
     private PluginHandler() {
-        // TODO
+        // Not yet coded
     }
 
     public PluginHandler getInstance() {

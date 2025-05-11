@@ -23,32 +23,45 @@ public enum ContentMimeType {
     // -----------------------------------------
     MIME_MULTIPART("MULTIPART", "multipart/form-data; boundary=----------SEPARATOR----------", false);
 
+    /** File suffix for this mime type. */
     private final String suffix;
-    private final String mimeType;
+
+    /** The Internet/HTTP standard for this mime type. */
+    private final String mimeString;
+
+    /** True=secondary usage, false=preferred/primary. */
     private final boolean alternateForm;
 
     /**
      * Ctor.
      * @param suffix File suffix for this type.
-     * @param mimeType Mime type per HTTP header.
+     * @param mimeString Mime type per HTTP header.
      * @param alternateForm True if this is not the preferred mime form.
      */
-    ContentMimeType(String suffix, String mimeType, boolean alternateForm) {
+    ContentMimeType(String suffix, String mimeString, boolean alternateForm) {
         this.suffix = suffix;
-        this.mimeType = mimeType;
+        this.mimeString = mimeString;
         this.alternateForm = alternateForm;
     }
 
     /**
+     * Get the HTTP standard string for this mime type.
+     * @return I.e. "application/json".
+     */
+    public String getMimeString() {
+        return mimeString;
+    }
+
+    /**
      * Get the base mime type in lowercase.
-     * @param mimeTypeString Mime type, possible including extraneous info after a semicolon.
+     * @param mimeString Mime type, possible including extraneous info after a semicolon.
      * @return lowercase mime type.
      */
-    public static String getMimeTypeBase(String mimeTypeString) {
-        if(mimeTypeString.contains(";")) {
-            return mimeTypeString.substring(0, mimeTypeString.indexOf(";")).trim().toLowerCase();
+    public static String getMimeStringBase(String mimeString) {
+        if(mimeString.contains(";")) {
+            return mimeString.substring(0, mimeString.indexOf(";")).trim().toLowerCase();
         }
-        return mimeTypeString.trim().toLowerCase();
+        return mimeString.trim().toLowerCase();
     }
 
     /**
@@ -62,9 +75,9 @@ public enum ContentMimeType {
         if(headerValues != null) {
             // generally the outer loop only executes one time...
             for(String headerValue : headerValues) {
-                String headerValueBase = ContentMimeType.getMimeTypeBase(headerValue);
+                String headerValueBase = ContentMimeType.getMimeStringBase(headerValue);
                 for (ContentMimeType checkMimeType : ContentMimeType.values()) {
-                    String checkBase = ContentMimeType.getMimeTypeBase(checkMimeType.getMimeType());
+                    String checkBase = ContentMimeType.getMimeStringBase(checkMimeType.getMimeString());
                     if(headerValueBase.equals(checkBase)) {
                         if(!checkMimeType.alternateForm) {
                             foundPreferred = true; // otherwise keep looping
@@ -103,9 +116,9 @@ public enum ContentMimeType {
      */
     @SuppressWarnings("ALL")
     public static ContentMimeType mimeTypeFromHeaderValue(String mimeTypeString) {
-        String mimeTypeBase = getMimeTypeBase(mimeTypeString);
+        String mimeStringBase = getMimeStringBase(mimeTypeString);
         for (ContentMimeType mimeType : ContentMimeType.values()) {
-            if(mimeType.mimeType.contains(mimeTypeBase)) {
+            if(mimeType.mimeString.contains(mimeStringBase)) {
                 return mimeType;
             }
         }
@@ -119,20 +132,16 @@ public enum ContentMimeType {
      */
     @SuppressWarnings("ALL")
     public static String fileSuffixFromMimeType(String mimeTypeString) {
-        String mimeTypeBase = getMimeTypeBase(mimeTypeString);
+        String mimeStringBase = getMimeStringBase(mimeTypeString);
         for (ContentMimeType mimeType : ContentMimeType.values()) {
             if(mimeType.alternateForm) {
                 continue; // skip short-forms of suffixes
             }
-            if(mimeTypeBase.endsWith(mimeType.suffix)) {
+            if(mimeStringBase.endsWith(mimeType.suffix)) {
                 return "." + mimeType.suffix;
             }
         }
         return null;
-    }
-
-    public String getMimeType() {
-        return mimeType;
     }
 
 }

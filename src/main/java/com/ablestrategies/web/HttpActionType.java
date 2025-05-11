@@ -1,8 +1,8 @@
-package com.ablestrategies.web.rqst;
+package com.ablestrategies.web;
 
-import com.ablestrategies.web.ServerManager;
 import com.ablestrategies.web.conn.ContentMimeType;
 import com.ablestrategies.web.resp.*;
+import com.ablestrategies.web.rqst.*;
 
 /**
  * Simple static methods to assist with creating HTTP requests and responses.
@@ -36,9 +36,9 @@ public class HttpActionType {
      * @return RequestKind, typically based on the Content-Type header.
      */
     public static RequestType getRequestKind(HttpRequestPojo request) {
-        String[] acceptContents = request.getHeader("Accept");
+        String[] acceptContents = request.getHeaderValues("Accept");
         if(acceptContents == null || acceptContents.length == 0) {
-            acceptContents = request.getHeader("Content-Type");
+            acceptContents = request.getHeaderValues("Content-Type");
         }
         ContentMimeType responseMimeType = ContentMimeType.getMimeType(acceptContents);
         if(responseMimeType == ContentMimeType.MIME_XML) {

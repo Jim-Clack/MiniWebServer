@@ -71,7 +71,7 @@ public class Preferences {
     @SuppressWarnings("ALL") // Until we flesh this method out
     public List<PluginPojo> getPluginPojos() {
         List<PluginPojo> pluginPojos = new LinkedList<>();
-        // TODO
+        // Not yet coded
         return pluginPojos;
     }
 
