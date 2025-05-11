@@ -52,8 +52,7 @@ public class ConnectionThread extends Thread {
         this.protocol = protocol;
         this.socket = socket;
         clientIp = socket.getRemoteSocketAddress().toString();
-        logger.info("Starting - connection with {}", clientIp);
-        System.out.println("\n### Connection with " + clientIp);
+        logger.debug("### Starting - connection with {}", clientIp);
         handler = new ConnectionHandler(socket, manager);
     }
 

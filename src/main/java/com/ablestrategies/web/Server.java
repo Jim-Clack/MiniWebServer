@@ -56,6 +56,18 @@ public class Server
     /** Store args for passing from ctor to runtime. */
     private final String[] args;
 
+    /** HTTP server. */
+    private ListenerThread httpListener = null;
+
+    /** HTTPS server. */
+    private ListenerThread httpsListener = null;
+
+    /** The management console on the local host. */
+    private LocalServerConsole console = null;
+
+    /** This object is in charge of all connections. */
+    private ServerManager manager = null;
+
     /**
      * Server.start()
      * @param args portNumber and rootPath - both are optional.
@@ -71,35 +83,18 @@ public class Server
      * @throws InterruptedException if an interrupt occurs where not expected.
      */
     public void start() throws IOException, InterruptedException {
-        setConfiguration(args);
-        System.out.println("AbleStrategies MiniWebServer version " + Preferences.version);
-        Thread.currentThread().setName("WebServer MainServerThread");
-        ServerManager manager = new ServerManager();
-
-        // Start HTTP listener
-        ListenerThread httpListener = new ListenerThread("HTTP", manager);
-        httpListener.start();
-
-        // Start HTTPS listener
-        if(Preferences.getInstance().getSslPortNumber() > 0) {
-            ListenerThread httpsListener = new ListenerThread("HTTPS", manager);
-            httpsListener.start();
-        }
-
-        LocalServerConsole console = new LocalServerConsole(manager, httpListener);
+        initialize(args);
+        startListeners();
         Thread.sleep(1000);
         console.interact();
-        manager.killIdleConnections(0L);
-        Thread.yield();
-        System.out.println("Done!");
-        httpListener.interrupt();
+        shutDown();
     }
 
     /**
      * This handles command-line args and reading the configuration.
      * @param args portNumber and rootPath - both are optional.
      */
-    private void setConfiguration(String[] args) {
+    private void initialize(String[] args) {
         if(args.length > 0) {
             Preferences.getInstance().setPortNumber(Integer.parseInt(args[0]));
             if(args.length > 1) {
@@ -108,6 +103,45 @@ public class Server
                     Preferences.getInstance().setRootPath(args[2]);
                 }
             }
+        }
+        System.out.println("AbleStrategies MiniWebServer version " + Preferences.version);
+        Thread.currentThread().setName("WebServer MainServerThread");
+        manager = new ServerManager();
+    }
+
+    /**
+     * Launch the HTTP and HTTPS listener threads.
+     * @throws IOException Only for unrecoverable problems.
+     */
+    private void startListeners() throws IOException {
+        // Start HTTP listener
+        if(Preferences.getInstance().getPortNumber() > 0) {
+            httpListener = new ListenerThread("HTTP", manager);
+            httpListener.start();
+            console = new LocalServerConsole(manager, httpListener);
+        }
+        // Start HTTPS listener
+        if(Preferences.getInstance().getSslPortNumber() > 0) {
+            httpsListener = new ListenerThread("HTTPS", manager);
+            httpsListener.start();
+            if(console == null) {
+                console = new LocalServerConsole(manager, httpsListener);
+            }
+        }
+    }
+
+    /**
+     * Shut down the server.
+     */
+    private void shutDown() {
+        manager.killIdleConnections(0L);
+        Thread.yield();
+        System.out.println("Done!");
+        if(httpsListener != null) {
+            httpsListener.interrupt();
+        }
+        if(httpListener != null) {
+            httpListener.interrupt();
         }
     }
 

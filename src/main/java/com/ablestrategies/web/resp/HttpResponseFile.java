@@ -33,6 +33,7 @@ public class HttpResponseFile extends HttpResponseBase {
      * @param request The HTTP that requested the file.
      */
     public HttpResponseFile(HttpRequestPojo request) {
+        this.description = "File";
         this.request = request;
         this.headerBuffer = new StringBuilder();
     }
@@ -51,6 +52,7 @@ public class HttpResponseFile extends HttpResponseBase {
         } else {
             assembleResponseWithFile(pathToFile);
         }
+        description += " " + pathToFile;
         return responseCode;
     }
 

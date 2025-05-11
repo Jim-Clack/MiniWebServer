@@ -8,6 +8,7 @@ import java.net.Socket;
 public class HttpResponsePlugin extends HttpResponseBase {
 
     public HttpResponsePlugin(HttpRequestPojo request) {
+        this.description = "Plug-in";
         // TODO
     }
 

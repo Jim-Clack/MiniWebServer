@@ -35,6 +35,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      * @param manager The top-level object that knows about all connections.
      */
     public HttpResponseWebConsole(HttpRequestPojo request, ServerManager manager) {
+        this.description = "WebConsole";
         this.request = request;
         this.headerBuffer = new StringBuilder();
         this.bodyBuffer = new StringBuilder();

@@ -105,7 +105,7 @@ public class ConnectionHandler extends SocketIOBase {
     private void handleRequest() {
         HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
         if(request.getErrorCode() == RequestError.UNINITIALIZED) {
-            updateHistory(request, ResponseCode.RC_UNKNOWN_ERROR);
+            updateHistory(request, null, ResponseCode.RC_UNKNOWN_ERROR);
             Thread.currentThread().interrupt();
             return;
         }
@@ -113,7 +113,7 @@ public class ConnectionHandler extends SocketIOBase {
         HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
         logger.debug("Processed request, code={}, type={}", code, HttpActionType.getRequestKind(request));
-        updateHistory(request, code);
+        updateHistory(request, response, code);
         if(code != ResponseCode.RC_SWITCHING_PROTOCOLS) {
             send(response.getContent());
         }
@@ -122,17 +122,23 @@ public class ConnectionHandler extends SocketIOBase {
     /**
      * Keep track of connection history.
      * @param request As received and parsed.
+     * @param response The response, null if none.
      * @param code Per response.
      */
-    private void updateHistory(HttpRequestPojo request, ResponseCode code) {
+    private void updateHistory(HttpRequestPojo request, HttpResponseBase response, ResponseCode code) {
         String now = dateFormat.format(new Date());
+        String requestSpecs = now + request.getSessionId() + " " + request.getMethod() + " " + request.getUrl();
+        String responseSpecs = "(no response)";
+        if(response != null) {
+            responseSpecs = response.getDescription() + " " + code.getNumValue() + " " + code.getTextValue();
+        }
         synchronized (this) {
-            history.add(0, now + request.getSessionId() + " " + request.getMethod() + " " +
-                request.getUrl() + " ==> " + code.getNumValue() + " " + code.getTextValue());
+            history.add(0, requestSpecs + " ==> " + responseSpecs);
             if (history.size() > Preferences.getInstance().getMaxHistory()) {
                 history.remove(history.size() - 1);
             }
         }
+        logger.debug("### " + requestSpecs + " ==> " + responseSpecs);
     }
 
 }

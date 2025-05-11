@@ -21,6 +21,9 @@ public abstract class HttpResponseBase {
     /** Logger slf4j. */
     private final Logger logger = LoggerFactory.getLogger(HttpResponseBase.class);
 
+    /** Description of the response. */
+    protected String description = "----";
+
     /**
      * Generate the response with line1, headers, and body.
      * @param socket Connection to remote client.
@@ -33,6 +36,14 @@ public abstract class HttpResponseBase {
      * @return A socket-ready HTTP response.
      */
     public abstract byte[] getContent();
+
+    /**
+     * Get the response description.
+     * @return May be the class name, authentication/user, the file sent/etc.
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Read a file in, such as a HTML. JPEG, or PNG file.

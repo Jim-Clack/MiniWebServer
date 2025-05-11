@@ -8,6 +8,7 @@ import java.net.Socket;
 public class HttpResponseSoap extends HttpResponseBase {
 
     public HttpResponseSoap(HttpRequestPojo request) {
+        this.description = "SOAP";
         // TODO
     }
 
