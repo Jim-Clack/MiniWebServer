@@ -149,7 +149,7 @@ public class ConnectionHandler extends SocketIOBase {
                 history.remove(history.size() - 1);
             }
         }
-        logger.debug("### " + buffer.toString());
+        logger.debug("### " + buffer);
     }
 
 }

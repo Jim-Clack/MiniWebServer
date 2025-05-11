@@ -84,28 +84,6 @@ class SocketIOBase {
     }
 
     /**
-     * Read the socket via inStream.
-     * @return number of bytes in inBuffer.
-     * @throws IOException If non-recoverable problem.
-     * @throws InterruptedException If interrupted.
-     */
-    /*
-    @SuppressWarnings("ALL")
-    private int readSocketToInBuffer() throws IOException, InterruptedException {
-        inBuffer = new StringBuilder();
-        String inputLine = null;
-        while((inputLine = inStream.readLine()) != null) {
-            inBuffer.append(inputLine);
-            inBuffer.append("\n");
-        }
-        if (inBuffer.length() == 0) {
-            Thread.sleep(50); // don't Bogart the thread
-        }
-        return inBuffer.length();
-    }
-    */
-
-    /**
      * Deal with an SSL exception.
      * @param e The exception.
      */
