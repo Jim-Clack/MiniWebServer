@@ -14,6 +14,7 @@ public class ConsoleSupport {
     /**
      * For sorting Threads.
      */
+    @SuppressWarnings("ALL")
     class ThreadComparator implements Comparator<Thread> {
         @Override
         public int compare(Thread n1, Thread n2) {
