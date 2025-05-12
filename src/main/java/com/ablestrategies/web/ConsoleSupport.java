@@ -3,10 +3,23 @@ package com.ablestrategies.web;
 import com.ablestrategies.web.conn.ConnectionThread;
 import com.ablestrategies.web.conn.SessionContext;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ConsoleSupport {
+
+    /**
+     * For sorting Threads.
+     */
+    class ThreadComparator implements Comparator<Thread> {
+        @Override
+        public int compare(Thread n1, Thread n2) {
+            return CharSequence.compare(n1.getName(), n2.getName());
+        }
+    }
 
     /** We need to get a lot of data from our server manager. */
     private final ServerManager manager;
@@ -31,14 +44,20 @@ public class ConsoleSupport {
         int threadCount = 0;
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
-        for (Thread thread : Thread.getAllStackTraces().keySet()) {
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        List<Thread> threadList = threadSet.stream().sorted(new ThreadComparator()).collect(Collectors.toList());
+        String checkMark = "  ";
+        for (Thread thread : threadList) {
             String classPath = "";
             StackTraceElement[] element = thread.getStackTrace();
             if (element.length > 2) {
                 classPath = element[2].getClassName();
                 classPath = classPath.substring(classPath.lastIndexOf(".") + 1);
             }
-            String checkMark = thread.getName().startsWith("WebServer ") ? "*" : " ";
+            if(thread.getName().startsWith("WebServer ") && !checkMark.contains("*")) {
+                checkMark = " *";
+                buffer.append(dashes);
+            }
             buffer.append(String.format("%s%-37s%-14s%s\n", checkMark, thread.getName(), thread.getState(), classPath));
             ++threadCount;
         }

@@ -25,13 +25,13 @@ import java.io.IOException;
  *   plugins (yet)
  *   brokering requests for an application server (yet)
  *   multi-part messages (yet)
- *   FTP or other protocols
  *   HTTP other than 1.1
- *   JEE, servlets, JSP
- *   zip/jar/was/aar deployment
- *   alternate connections (non-HTTP)
  *   could also use more thorough exception/error handling
  *   should make use of a thread pool
+ *   FTP or other protocols
+ *   zip/jar/was/aar deployment
+ *   JEE, servlets, JSP
+ *   alternate connections (non-HTTP)
  *   load balancing
  * ---------------------------------------------------------------------------
  * You can pass in configuration settings or put them into the java properties
@@ -41,16 +41,16 @@ import java.io.IOException;
  *    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
  * In order to support SSL/HTTPS, you have to set certain Java properties, as
  * listed in Preferences.java.
- * ---------------------------------------------------------------------------
- * Note the following distinction in the sources:
- *   Connection - Client-Server match-up based on IP-Address-and-Port
- *   Session - Client-Server match-up based on sessionId(mws) cookie
- * [[[ The main loop is ConnectionHandler.handleRequest() ]]]
  * You may link with this in order to create an embedded web server or run it
  * under "App,java" as a standalone web server. To call it, do this:
  *    new Server(args).start();
- * You will have to catch IOException and InterruptedException, although all
- * recoverable exceptions will be handled by the server without throwing.
+ * ---------------------------------------------------------------------------
+ * Developer notes, guide to the sources:
+ *   Connection - Client-Server match-up based on IP-Address-and-Port
+ *   Session - Client-Server match-up based on sessionId(mws) cookie
+ *   The main loop is ConnectionHandler.handleRequest()
+ *   You will have to catch IOException and InterruptedException, although all
+ *   recoverable exceptions will be handled by the server without throwing.
  * ---------------------------------------------------------------------------
  */
 public class Server
@@ -108,7 +108,7 @@ public class Server
             }
         }
         System.out.println("AbleStrategies MiniWebServer version " + Preferences.version);
-        Thread.currentThread().setName("WebServer MainServerThread");
+        Thread.currentThread().setName("WebServer MainConsoleThread");
         manager = new ServerManager();
     }
 

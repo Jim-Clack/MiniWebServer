@@ -1,31 +1,34 @@
- LOOKING FOR COLLABORATORS/CONTRIBUTORS - jim.clack@ablestrategies.com
 ## Basic web server - lightweight and easy to use.
-  Handles HTML, PNG, JPEG, JS, CSS, etc.\
-  Supports both HTTP and HTTPS. (TLS/SSL)\
-  Has a local and a web console for managing the server.\
-  Can be embedded or standalone.\
-  Requires no extra code libraries except slf4j.\
-  Unit tests for classes that provide underlying functionality.\
-  Decently readable with a good maintainability index.
-## Put files from webroot into /users/<yourname>/webroot, then try...
-  localhost:12345/index.html\
-  localhost:12345/webconsole\
+ - Handles HTML, PNG, JPEG, JS, CSS, etc.
+ - Supports both HTTP and HTTPS. (TLS/SSL)
+ - Has a local and a web console for managing the server.
+ - Can be embedded or standalone.
+ - Requires no extra code libraries except slf4j.
+ - Unit tests for classes that provide underlying functionality.
+ - Decently readable with a good maintainability index.
+## Quick-Start
+  Put files from webroot into /users/<yourname>/webroot\
+  Run the App (no special settings)\
+  Bring up a web browser and go to...
+  - localhost:12345/index.html\
+  - localhost:12345/webconsole\
+
 *Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)*
 ## Does NOT support...
-  sessions based on a cookie and a sessionId (yet)\
-  basic auth, URL-based credentials (yet)\
-  web services, JSON, SOAP, etc. (yet)\
-  brokering requests for an application server\
-  websockets\
-  ftp\
-  multi-part messages\
-  HTTP other than 1.1, overlapping requests\
-  plugins\
-  JEE, servlets, JSP\
-  zip/jar/was/aar/ear deployment\
-  load balancing\
-  alternate connections (non-HTTP)\
-  could also use more thorough exception/error handling
+ - sessions based on a cookie and a sessionId (yet)
+ - basic auth, URL-based credentials (yet)
+ - web services, JSON, SOAP, etc. (yet)
+ - brokering requests for an application server
+ - websockets
+ - ftp or other ptotocols
+ - multi-part messages
+ - HTTP other than 1.1, overlapping requests
+ - plugins/extensions
+ - JEE, servlets, JSP
+ - zip/jar/was/aar/ear deployment
+ - load balancing
+ - alternate connections (non-HTTP)
+ - could also use more thorough exception/error handling
 ## You can pass in configuration settings or put them into the java properties
 ```
    Setting          arg[n] Java property              Default
@@ -39,10 +42,11 @@ listed in Preferences.java.
 ```
    new Server(args).start();
 ```
-Note the following distinction in the sources:
-- Connection - Client-Server match-up based on IP-Address-and-Port
-- Session - Client-Server match-up based on sessionId(mws) cookie
-
-You will have to catch IOException and InterruptedException, although all\
-recoverable exceptions will be handled by the server without throwing.\
-I'm 75 and  just wrote this, so I hope it's not too old-fashioned.
+Developer notes, guide to the sources:
+- Connection = Client-Server match-up based on IP-Address-and-Port
+- Session = Client-Server match-up based on sessionId(mws) cookie
+- The main loop is in ConnectionHandler, handleRequest()
+- You will have to catch IOException and InterruptedException, although all
+recoverable exceptions will be handled by the server without throwing.
+- (I'm 75 and  just wrote this, so I hope it's not too old-fashioned.)
+- You may want to contact me at jim.clack@ablestrategies.com

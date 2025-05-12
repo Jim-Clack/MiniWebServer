@@ -70,15 +70,26 @@ public class HttpRequestPojo {
         if(context == null) {
             context = manager.getSessionHandler().getOrCreateSession(sessionId);
         }
-        String userAgent = getHeaderValue("user-agent");
-        if(userAgent != null && !userAgent.isEmpty()) {
-            context.setStringValue("user-agent", userAgent);
-        }
-        String authorization = getHeaderValue("authorization");
-        if(authorization != null && !authorization.isEmpty()) {
-            context.setStringValue("authorization", authorization);
-        }
+        // We certainly don't need all of these, but for now, they're useful diagnostics
+        copyHeaderToStringValues("user-agent");
+        copyHeaderToStringValues("authorization");
+        copyHeaderToStringValues("accept");
+        copyHeaderToStringValues("from");
+        copyHeaderToStringValues("origin");
+        copyHeaderToStringValues("referer");
+        copyHeaderToStringValues("via");
         return context;
+    }
+
+    /**
+     * If a chosen header exists, copy it to the Session string values.
+     * @param key Lowercase header key.
+     */
+    private void copyHeaderToStringValues(String key) {
+        String value = getHeaderValue(key);
+        if(value != null && !value.isEmpty()) {
+            context.setStringValue(key, value);
+        }
     }
 
     /**

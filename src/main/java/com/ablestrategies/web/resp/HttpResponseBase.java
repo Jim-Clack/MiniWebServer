@@ -87,7 +87,7 @@ public abstract class HttpResponseBase {
             headerBuffer.append("expires: " + now + "\n");
             headerBuffer.append("pragma: no-cache\n");
         }
-        headerBuffer.append("server: mws-MiniWebServer/AbleStrategies\n");
+        headerBuffer.append("server: mws-MiniWebServer AbleStrategies\n");
         headerBuffer.append("content-length: " + contentLength + "\n");
         headerBuffer.append("\n");
     }
