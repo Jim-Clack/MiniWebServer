@@ -22,16 +22,17 @@ public class IdleLoopThread extends Thread {
      */
     @SuppressWarnings("all")
     public void run() {
-        int maxIdle = Preferences.getInstance().getMaxIdleSeconds();
-        setName("WebServer " + maxIdle + "-IdleLoopThread");
+        int connectionMaxIdle = Preferences.getInstance().getConnectionMaxIdleSeconds();
+        int sessionMaxIdle = Preferences.getInstance().getSessionMaxIdleSeconds();
+        setName("WebServer " + connectionMaxIdle + "-" + sessionMaxIdle + "-IdleLoopThread");
         while(!isInterrupted()) {
             try {
                 sleep(10000); // check every 10 seconds
             } catch (InterruptedException e) {
                 // ignore interrupts
             }
-            manager.killIdleConnections(maxIdle);
-            manager.discardIdleSessions(maxIdle);
+            manager.killIdleConnections(connectionMaxIdle);
+            manager.discardIdleSessions(sessionMaxIdle);
         }
     }
 }

@@ -25,8 +25,8 @@ public class ConsoleSupport {
     /** We need to get a lot of data from our server manager. */
     private final ServerManager manager;
 
-    /** Paragraph separator. */
-    private static final String dashes = "--------------------------------------\n";
+    /** Section separator. */
+    private static final String dashes = "----------------------------------------------------\n";
 
     /**
      * Ctor.
@@ -79,6 +79,7 @@ public class ConsoleSupport {
         buffer.append(dashes);
         for (SessionContext context : manager.getSessionHandler().getSessions()) {
             buffer.append("Session:  " + context.getSessionId() + "\n");
+            buffer.append("Created:  " + context.getCreated().toString() + "\n");
             buffer.append("Idle:     " + context.beenIdleForHowLong() + "\n");
             Map<String, String> values = context.getStringValues();
             for (String key : values.keySet()) {
@@ -99,7 +100,6 @@ public class ConsoleSupport {
 
     /**
      * List all connections that are presentm, whether alive or dead.
-     *
      * @return Multi-line string.
      */
     @SuppressWarnings("all")
@@ -124,6 +124,29 @@ public class ConsoleSupport {
         }
         buffer.append("Number of connections Alive: " + threadCount + "\n");
         manager.discardDeadConnections();
+        return buffer.toString();
+    }
+
+    /**
+     * List all addresses and ports, server first, then clients.
+     * @return Multi-line string.
+     */
+    @SuppressWarnings("all")
+    public synchronized String listIpAddresses() {
+        int clientCount = 0;
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(dashes);
+        Map<String, ListenerThread> listeners = manager.getListeners();
+        for(String protocol : listeners.keySet()) {
+            buffer.append("Server: " + protocol + " ==> IP Addr:" + listeners.get(protocol).getAddressAndPort() + "\n");
+        }
+        buffer.append(dashes);
+        for (ConnectionThread connection : manager.getConnections()) {
+            buffer.append("Client: " + connection.getProtocol() + " ==> IP Addr:" + connection.getAddressAndPort() + "\n");
+            clientCount++;
+        }
+        buffer.append(dashes);
+        buffer.append("Number of clients: " + clientCount + "\n");
         return buffer.toString();
     }
 

@@ -50,7 +50,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
     @Override
     public ResponseCode generateContent(Socket socket) {
         generateHtmlAtTop();
-        generateHtmlMessage(socket);
+        generateHtmlMessage();
         generateHtmlAtBottom();
         generateHeaders(); // generate headers AFTER the body because of Content-Length
         return ResponseCode.RC_OK;
@@ -98,25 +98,24 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<button type='submit' name='selection' value='C'>&nbsp;Connections&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='T'>&nbsp;Threads&nbsp;</button>&nbsp;\n");
-        bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Address:Port&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Addresses&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("</form><p/>\n");
     }
 
     /**
      * Generate the response to the previous menu selection.
-     * @param socket Connection - needed for discovering the IP address and port.
      * @apiNote Output is appended to bodyBuffer.
      */
-    private void generateHtmlMessage(Socket socket) {
+    private void generateHtmlMessage() {
         bodyBuffer.append("<div class='m'>\n");
         char selection = request.getQueryValue("selection", "S").charAt(0);
         switch (selection) {
             case 'K':
                 toBodyAsHtml("Number of connections killed: " + manager.killIdleConnections(60) + "\n");
                 break;
-            case 'A': case 'P':
-                toBodyAsHtml("Server address and port: " + socket.getRemoteSocketAddress().toString() + "\n");
+            case 'A':
+                toBodyAsHtml(manager.getConsole().listIpAddresses() + "\n");
                 break;
             case 'C':
                 toBodyAsHtml(manager.getConsole().listAllConnections() + "\n");

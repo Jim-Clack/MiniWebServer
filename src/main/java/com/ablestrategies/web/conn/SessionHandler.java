@@ -1,5 +1,7 @@
 package com.ablestrategies.web.conn;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 /**
@@ -96,19 +98,13 @@ public class SessionHandler {
         if(developerWarning) {
             throw new RuntimeException("Don't call newSession() directly!");
         }
-        if(sessionId == null) {
-            sessionCount = (sessionCount + 3L) & 0x0000FFFFFFFFFFFFL;
-            long hi4bits = ((sessionCount * 2111L) & 0x7FFFL) * 0x1000000000000L;
-            long reversedId = sessionCount | hi4bits;
-            String sessionString = String.format("%016x", reversedId);
-            StringBuilder buffer = new StringBuilder();
-            for (byte byt : sessionString.getBytes()) {
-                buffer.insert(0, (char) byt);
+        synchronized (this) {
+            if (doesSessionExist(sessionId)) {
+                return contexts.get(sessionId);
             }
-            sessionId = new String(buffer);
         }
-        if(doesSessionExist(sessionId)) {
-            return contexts.get(sessionId);
+        if(sessionId == null) {
+            sessionId = generateSessionId();
         }
         SessionContext context = new SessionContext(sessionId);
         contexts.put(sessionId, context);
@@ -126,6 +122,24 @@ public class SessionHandler {
             throw new RuntimeException("Don't call getSession() directly!");
         }
         return contexts.get(sessionId);
+    }
+
+    /**
+     * Generate a new session ID.
+     * @return The session ID.
+     */
+    private @NotNull String generateSessionId() {
+        String sessionId;
+        sessionCount = (sessionCount + 3L) & 0x0000FFFFFFFFFFFFL;
+        long hi4bits = ((sessionCount * 2111L) & 0x7FFFL) * 0x1000000000000L;
+        long reversedId = sessionCount | hi4bits;
+        String sessionString = String.format("%016x", reversedId);
+        StringBuilder buffer = new StringBuilder();
+        for (byte byt : sessionString.getBytes()) {
+            buffer.insert(0, (char) byt);
+        }
+        sessionId = new String(buffer);
+        return sessionId;
     }
 
 }

@@ -108,7 +108,7 @@ public class Server
             }
         }
         System.out.println("AbleStrategies MiniWebServer version " + Preferences.version);
-        Thread.currentThread().setName("WebServer MainConsoleThread");
+        Thread.currentThread().setName("WebServer Console-MainThread");
         manager = new ServerManager();
     }
 
@@ -121,14 +121,16 @@ public class Server
         if(Preferences.getInstance().getPortNumber() > 0) {
             httpListener = new ListenerThread("HTTP", manager);
             httpListener.start();
-            console = new LocalServerConsole(manager, httpListener);
+            manager.setListener("HTTP", httpListener);
+            console = new LocalServerConsole(manager);
         }
         // Start HTTPS listener
         if(Preferences.getInstance().getSslPortNumber() > 0) {
             httpsListener = new ListenerThread("HTTPS", manager);
             httpsListener.start();
+            manager.setListener("HTTPS", httpListener);
             if(console == null) {
-                console = new LocalServerConsole(manager, httpsListener);
+                console = new LocalServerConsole(manager);
             }
         }
     }

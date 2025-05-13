@@ -18,17 +18,12 @@ public class LocalServerConsole {
     /** The top-level object that knows about all connections. */
     private final ServerManager manager;
 
-    /** The server's listener thread. */
-    private final ListenerThread listener;
-
     /**
      * Ctor.
      * @param manager The top-level object that knows about all connections.
-     * @param listener The server's listener thread.
      */
-    public LocalServerConsole(ServerManager manager, ListenerThread listener) {
+    public LocalServerConsole(ServerManager manager) {
         this.manager = manager;
-        this.listener = listener;
     }
 
     /**
@@ -50,8 +45,8 @@ public class LocalServerConsole {
                 case 'K':
                     System.out.println("Number of connections killed: " + manager.killIdleConnections(60) + "\n");
                     break;
-                case 'A': case 'P':
-                    System.out.println("Server address and port: " + listener.getAddressAndPort() + "\n");
+                case 'A':
+                    System.out.println(manager.getConsole().listIpAddresses());
                     break;
                 case 'C':
                     System.out.println(manager.getConsole().listAllConnections());

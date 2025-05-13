@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Top level class to manage all connections.
@@ -27,12 +29,32 @@ public class ServerManager {
     /** Support for the server management console. */
     private final ConsoleSupport console;
 
+    /** HTTP and HTTPS listeners. */
+    private final Map<String, ListenerThread> listeners = new HashMap<>();
+
     /**
      * Ctor.
      */
     public ServerManager() {
         console = new ConsoleSupport(this);
         new IdleLoopThread(this).start();
+    }
+
+    /**
+     * Keep track of a listener thread.
+     * @param protocol HTTP or HTTPS.
+     * @param thread The listener thread.
+     */
+    public void setListener(String protocol, ListenerThread thread) {
+        listeners.put(protocol, thread);
+    }
+
+    /**
+     * Get the listeners.
+     * @return Map of protocols and listeners.
+     */
+    public Map<String, ListenerThread> getListeners() {
+        return listeners;
     }
 
     /**

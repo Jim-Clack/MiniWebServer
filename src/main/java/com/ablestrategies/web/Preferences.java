@@ -36,6 +36,10 @@ public class Preferences {
     private int sslPortNumber = 0; // 0 = SSL disabled
     private String rootPath;
 
+    /**
+     * Get the singleton.
+     * @return The only instance.
+     */
     public static Preferences getInstance() {
         if(instance == null) {
             instance = new Preferences();
@@ -43,6 +47,9 @@ public class Preferences {
         return instance;
     }
 
+    /**
+     * [private - singleton] Ctor.
+     */
     private Preferences() {
         reset();
         File rootPathFile = new File(this.rootPath);
@@ -75,34 +82,74 @@ public class Preferences {
         return pluginPojos;
     }
 
+    /**
+     * How many requests/responses to keep track of per connection.
+     * @return Max history records.
+     */
     public int getMaxHistory() {
         return 12; // not configurable for now
     }
 
-    public int getMaxIdleSeconds() {
-        return 300; // not configurable for now
+    /**
+     * How long to keep connections open.
+     * @return Seconds.
+     */
+    public int getConnectionMaxIdleSeconds() {
+        return 60 * 5; // not configurable for now
     }
 
+    /**
+     * How long to keep sessions open.
+     * @return Seconds.
+     */
+    public int getSessionMaxIdleSeconds() {
+        return 60 * 60 * 24 * 2; // not configurable for now
+    }
+
+    /**
+     * HTTP port number.
+     * @return IP port.
+     */
     public int getPortNumber() {
         return portNumber;
     }
 
+    /**
+     * HTTP port number.
+     * @param portNumber IP port.
+     */
     public void setPortNumber(int portNumber) {
         this.portNumber = portNumber;
     }
 
+    /**
+     * HTTPS port number.
+     * @return IP port.
+     */
     public int getSslPortNumber() {
         return sslPortNumber;
     }
 
+    /**
+     * HTTPS port number.
+     * @param sslPortNumber IP port.
+     */
     public void setSslPortNumber(int sslPortNumber) {
         this.sslPortNumber = sslPortNumber;
     }
 
+    /**
+     * Path to web files, HTML, PNG, JS, CSS, etc.
+     * @return Absolute path.
+     */
     public String getRootPath() {
         return this.rootPath;
     }
 
+    /**
+     * Path to web files, HTML, PNG, JS, CSS, etc.
+     * @param rootPath Absolute path.
+     */
     public void setRootPath(String rootPath) {
         this.rootPath = rootPath;
     }

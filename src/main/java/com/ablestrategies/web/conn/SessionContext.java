@@ -22,6 +22,9 @@ public class SessionContext {
     /** Synchlock for access to lastActivity. */
     private final Integer lastActivityLock = 0;
 
+    /** Keep track of when the session was started. */
+    private final LocalDateTime created = LocalDateTime.now();
+
     /**
      * Ctor.
      * @param sessionId Sessions are tracked by exchanging a sessionId in the header.
@@ -93,6 +96,14 @@ public class SessionContext {
         boolean returnValue = isFresh;
         isFresh = false;
         return returnValue;
+    }
+
+    /**
+     * When was this session created?
+     * @return Date/Time created.
+     */
+    public LocalDateTime getCreated() {
+        return created;
     }
 
 }
