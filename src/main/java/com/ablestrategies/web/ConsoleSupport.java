@@ -40,6 +40,7 @@ public class ConsoleSupport {
      * Kill connections and sessions that have been idle 60 seconds or longer.
      * @return Multi-line string.
      */
+    @SuppressWarnings("all")
     public String killIdleClients() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
