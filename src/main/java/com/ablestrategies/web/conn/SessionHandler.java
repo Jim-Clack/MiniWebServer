@@ -67,13 +67,17 @@ public class SessionHandler {
     /**
      * Delete inactive or invalid sessions.
      * @param maxIdleSeconds If idle this many seconds.
+     * @return Number of sessions deleted.
      */
-    public synchronized void deleteSessionsIfIdle(long maxIdleSeconds) {
+    public synchronized int deleteSessionsIfIdle(long maxIdleSeconds) {
+        int count = 0;
         for(SessionContext context : contexts.values()) {
             if (context != null && context.beenIdleForHowLong() > maxIdleSeconds) {
                 contexts.remove(context.getSessionId());
+                count++;
             }
         }
+        return count;
     }
 
     /**

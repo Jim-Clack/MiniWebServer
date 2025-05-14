@@ -113,10 +113,12 @@ public class ServerManager {
     }
 
     /**
-     * Find sessions that are old and remove them from the list.
+     * Discard inactive or invalid sessions.
+     * @param maxIdleSeconds If idle this many seconds.
+     * @return Number of sessions deleted.
      */
-    public void discardIdleSessions(long maxIdleSeconds) {
-        sessionHandler.deleteSessionsIfIdle(maxIdleSeconds);
+    public int discardIdleSessions(long maxIdleSeconds) {
+        return sessionHandler.deleteSessionsIfIdle(maxIdleSeconds);
     }
 
     /**

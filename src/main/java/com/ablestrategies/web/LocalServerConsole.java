@@ -35,19 +35,10 @@ public class LocalServerConsole {
         String input;
         while(running) {
             do {
-                System.out.println("Select: [C]onnections, [Sessions], [T]hreads, [K]illIdle60, [A]ddress, [Q]uit");
+                System.out.println("Select: [C]onnections, [Sessions], [T]hreads, [A]ddress, [K]illIdle60, [Q]uit");
                 input = scanner.nextLine().trim().toUpperCase();
             } while(input.isEmpty());
             switch(input.charAt(0)) {
-                case 'X': case 'Q':
-                    running = false;
-                    break;
-                case 'K':
-                    System.out.println("Number of connections killed: " + manager.killIdleConnections(60) + "\n");
-                    break;
-                case 'A':
-                    System.out.println(manager.getConsole().listIpAddresses());
-                    break;
                 case 'C':
                     System.out.println(manager.getConsole().listAllConnections());
                     break;
@@ -56,6 +47,15 @@ public class LocalServerConsole {
                     break;
                 case 'T':
                     System.out.println(manager.getConsole().listAllThreads());
+                    break;
+                case 'A':
+                    System.out.println(manager.getConsole().listIpAddresses());
+                    break;
+                case 'K':
+                    System.out.println(manager.getConsole().killIdleClients());
+                    break;
+                case 'X': case 'Q':
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid command\n");

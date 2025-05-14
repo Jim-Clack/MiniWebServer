@@ -37,6 +37,23 @@ public class ConsoleSupport {
     }
 
     /**
+     * Kill connections and sessions that have been idle 60 seconds or longer.
+     * @return Multi-line string.
+     */
+    public String killIdleClients() {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(dashes);
+        buffer.append("Killing connections and sessions idle 60 seconds or more...\n");
+        int countConnections = manager.killIdleConnections(60);
+        int countSessions = manager.discardIdleSessions(60);
+        buffer.append(dashes);
+        buffer.append("  Number of connections killed: " + countConnections + "\n");
+        buffer.append("  Number of sessions killed: " + countSessions + "\n");
+        buffer.append(dashes);
+        return buffer.toString();
+    }
+
+    /**
      * List all threads running in this JVM.
      * @return Multi-line string.
      */

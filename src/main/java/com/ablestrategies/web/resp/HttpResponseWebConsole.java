@@ -109,14 +109,8 @@ public class HttpResponseWebConsole extends HttpResponseBase {
      */
     private void generateHtmlMessage() {
         bodyBuffer.append("<div class='m'>\n");
-        char selection = request.getQueryValue("selection", "S").charAt(0);
+        char selection = request.getQueryValue("selection", "C").charAt(0);
         switch (selection) {
-            case 'K':
-                toBodyAsHtml("Number of connections killed: " + manager.killIdleConnections(60) + "\n");
-                break;
-            case 'A':
-                toBodyAsHtml(manager.getConsole().listIpAddresses() + "\n");
-                break;
             case 'C':
                 toBodyAsHtml(manager.getConsole().listAllConnections() + "\n");
                 break;
@@ -125,6 +119,12 @@ public class HttpResponseWebConsole extends HttpResponseBase {
                 break;
             case 'T':
                 toBodyAsHtml(manager.getConsole().listAllThreads() + "\n");
+                break;
+            case 'A':
+                toBodyAsHtml(manager.getConsole().listIpAddresses() + "\n");
+                break;
+            case 'K':
+                toBodyAsHtml(manager.getConsole().killIdleClients() + "\n");
                 break;
             default:
                 toBodyAsHtml("Invalid command " + selection + "\n");

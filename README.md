@@ -7,15 +7,13 @@
  - Unit tests for classes that provide underlying functionality.
  - Decently readable with a good maintainability index.
 ## Quick-Start
-  Put files from webroot into /users/<yourname>/webroot\
-  Run the App (no special settings)\
-  Bring up a web browser and go to...
-  - localhost:12345/index.html\
-  - localhost:12345/webconsole\
-
-*Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)*
+ - Put files from webroot into /users/<yourname>/webroot\
+ - Run the App (no special settings)\
+ - Bring up a web browser and go to...
+   - localhost:12345/index.html\
+   - localhost:12345/webconsole\
+ - *Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)*
 ## Does NOT support...
- - sessions based on a cookie and a sessionId (yet)
  - basic auth, URL-based credentials (yet)
  - web services, JSON, SOAP, etc. (yet)
  - brokering requests for an application server
@@ -46,7 +44,7 @@ Developer notes, guide to the sources:
 - Connection = Client-Server match-up based on IP-Address-and-Port
 - Session = Client-Server match-up based on sessionId(mws) cookie
 - The main loop is in ConnectionHandler, handleRequest()
-- You will have to catch IOException and InterruptedException, although all
-recoverable exceptions will be handled by the server without throwing.
+- You may want to catch IOException and InterruptedException
+  - (...but recoverable exceptions will be handled by the server)
 - (I'm 75 and  just wrote this, so I hope it's not too old-fashioned.)
-- You may want to contact me at jim.clack@ablestrategies.com
+- If you want to contact me, I'm at jim.clack@ablestrategies.com
