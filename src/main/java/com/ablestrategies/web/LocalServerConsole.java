@@ -7,10 +7,11 @@ import java.util.Scanner;
  * ---------------------------------------------------------------------------
  * Commands:
  *    [Enter]     Help, show commands
- *    A [Enter]   Show IP Address and port of this server
  *    C [Enter]   Show all Connections
+ *    S [Enter]   Show all Sessions
  *    T [Enter]   Show all Threads
- *    K [Enter]   Kill connections that have been inactive for 60 seconds or more
+ *    A [Enter]   Show IP Addresses (and ports, and webroot)
+ *    K [Enter]   Kill connections/sessions that have been inactive for 60 seconds
  *    Q [Enter]   Quit - shut down the server
  */
 public class LocalServerConsole {
@@ -35,7 +36,7 @@ public class LocalServerConsole {
         String input;
         while(running) {
             do {
-                System.out.println("Select: [C]onnections, [Sessions], [T]hreads, [A]ddress, [K]illIdle60, [Q]uit");
+                System.out.println(manager.getConsole().getMenu());
                 input = scanner.nextLine().trim().toUpperCase();
             } while(input.isEmpty());
             switch(input.charAt(0)) {

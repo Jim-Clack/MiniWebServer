@@ -7,12 +7,12 @@
  - Unit tests for classes that provide underlying functionality.
  - Decently readable with a good maintainability index.
 ## Quick-Start
- - Put files from webroot into /users/<yourname>/webroot\
- - Run the App (no special settings)\
+ - Put files from webroot into /users/<yourname>/webroot
+ - Run the App (no special settings)
  - Bring up a web browser and go to...
-   - localhost:12345/index.html\
-   - localhost:12345/webconsole\
- - *Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)*
+   - localhost:12345/index.html
+   - localhost:12345/webconsole
+ - *Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
 ## Does NOT support...
  - basic auth, URL-based credentials (yet)
  - web services, JSON, SOAP, etc. (yet)

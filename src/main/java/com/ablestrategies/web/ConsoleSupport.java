@@ -36,6 +36,10 @@ public class ConsoleSupport {
         this.manager = manager;
     }
 
+    public String getMenu() {
+        return "Select: [C]onnections, [Sessions], [T]hreads, [A]ddress, [K]illIdle60, [Q]uit";
+    }
+
     /**
      * Kill connections and sessions that have been idle 60 seconds or longer.
      * @return Multi-line string.
@@ -153,6 +157,7 @@ public class ConsoleSupport {
     public synchronized String listIpAddresses() {
         int clientCount = 0;
         StringBuilder buffer = new StringBuilder();
+        buffer.append("Web root folder: " + Preferences.getInstance().getRootPath() + "\n");
         buffer.append(dashes);
         Map<String, ListenerThread> listeners = manager.getListeners();
         for(String protocol : listeners.keySet()) {

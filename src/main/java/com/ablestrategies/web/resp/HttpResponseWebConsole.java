@@ -112,22 +112,22 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         char selection = request.getQueryValue("selection", "C").charAt(0);
         switch (selection) {
             case 'C':
-                toBodyAsHtml(manager.getConsole().listAllConnections() + "\n");
+                toBodyAsHtml(manager.getConsole().listAllConnections());
                 break;
             case 'S':
-                toBodyAsHtml(manager.getConsole().listAllSessions() + "\n");
+                toBodyAsHtml(manager.getConsole().listAllSessions());
                 break;
             case 'T':
-                toBodyAsHtml(manager.getConsole().listAllThreads() + "\n");
+                toBodyAsHtml(manager.getConsole().listAllThreads());
                 break;
             case 'A':
-                toBodyAsHtml(manager.getConsole().listIpAddresses() + "\n");
+                toBodyAsHtml(manager.getConsole().listIpAddresses());
                 break;
             case 'K':
-                toBodyAsHtml(manager.getConsole().killIdleClients() + "\n");
+                toBodyAsHtml(manager.getConsole().killIdleClients());
                 break;
             default:
-                toBodyAsHtml("Invalid command " + selection + "\n");
+                toBodyAsHtml("Invalid command " + selection);
                 break;
         }
         bodyBuffer.append("</div>\n");
