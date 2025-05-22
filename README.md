@@ -1,5 +1,6 @@
-## Basic web server - lightweight and easy to use.
- - Handles HTML, PNG, JPEG, JS, CSS, etc.
+## Basic web server
+ - Lightweight and easy to use.
+ - Handles static pages: HTML, PNG, JPEG, JS, CSS, etc.
  - Supports both HTTP and HTTPS. (TLS/SSL)
  - Has a local and a web console for managing the server.
  - Can be embedded or standalone.
@@ -18,7 +19,7 @@
  - web services, JSON, SOAP, etc. (yet)
  - brokering requests for an application server
  - websockets
- - ftp or other ptotocols
+ - ftp or other protocols
  - multi-part messages
  - HTTP other than 1.1, overlapping requests
  - plugins/extensions
@@ -46,5 +47,5 @@ Developer notes, guide to the sources:
 - The main loop is in ConnectionHandler, handleRequest()
 - You may want to catch IOException and InterruptedException
   - (...but recoverable exceptions will be handled by the server)
-- (I'm 75 and  just wrote this, so I hope it's not too old-fashioned.)
+- (I'm 75 and just wrote this, so I hope it's not too old-fashioned.)
 - If you want to contact me, I'm at jim.clack@ablestrategies.com

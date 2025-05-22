@@ -130,7 +130,7 @@ public class ConsoleSupport {
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
         for (ConnectionThread connection : manager.getConnections()) {
-            buffer.append(connection.getThreadName() + "\n");
+            buffer.append("Thread:   " + connection.getThreadName() + "\n");
             buffer.append("Alive:    " + connection.isAlive() + "\n");
             buffer.append("Protocol: " + connection.getProtocol() + "\n");
             buffer.append("Idle:     " + connection.beenIdleForHowLong() + "\n");

@@ -3,54 +3,10 @@ package com.ablestrategies.web;
 import java.io.IOException;
 
 /**
- * LOOKING FOR COLLABORATORS - jim.clack@ablestrategies.com
- *   TODO - Fix all the SuppressWarnings directives
+ * ---------------------------------------------------------------------------
  * Basic web server - lightweight and easy to use.
- *   Handles HTML, PNG, JPEG, JS, CSS, etc,
- *   Supports both HTTP and HTTPS. (TLS/SSL)
- *   Has a local and a web console for managing the server.
- *   Can be embedded or standalone.
- *   Requires no extra code libraries except slf4j.
- *   Unit tests for classes that provide underlying functionality.
- *   Decently readable with a good maintainability index.
- * Put the files from webroot into /users/<yourname>/webroot, then try these URLs...
- *   localhost:12345/index.html
- *   localhost:12345/webconsole
- * Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
- * ---------------------------------------------------------------------------
- * Does NOT support...
- *   basic auth, URL-based credentials (yet)
- *   web services, JSON, SOAP, etc. (yet)
- *   websockets (yet)
- *   plugins (yet)
- *   brokering requests for an application server (yet)
- *   multi-part messages (yet)
- *   HTTP other than 1.1
- *   could also use more thorough exception/error handling
- *   should make use of a thread pool
- *   FTP or other protocols
- *   zip/jar/was/aar deployment
- *   JEE, servlets, JSP
- *   alternate connections (non-HTTP)
- *   load balancing
- * ---------------------------------------------------------------------------
- * You can pass in configuration settings or put them into the java properties
- *    Setting          arg[n] Java property              Default
- *    IP port to listen   0  MiniWebServer.portNumber    12345
- *    SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)
- *    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
- * In order to support SSL/HTTPS, you have to set certain Java properties, as
- * listed in Preferences.java.
- * You may link with this in order to create an embedded web server or run it
- * under "App,java" as a standalone web server. To call it, do this:
- *    new Server(args).start();
- * ---------------------------------------------------------------------------
- * Developer notes, guide to the sources:
- *   Connection - Client-Server match-up based on IP-Address-and-Port
- *   Session - Client-Server match-up based on sessionId(mws) cookie
- *   The main loop is ConnectionHandler.handleRequest()
- *   You will have to catch IOException and InterruptedException, although all
- *   recoverable exceptions will be handled by the server without throwing.
+ * Refer to README.MD for usage and notes.
+ *   TODO - Fix all the SuppressWarnings directives
  * ---------------------------------------------------------------------------
  */
 public class Server
