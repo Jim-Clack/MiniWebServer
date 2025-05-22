@@ -2,11 +2,9 @@ package com.ablestrategies.web;
 
 import com.ablestrategies.web.conn.ConnectionThread;
 import com.ablestrategies.web.conn.SessionContext;
+import javafx.beans.property.Property;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConsoleSupport {
@@ -37,7 +35,7 @@ public class ConsoleSupport {
     }
 
     public String getMenu() {
-        return "Select: [C]onnections, [Sessions], [T]hreads, [A]ddress, [K]illIdle60, [Q]uit";
+        return "Select: [C]onnections, [S]essions, [T]hreads, [P]roperties, [K]illIdle60, [Q]uit";
     }
 
     /**
@@ -154,23 +152,56 @@ public class ConsoleSupport {
      * @return Multi-line string.
      */
     @SuppressWarnings("all")
-    public synchronized String listIpAddresses() {
-        int clientCount = 0;
+    public synchronized String listProperties() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("Web root folder: " + Preferences.getInstance().getRootPath() + "\n");
+        listEnvironment(buffer);
+        listProperties(buffer);
+        ListPreferences(buffer);
+        listAddresses(buffer);
         buffer.append(dashes);
+        return buffer.toString();
+    }
+
+    private static void listEnvironment(StringBuilder buffer) {
+        buffer.append(dashes);
+        buffer.append("Environment\n");
+        Map<String, String> env = System.getenv();
+        for(Map.Entry<String, String> entry : env.entrySet()) {
+            buffer.append(" " + entry.getKey() + " = " + entry.getValue() + "\n");
+        }
+    }
+
+    private static void listProperties(StringBuilder buffer) {
+        buffer.append(dashes);
+        buffer.append("Properties\n");
+        Properties properties = System.getProperties();
+        for(Object property : properties.keySet()) {
+            buffer.append(" " + property.toString() + ": " + properties.get(property).toString().
+                    replaceAll("\\x0d", "[CR]").replaceAll("\\x0A", "[LF]") + "\n");
+        }
+    }
+
+    private static void ListPreferences(StringBuilder buffer) {
+        buffer.append(dashes);
+        buffer.append("Preferences\n");
+        buffer.append(" Web root path directory: " + Preferences.getInstance().getRootPath() + "\n");
+        buffer.append(" HTTP IP port number: " + Preferences.getInstance().getPortNumber() + "\n");
+        buffer.append(" HTTPS IP port number: " + Preferences.getInstance().getSslPortNumber() + "\n");
+        buffer.append(" Max history per connection: " + Preferences.getInstance().getMaxHistory() + "\n");
+        buffer.append(" Connection max idle seconds: " + Preferences.getInstance().getConnectionMaxIdleSeconds() + "\n");
+        buffer.append(" Session max idle seconds: " + Preferences.getInstance().getSessionMaxIdleSeconds() + "\n");
+    }
+
+    private void listAddresses(StringBuilder buffer) {
+        buffer.append(dashes);
+        buffer.append("Addresses\n");
         Map<String, ListenerThread> listeners = manager.getListeners();
         for(String protocol : listeners.keySet()) {
-            buffer.append("Server: " + protocol + " ==> IP Addr:" + listeners.get(protocol).getAddressAndPort() + "\n");
+            buffer.append(" Server: " + protocol + " ==> IP Addr:/" + listeners.get(protocol).getAddressAndPort() + "\n");
         }
-        buffer.append(dashes);
         for (ConnectionThread connection : manager.getConnections()) {
-            buffer.append("Client: " + connection.getProtocol() + " ==> IP Addr:" + connection.getAddressAndPort() + "\n");
-            clientCount++;
+            buffer.append(" Client: " + connection.getProtocol() + " ==> IP Addr:" + connection.getAddressAndPort() + "\n");
         }
-        buffer.append(dashes);
-        buffer.append("Number of clients: " + clientCount + "\n");
-        return buffer.toString();
     }
 
 }

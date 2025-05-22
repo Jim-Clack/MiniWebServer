@@ -82,14 +82,8 @@ public class HttpResponseWebConsole extends HttpResponseBase {
     private void generateHtmlAtTop() {
         bodyBuffer.append("<html>\n<head>\n</head>\n<body>\n");
         bodyBuffer.append("<style>\n");
-        bodyBuffer.append("p {\n");
-        bodyBuffer.append(" line-height: 50%;\n");
-        bodyBuffer.append(" }\n");
-        bodyBuffer.append(".m {\n");
-        bodyBuffer.append(" font-family: 'Courier New';\n");
-        bodyBuffer.append(" font-weight: bold;\n");
-        bodyBuffer.append(" font-size: small;\n");
-        bodyBuffer.append(" }\n");
+        bodyBuffer.append("p {padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0;}\n");
+        bodyBuffer.append(".m {font-family: 'Courier New'; font-weight: bold; font-size: small; width: 1000%;}\n");
         bodyBuffer.append("</style>\n");
         bodyBuffer.append("<p style='line-height: 60%;'>\n");
         bodyBuffer.append("<h1>Web Console for Mini Web Server</h1><p/>\n");
@@ -98,7 +92,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<button type='submit' name='selection' value='C'>&nbsp;Connections&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='T'>&nbsp;Threads&nbsp;</button>&nbsp;\n");
-        bodyBuffer.append("<button type='submit' name='selection' value='A'>&nbsp;Addresses&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='P'>&nbsp;Properties&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("</form><p/>\n");
     }
@@ -120,8 +114,8 @@ public class HttpResponseWebConsole extends HttpResponseBase {
             case 'T':
                 toBodyAsHtml(manager.getConsole().listAllThreads());
                 break;
-            case 'A':
-                toBodyAsHtml(manager.getConsole().listIpAddresses());
+            case 'P':
+                toBodyAsHtml(manager.getConsole().listProperties());
                 break;
             case 'K':
                 toBodyAsHtml(manager.getConsole().killIdleClients());

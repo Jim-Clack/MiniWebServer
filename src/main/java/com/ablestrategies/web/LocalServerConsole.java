@@ -7,10 +7,10 @@ import java.util.Scanner;
  * ---------------------------------------------------------------------------
  * Commands:
  *    [Enter]     Help, show commands
- *    C [Enter]   Show all Connections
- *    S [Enter]   Show all Sessions
- *    T [Enter]   Show all Threads
- *    A [Enter]   Show IP Addresses (and ports, and webroot)
+ *    C [Enter]   List all Connections
+ *    S [Enter]   List all Sessions
+ *    T [Enter]   List all Threads
+ *    P [Enter]   List properties and preferences
  *    K [Enter]   Kill connections/sessions that have been inactive for 60 seconds
  *    Q [Enter]   Quit - shut down the server
  */
@@ -49,8 +49,8 @@ public class LocalServerConsole {
                 case 'T':
                     System.out.println(manager.getConsole().listAllThreads());
                     break;
-                case 'A':
-                    System.out.println(manager.getConsole().listIpAddresses());
+                case 'P':
+                    System.out.println(manager.getConsole().listProperties());
                     break;
                 case 'K':
                     System.out.println(manager.getConsole().killIdleClients());
