@@ -71,11 +71,15 @@ public class SessionHandler {
      */
     public synchronized int deleteSessionsIfIdle(long maxIdleSeconds) {
         int count = 0;
+        Map<String, SessionContext> toDelete = new HashMap<>();
         for(SessionContext context : contexts.values()) {
             if (context != null && context.beenIdleForHowLong() > maxIdleSeconds) {
-                contexts.remove(context.getSessionId());
-                count++;
+                toDelete.put(context.getSessionId(), context);
             }
+        }
+        for(SessionContext context : toDelete.values()) {
+            contexts.remove(context.getSessionId());
+            count++;
         }
         return count;
     }

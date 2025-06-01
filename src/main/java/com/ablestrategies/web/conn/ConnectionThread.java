@@ -62,7 +62,7 @@ public class ConnectionThread extends Thread {
      */
     @SuppressWarnings({"all"})
     public void run() {
-        threadName = "WebServer " + protocol + "-ConnectionThread" + (++ThreadCounter);
+        threadName = "ConnectionThread" + (++ThreadCounter) + "-" + protocol + socket.getPort();
         Thread.currentThread().setName(threadName);
         while(!isInterrupted()) {
             handler.connectionLoop();

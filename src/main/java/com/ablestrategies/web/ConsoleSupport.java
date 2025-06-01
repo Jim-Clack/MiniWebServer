@@ -2,7 +2,6 @@ package com.ablestrategies.web;
 
 import com.ablestrategies.web.conn.ConnectionThread;
 import com.ablestrategies.web.conn.SessionContext;
-import javafx.beans.property.Property;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,21 +9,30 @@ import java.util.stream.Collectors;
 public class ConsoleSupport {
 
     /**
-     * For sorting Threads.
+     * For sorting Threads based ion name and whether they are part of this (WebServer) group.
      */
     @SuppressWarnings("ALL")
     class ThreadComparator implements Comparator<Thread> {
         @Override
         public int compare(Thread n1, Thread n2) {
-            return CharSequence.compare(n1.getName(), n2.getName());
+            if(n1.getThreadGroup() == n2.getThreadGroup()) {
+                return CharSequence.compare(n1.getName(), n2.getName());
+            }
+            if(n1.getThreadGroup() == ConsoleSupport.threadGroup) {
+                return 1;
+            }
+            return -1;
         }
     }
+
+    /** Used to see if a thread is a member of this group */
+    static ThreadGroup threadGroup = null;
 
     /** We need to get a lot of data from our server manager. */
     private final ServerManager manager;
 
     /** Section separator. */
-    private static final String dashes = "----------------------------------------------------\n";
+    private static final String dashes = "--------------------------------------------------------------\n";
 
     /**
      * Ctor.
@@ -32,6 +40,7 @@ public class ConsoleSupport {
      */
     public ConsoleSupport(ServerManager manager) {
         this.manager = manager;
+        ConsoleSupport.threadGroup = Thread.currentThread().getThreadGroup();
     }
 
     public String getMenu() {
@@ -67,7 +76,7 @@ public class ConsoleSupport {
         buffer.append(dashes);
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         List<Thread> threadList = threadSet.stream().sorted(new ThreadComparator()).collect(Collectors.toList());
-        String checkMark = "  ";
+        boolean wasThisThreadGroup = false;
         for (Thread thread : threadList) {
             String classPath = "";
             StackTraceElement[] element = thread.getStackTrace();
@@ -75,11 +84,13 @@ public class ConsoleSupport {
                 classPath = element[2].getClassName();
                 classPath = classPath.substring(classPath.lastIndexOf(".") + 1);
             }
-            if(thread.getName().startsWith("WebServer ") && !checkMark.contains("*")) {
-                checkMark = " *";
+            boolean isThisThreadGroup = thread.getThreadGroup().equals(Thread.currentThread().getThreadGroup());
+            if(wasThisThreadGroup != isThisThreadGroup) {
                 buffer.append(dashes);
             }
-            buffer.append(String.format("%s%-37s%-14s%s\n", checkMark, thread.getName(), thread.getState(), classPath));
+            String checkMark = isThisThreadGroup ? "*" : " ";
+            wasThisThreadGroup = isThisThreadGroup;
+            buffer.append(String.format(" %s%-31s%-14s%s\n", checkMark, thread.getName(), thread.getState(), classPath));
             ++threadCount;
         }
         buffer.append(dashes);
@@ -157,7 +168,7 @@ public class ConsoleSupport {
         listEnvironment(buffer);
         listProperties(buffer);
         ListPreferences(buffer);
-        listAddresses(buffer);
+        listIpAddresses(buffer);
         buffer.append(dashes);
         return buffer.toString();
     }
@@ -192,9 +203,9 @@ public class ConsoleSupport {
         buffer.append(" Session max idle seconds: " + Preferences.getInstance().getSessionMaxIdleSeconds() + "\n");
     }
 
-    private void listAddresses(StringBuilder buffer) {
+    private void listIpAddresses(StringBuilder buffer) {
         buffer.append(dashes);
-        buffer.append("Addresses\n");
+        buffer.append("IPAddresses\n");
         Map<String, ListenerThread> listeners = manager.getListeners();
         for(String protocol : listeners.keySet()) {
             buffer.append(" Server: " + protocol + " ==> IP Addr:/" + listeners.get(protocol).getAddressAndPort() + "\n");

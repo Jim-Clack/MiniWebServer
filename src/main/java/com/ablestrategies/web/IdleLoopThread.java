@@ -24,12 +24,14 @@ public class IdleLoopThread extends Thread {
     public void run() {
         int connectionMaxIdle = Preferences.getInstance().getConnectionMaxIdleSeconds();
         int sessionMaxIdle = Preferences.getInstance().getSessionMaxIdleSeconds();
-        setName("WebServer " + connectionMaxIdle + "-" + sessionMaxIdle + "-IdleLoopThread");
+        setName("IdleLoopThread-Max" + sessionMaxIdle);
+        int priority = Math.max(Thread.MIN_PRIORITY, Thread.currentThread().getPriority() - 1);
+        Thread.currentThread().setPriority(priority);
         while(!isInterrupted()) {
             try {
                 sleep(10000); // check every 10 seconds
             } catch (InterruptedException e) {
-                // ignore interrupts
+                // daemon, ignore interrupts
             }
             manager.killIdleConnections(connectionMaxIdle);
             manager.discardIdleSessions(sessionMaxIdle);
