@@ -159,7 +159,7 @@ public class ConnectionHandler extends SocketIOBase {
         buffer.append(" ");
         buffer.append(request.getMethod());
         buffer.append(" ");
-        buffer.append(request.getUrl());
+        buffer.append(request.getUri());
         if(response != null) {
             buffer.append(" ==> ");
             buffer.append(response.getDescription());

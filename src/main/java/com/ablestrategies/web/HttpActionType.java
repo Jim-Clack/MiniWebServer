@@ -45,7 +45,7 @@ public class HttpActionType {
             return RequestType.RQ_WS_SOAP;
         } else if(responseMimeType == ContentMimeType.MIME_JSON) {
             return RequestType.RQ_WS_JSON;
-        } else if(request.getUrl().startsWith("/webconsole")) {
+        } else if(request.getUri().startsWith("/webconsole")) {
             return RequestType.RQ_WEB_CONSOLE;
         } else if(request.getMethod().equals("POST")) {
             return RequestType.RQ_FILE_POST;

@@ -40,7 +40,7 @@ listed in Preferences.java.
 ```
    new Server(args).start();
 ```
-Developer notes, guide to the sources:
+## Developer notes, guide to the sources:
 - Connection = Client-Server match-up based on IP-Address-and-Port
 - Session = Client-Server match-up based on sessionId(mws) cookie
 - The main loop is in ConnectionHandler, handleRequest()
@@ -48,3 +48,5 @@ Developer notes, guide to the sources:
   - (...but recoverable exceptions will be handled by the server)
 - (I'm 75 and just wrote this, so I hope it's not too old-fashioned.)
 - If you want to contact me, I'm at jim.clack@ablestrategies.com
+## TODO...
+- Need to use IP Address to track session if there is no sessionID

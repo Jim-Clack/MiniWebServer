@@ -11,6 +11,7 @@ import java.util.Scanner;
  *    S [Enter]   List all Sessions
  *    T [Enter]   List all Threads
  *    P [Enter]   List properties and preferences
+ *    L [Enter]   Toggle Log Level
  *    K [Enter]   Kill connections/sessions that have been inactive for 60 seconds
  *    Q [Enter]   Quit - shut down the server
  */
@@ -51,6 +52,9 @@ public class LocalServerConsole {
                     break;
                 case 'P':
                     System.out.println(manager.getConsole().listProperties());
+                    break;
+                case 'L':
+                    System.out.println(manager.getConsole().toggleLogLevel());
                     break;
                 case 'K':
                     System.out.println(manager.getConsole().killIdleClients());

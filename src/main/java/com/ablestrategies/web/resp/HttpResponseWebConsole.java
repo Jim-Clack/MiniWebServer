@@ -93,6 +93,7 @@ public class HttpResponseWebConsole extends HttpResponseBase {
         bodyBuffer.append("<button type='submit' name='selection' value='S'>&nbsp;Sessions&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='T'>&nbsp;Threads&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='P'>&nbsp;Properties&nbsp;</button>&nbsp;\n");
+        bodyBuffer.append("<button type='submit' name='selection' value='L'>&nbsp;Log Level&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("<button type='submit' name='selection' value='K'>&nbsp;Kill Idle 60&nbsp;</button>&nbsp;\n");
         bodyBuffer.append("</form><p/>\n");
     }
@@ -116,6 +117,9 @@ public class HttpResponseWebConsole extends HttpResponseBase {
                 break;
             case 'P':
                 toBodyAsHtml(manager.getConsole().listProperties());
+                break;
+            case 'L':
+                toBodyAsHtml(manager.getConsole().toggleLogLevel());
                 break;
             case 'K':
                 toBodyAsHtml(manager.getConsole().killIdleClients());

@@ -4,6 +4,9 @@ import com.ablestrategies.web.conn.ConnectionThread;
 import com.ablestrategies.web.conn.SessionContext;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ConsoleSupport {
@@ -44,7 +47,29 @@ public class ConsoleSupport {
     }
 
     public String getMenu() {
-        return "Select: [C]onnections, [S]essions, [T]hreads, [P]roperties, [K]illIdle60, [Q]uit";
+        return "[C]onnections, [S]essions, [T]hreads, [P]roperties, [K]illIdle60, [L]ogLevel [Q]uit";
+    }
+
+    /**
+     * Change the log level.
+     * @return Descriptive string.
+     */
+    @SuppressWarnings("ALL")
+    public String toggleLogLevel() {
+        StringBuilder buffer = new StringBuilder();
+        boolean found = false;
+        buffer.append(dashes);
+        String message = toggleJavaLogger();
+        if(message != null) {
+            buffer.append(message);
+            found = true;
+        }
+        // <-- Add other Logger here, and so forth
+        if(!found) {
+            buffer.append("Cannot access any logger");
+        }
+        buffer.append(dashes);
+        return buffer.toString();
     }
 
     /**
@@ -171,6 +196,29 @@ public class ConsoleSupport {
         listIpAddresses(buffer);
         buffer.append(dashes);
         return buffer.toString();
+    }
+
+    /**
+     * Change the log level for the standard Java Logger.
+     * @return null if we're not using that logger. Else a descriptive message.
+     */
+    private String toggleJavaLogger() {
+        String packageName = this.getClass().getPackage().getName();
+        String message = null;
+        Logger logger = Logger.getLogger("");
+        if(logger != null) {
+            Level[] levels = { Level.SEVERE, Level.WARNING, Level.INFO, Level.FINE, Level.FINEST };
+            Level level = logger.getLevel();
+            for(int i = 0; i < levels.length; i++) {
+                if(level.intValue() >= levels[i].intValue()) {
+                    level = levels[(i + 1) % levels.length];
+                    break;
+                }
+            }
+            logger.setLevel(level);
+            message = "Java Logger level set to " + level.toString() + "(" + level.intValue() + ")\n";
+        }
+        return message;
     }
 
     private static void listEnvironment(StringBuilder buffer) {

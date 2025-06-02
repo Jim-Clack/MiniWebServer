@@ -96,8 +96,8 @@ public class HttpRequestXxxxTest extends TestCase {
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        String url = rq.getUrl();
-        Assert.assertEquals("/index.html?qu=samp&qty=1", url);
+        String uri = rq.getUri();
+        Assert.assertEquals("/index.html?qu=samp&qty=1", uri);
     }
 
     public void testGetVersion() {

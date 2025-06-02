@@ -30,7 +30,7 @@ public class HttpRequestPojo {
     protected String method = "?";
 
     /** URL of file with optional query string, but not protocol and domain. */
-    protected String url = "?";
+    protected String uri = "?";
 
     /** Typically "HTTP/1.1". */
     protected String version = "?";
@@ -98,7 +98,7 @@ public class HttpRequestPojo {
      * @return file to transfer.
      */
     public String getFilePath(boolean mustExist) {
-        return UriParser.getFilePath(url, mustExist);
+        return UriParser.getFilePath(uri, mustExist);
     }
 
     /**
@@ -108,7 +108,7 @@ public class HttpRequestPojo {
      * @return the value of that key.
      */
     public String getQueryValue(String key, String defaultValue) {
-        return UriParser.queryString(url, key, defaultValue);
+        return UriParser.queryString(uri, key, defaultValue);
     }
 
     /**
@@ -167,8 +167,8 @@ public class HttpRequestPojo {
      * Fetch the complete URL, without the protocol and server IP/Domain/Port.
      * @return filepath, optionally followed by a "?" then query values, often from a form.
      */
-    public String getUrl() {
-        return url;
+    public String getUri() {
+        return uri;
     }
 
     /**

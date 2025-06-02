@@ -34,7 +34,7 @@ public class HttpRequestBase extends HttpRequestPojo {
         this.body = original.body;
         this.errorCode = original.errorCode;
         this.method = original.method;
-        this.url = original.url;
+        this.uri = original.uri;
         this.version = original.version;
     }
 
@@ -49,7 +49,7 @@ public class HttpRequestBase extends HttpRequestPojo {
         } else {
             errorCode = RequestError.OK;
             method = tokens[0].trim();
-            url = tokens[1].trim();
+            uri = tokens[1].trim();
             version = tokens[2].trim();
         }
         if(!method.equals("GET")) {
@@ -58,7 +58,7 @@ public class HttpRequestBase extends HttpRequestPojo {
         if(!version.equals("HTTP/1.1")) {
             errorCode = RequestError.UNSUPPORTED_VERSION;
         }
-        logger.debug("HttpRequest code={}, method={}, url={}, version={}", errorCode, method, url, version);
+        logger.debug("HttpRequest code={}, method={}, url={}, version={}", errorCode, method, uri, version);
     }
 
     /**
