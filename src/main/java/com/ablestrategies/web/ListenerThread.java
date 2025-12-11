@@ -58,8 +58,6 @@ public class ListenerThread extends Thread {
         InetAddress address = InetAddress.getByName("localhost");
         if(protocol.equals("HTTPS")) {
             this.portNumber = Preferences.getInstance().getSslPortNumber();
-            this.serverSocket = SSLServerSocketFactory.getDefault().
-                    createServerSocket(portNumber, 100, address);
             SSLContext sslContext = getSslContext();
             if(sslContext == null) {
                 logger.error("SSLContext FAILURE - HTTPS Listener NOT active!\n" +
@@ -68,7 +66,6 @@ public class ListenerThread extends Thread {
             }
             SSLServerSocketFactory sslServerSocketFactory = sslContext.getServerSocketFactory();
             SSLServerSocket sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(portNumber);
-
         } else {
             this.portNumber = Preferences.getInstance().getPortNumber();
             this.serverSocket = ServerSocketFactory.getDefault().
