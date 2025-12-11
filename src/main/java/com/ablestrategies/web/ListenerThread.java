@@ -4,15 +4,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
+import java.security.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.cert.CertificateException;
 
 /**
  * Simple listener for a web server.
+ * HTTPS, per Gemini:
+ * Before writing the Java code, you need a Java Keystore (JKS or PKCS12 format) file
+ * that holds your server's public certificate and private key. The keytool utility,
+ * included with the JDK, can be used for this purpose:
+ *   keytool -genkeypair -alias myServerKey -keyalg RSA -keysize 2048 -storetype
+ *              PKCS12 -keystore keystore.p12 -validity 3650
+ * This command generates a key pair and stores it in a file named keystore.p12.
+ * Remember the passwords you set during this process, as you will need them in your
+ * Java code.
  */
 public class ListenerThread extends Thread {
 
@@ -45,6 +60,15 @@ public class ListenerThread extends Thread {
             this.portNumber = Preferences.getInstance().getSslPortNumber();
             this.serverSocket = SSLServerSocketFactory.getDefault().
                     createServerSocket(portNumber, 100, address);
+            SSLContext sslContext = getSslContext();
+            if(sslContext == null) {
+                logger.error("SSLContext FAILURE - HTTPS Listener NOT active!\n" +
+                        "Is the keystore.p12 installed and use proper passwords?");
+                return;
+            }
+            SSLServerSocketFactory sslServerSocketFactory = sslContext.getServerSocketFactory();
+            SSLServerSocket sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(portNumber);
+
         } else {
             this.portNumber = Preferences.getInstance().getPortNumber();
             this.serverSocket = ServerSocketFactory.getDefault().
@@ -86,5 +110,32 @@ public class ListenerThread extends Thread {
         return serverSocket.getInetAddress().getHostAddress() + ":" + serverSocket.getLocalPort();
     }
 
+    /**
+     * Initialize for HTTPS (SSLContext supports TLS)
+     * @return SSLContext, null on error
+     */
+    private SSLContext getSslContext() {
+        String KEYSTORE_PATH = "keystore.p12";
+        String KEYSTORE_PASSWORD = "keystore_password";
+        String KEY_PASSWORD = "key_password";
+        try {
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            char[] keystorePasswordChars = KEYSTORE_PASSWORD.toCharArray();
+            try (FileInputStream fis = new FileInputStream(KEYSTORE_PATH)) {
+                keyStore.load(fis, keystorePasswordChars);
+            }
+            KeyManagerFactory keyManagerFactory =
+                    KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            char[] keyPasswordChars = KEY_PASSWORD.toCharArray();
+            keyManagerFactory.init(keyStore, keyPasswordChars);
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(keyManagerFactory.getKeyManagers(), null, null);
+            return sslContext;
+        } catch (IOException | KeyStoreException | NoSuchAlgorithmException |
+                 CertificateException | UnrecoverableKeyException | KeyManagementException e) {
+            logger.warn("Cannot initialize SSL/TLS " + e.getMessage(), e);
+            return null;
+        }
+    }
 }
 

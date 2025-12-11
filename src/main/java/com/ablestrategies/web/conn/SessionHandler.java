@@ -23,10 +23,6 @@ public class SessionHandler {
      * Ctor.
      */
     public SessionHandler() {
-        // Wisdom of Confucius...
-        //  Step in the river.
-        //  But the water has moved on.
-        //  There's nothing to see.
     }
 
     /**
