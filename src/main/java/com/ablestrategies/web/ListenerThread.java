@@ -38,7 +38,7 @@ public class ListenerThread extends Thread {
     private final ServerManager manager;
 
     /** The server socket that we listen on. */
-    private final ServerSocket serverSocket;
+    private ServerSocket serverSocket = null;
 
     /** HTTPS or HTTPS? */
     private final String protocol;
