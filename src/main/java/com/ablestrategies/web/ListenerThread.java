@@ -65,7 +65,7 @@ public class ListenerThread extends Thread {
                 return;
             }
             SSLServerSocketFactory sslServerSocketFactory = sslContext.getServerSocketFactory();
-            this.serverSocket = (SSLServerSocket)sslServerSocketFactory.createServerSocket(portNumber);
+            this.serverSocket = sslServerSocketFactory.createServerSocket(portNumber);
         } else {
             this.portNumber = Preferences.getInstance().getPortNumber();
             this.serverSocket = ServerSocketFactory.getDefault().
