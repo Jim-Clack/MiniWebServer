@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.security.*;
 import java.io.FileInputStream;

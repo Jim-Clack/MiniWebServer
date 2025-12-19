@@ -50,11 +50,13 @@ public class Preferences {
     /**
      * [private - singleton] Ctor.
      */
+    @SuppressWarnings("all")
     private Preferences() {
         reset();
         File rootPathFile = new File(this.rootPath);
         if(!rootPathFile.exists()) {
-            throw new RuntimeException("Web root path does not exist: " + rootPathFile);
+            // throw new RuntimeException("Web root path does not exist: " + rootPathFile);
+            rootPathFile.mkdirs();
         }
     }
 
