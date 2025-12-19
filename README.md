@@ -8,7 +8,7 @@
  - Unit tests for classes that provide underlying functionality.
  - Decently readable with a good maintainability index.
 ## Quick-Start
- - Put files from webroot into /users/<yourname>/webroot
+ - Put files from webroot into your <home>/webroot
  - Run the App (no special settings)
  - Bring up a web browser and go to...
    - localhost:12345/index.html
@@ -42,11 +42,12 @@ listed in Preferences.java.
 ```
 ## Developer notes, guide to the sources:
 - Connection = Client-Server match-up based on IP-Address-and-Port
-- Session = Client-Server match-up based on sessionId(mws) cookie
-- The main loop is in ConnectionHandler, handleRequest()
+- Session = Client-Server match-up based on sessionid-mws cookie
+- The main loop is in ConnectionHandler: handleRequest()
 - You may want to catch IOException and InterruptedException
   - (...but recoverable exceptions will be handled by the server)
-- (I'm 75 and just wrote this, so I hope it's not too old-fashioned.)
+- (I'm 76 and just wrote this, so I hope it's not too old-fashioned.)
 - If you want to contact me, I'm at jim.clack@ablestrategies.com
 ## TODO...
-- Need to use IP Address to track session if there is no sessionID
+- Need to change HTTPRequest buffer to byte[] to handle binary requests
+- Need to use remote IP Address to track session if there is no sessionID
