@@ -24,8 +24,8 @@ public class ExamplePlugin extends PluginBase {
 
     /**
      * Process the HttpRequest and create a corresponding HttpResponse
-     * @param request
-     * @return
+     * @param request incoming http request
+     * @return response
      */
     @Override
     public HttpResponse handleRequest(HttpRequest request) {

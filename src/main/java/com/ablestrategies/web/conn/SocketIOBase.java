@@ -72,7 +72,7 @@ class SocketIOBase {
      * populateInBuffer
      * TODO: This method is rough and needs to be rewritten...
      * @return bytes read
-     * @throws IOException
+     * @throws IOException trouble reading soeckt
      */
     private int populateInBuffer() throws IOException {
         byte[] buffer = new byte[10000];

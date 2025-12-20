@@ -35,7 +35,7 @@ public class PluginHandler {
     public void loadPlugins() {
         Preferences preferences = Preferences.getInstance();
         String[] classNames = preferences.getPluginClassNames();
-        this.plugins = new LinkedList<PluginBase>();
+        this.plugins = new LinkedList<>();
         for(String className : classNames) {
             try {
                 Object object = ClassLoader.getSystemClassLoader().loadClass(className);
