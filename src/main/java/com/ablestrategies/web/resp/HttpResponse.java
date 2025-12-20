@@ -31,6 +31,9 @@ public abstract class HttpResponse {
      */
     public abstract ResponseCode generateContent(Socket socket);
 
+    /** The response header gets assembled into this. */
+    protected StringBuilder headerBuffer;
+
     /**
      * Get the response that was assembled by the generateContent() call.
      * @return A socket-ready HTTP response.

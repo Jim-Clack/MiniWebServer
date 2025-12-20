@@ -21,8 +21,6 @@ public class HttpResponseExample extends HttpResponsePlugin {
     }
 
     /**
-     * Get the response that was assembled by the generateContent() call.
-     *
      * @return A socket-ready HTTP response.
      */
     @Override

@@ -19,9 +19,6 @@ public class HttpResponseFile extends HttpResponse {
     /** The HTTP that requested the file. */
     private final HttpRequestPojo request;
 
-    /** The response header gets assembled into this. */
-    private final StringBuilder headerBuffer;
-
     /** Line1, headers, and body (file content) are assembled into this. */
     private byte[] responseBuffer = null;
 

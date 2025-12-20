@@ -23,9 +23,6 @@ public class HttpResponseWebConsole extends HttpResponse {
     /** The top-level object that knows about all connections. */
     private final ServerManager manager;
 
-    /** Buffer for assembling the HTTP header. */
-    private final StringBuilder headerBuffer;
-
     /** Buffer for assembling the HTML body. */
     private final StringBuilder bodyBuffer;
 
