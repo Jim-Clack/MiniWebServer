@@ -7,12 +7,9 @@ import java.net.Socket;
 @SuppressWarnings("ALL") // Plugins must extend this base class
 public abstract class HttpResponsePlugin extends HttpResponse {
 
-    public abstract void initialize(HttpRequestPojo request, Socket socket);
-
-    // @Override
-    //   generateContent()
-    //   getContent()
-    //   set description
+    public void initialize(String description) {
+        this.description = description;
+    }
 
     @Override
     public abstract ResponseCode generateContent(Socket socket);

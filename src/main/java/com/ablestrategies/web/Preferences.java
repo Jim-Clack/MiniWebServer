@@ -78,11 +78,11 @@ public class Preferences {
     @SuppressWarnings("ALL") // Until we flesh this method out
     public String[] getPluginClassNames() {
         String[] plugins = new String[0];
-        String pluginPojos = System.getProperty("MiniWebServer.plugins", null);
-        if(pluginPojos == null) {
+        String pluginNames = System.getProperty("MiniWebServer.plugins", null);
+        if(pluginNames == null) {
             return plugins;
         }
-        plugins = pluginPojos.split(",");
+        plugins = pluginNames.split(",");
         for(int i = 0; i < plugins.length; i++) {
             plugins[i] = plugins[i].trim();
         }

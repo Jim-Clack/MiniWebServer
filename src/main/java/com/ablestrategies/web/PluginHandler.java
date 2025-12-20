@@ -11,8 +11,10 @@ import java.util.List;
 
 /**
  * PluginHandler
- *  TODO: Test this class - it has not been tested!!!
- * getProperty("MiniWebServer.plugins", "comma,delimited,classes");
+ * To create a plugin...
+ * Extend HttpResponsePlugin
+ * Extend PluginBase
+ * getProperty("MiniWebServer.plugins", "comma,delimited,plugin,classes");
  */
 public class PluginHandler {
 
@@ -21,17 +23,22 @@ public class PluginHandler {
 
     private static PluginHandler instance = null;
 
-    private final List<PluginBase> plugins = new LinkedList<>();
+    private List<PluginBase> plugins = new LinkedList<>();
 
     /**
      * Ctor.
      */
     private PluginHandler() {
+        loadPlugins();
+    }
+
+    public void loadPlugins() {
         Preferences preferences = Preferences.getInstance();
         String[] classNames = preferences.getPluginClassNames();
+        this.plugins = new LinkedList<PluginBase>();
         for(String className : classNames) {
             try {
-                Object object = ClassLoader.getPlatformClassLoader().loadClass(className);
+                Object object = ClassLoader.getSystemClassLoader().loadClass(className);
                 @SuppressWarnings("all")
                 Class<? extends PluginBase> clazz = (Class<? extends PluginBase>)object;
                 if(clazz == null) {
@@ -42,10 +49,11 @@ public class PluginHandler {
                     ctor.setAccessible(true);
                     PluginBase plugin = (PluginBase)ctor.newInstance(preferences);
                     plugins.add(plugin);
+                    logger.info(plugin.getClass().getCanonicalName() + " plugin loaded");
                 }
             } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
-                logger.warn("Cannot instantiate plugin " + className);
+                     InvocationTargetException ex) {
+                logger.warn("Cannot instantiate plugin " + className, ex);
             }
         }
     }

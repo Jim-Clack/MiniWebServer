@@ -35,6 +35,6 @@ public abstract class PluginBase {
      * @param request
      * @return
      */
-    public abstract HttpResponse handle(HttpRequest request);
+    public abstract HttpResponse handleRequest(HttpRequest request);
 
 }

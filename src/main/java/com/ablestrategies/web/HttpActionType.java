@@ -75,7 +75,7 @@ public class HttpActionType {
         } else if (requestType == RequestType.RQ_WS_JSON) {
             return new HttpRequestJson(request);
         } else if (requestType == RequestType.RQ_PLUG_IN) {
-            logger.error("Illegal call to getTypedRequest()");
+            return new HttpRequestPlugin(request);
         }
         return new HttpRequestFile(request);
     }
@@ -97,10 +97,10 @@ public class HttpActionType {
             return new HttpResponseWebConsole(request, manager);
         } else if (requestType == RequestType.RQ_PLUG_IN) {
             PluginBase plugin = PluginHandler.getInstance().getPlugin(request);
-            if(plugin != null) {
+            if(plugin == null) {
                 logger.error("Missing plugin on call to getTypedResponse()");
             }
-            return plugin.handle(request);
+            return plugin.handleRequest(request);
         }
         return new HttpResponseFile(request);
     }

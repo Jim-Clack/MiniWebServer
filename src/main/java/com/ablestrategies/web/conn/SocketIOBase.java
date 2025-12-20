@@ -68,6 +68,12 @@ class SocketIOBase {
         return 0;
     }
 
+    /**
+     * populateInBuffer
+     * TODO: This method is rough and needs to be rewritten...
+     * @return bytes read
+     * @throws IOException
+     */
     private int populateInBuffer() throws IOException {
         byte[] buffer = new byte[10000];
         int bytesRead = Math.max(1, inStream.available()); // try to read at least one char

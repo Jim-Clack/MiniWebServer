@@ -1,12 +1,12 @@
 package com.ablestrategies.web.rqst;
 
-@SuppressWarnings("ALL") // Until we flesh this class out
+/**
+ * This is just a shell to pass the request to a plugin
+ */
 public class HttpRequestPlugin extends HttpRequest {
 
     public HttpRequestPlugin(HttpRequestPojo original) {
         super(null);
         cloneState(original);
     }
-
-    // Not yet coded
 }
