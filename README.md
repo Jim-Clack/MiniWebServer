@@ -13,14 +13,13 @@
  - Bring up a web browser and go to...
    - localhost:12345/index.html
    - localhost:12345/webconsole
- - *Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
+ - Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
 ## Does NOT support...
  - basic auth, URL-based credentials (yet)
  - web services, JSON, SOAP, etc. (yet)
- - brokering requests for an application server
  - ftp, webdav, websockets, or other protocols
- - multi-part messages
- - HTTP other than 1.1, overlapping requests
+ - multi-part forms
+ - HTTP other than 1.1, i.e. overlapping requests on a socket
  - JEE, servlets, JSP
  - zip/jar/war/aar/ear deployment
  - load balancing
@@ -32,6 +31,7 @@
    IP port to listen   0  MiniWebServer.portNumber    12345
    SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)
    Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
+   Plugins                MiniWebServer.plugins       (none) comma-delimited
 ```
 In order to support SSL/HTTPS, you have to set certain Java properties, as\
 listed in Preferences.java.
@@ -49,5 +49,6 @@ listed in Preferences.java.
 - If you want to contact me, I'm at jim.clack@ablestrategies.com
 ## TODO...
 - Test Plugins, as the code has not been exercised for this
-- Need to change HTTPRequest buffer to byte[] to handle binary requests
 - Need to use remote IP Address to track session if there is no sessionID
+- Persist cookies, but delete them after so many days 
+- Need to change HTTPRequest buffer to byte[] to handle binary requests

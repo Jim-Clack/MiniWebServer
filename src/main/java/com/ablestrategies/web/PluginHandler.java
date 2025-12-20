@@ -13,8 +13,6 @@ import java.util.List;
  * PluginHandler
  *  TODO: Test this class - it has not been tested!!!
  * getProperty("MiniWebServer.plugins", "comma,delimited,classes");
- * - Each such jar must have one class named Plugin that extends PluginBase
- * - HttpResponse response = Plugin.handle(HttpRequest request, ...);
  */
 public class PluginHandler {
 

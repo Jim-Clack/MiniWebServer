@@ -4,7 +4,7 @@ import com.ablestrategies.web.resp.HttpResponse;
 import com.ablestrategies.web.rqst.HttpRequest;
 
 /**
- * Generally, this is read from a local JSON file.
+ * A Plugin must extend this class.
  */
 @SuppressWarnings("ALL") // Base class for processing plugins
 public abstract class PluginBase {
