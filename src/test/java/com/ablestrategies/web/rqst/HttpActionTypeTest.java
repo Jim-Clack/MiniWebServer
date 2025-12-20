@@ -1,7 +1,7 @@
 package com.ablestrategies.web.rqst;
 
 import com.ablestrategies.web.HttpActionType;
-import com.ablestrategies.web.resp.HttpResponseBase;
+import com.ablestrategies.web.resp.HttpResponse;
 import com.ablestrategies.web.resp.HttpResponseFile;
 import junit.framework.TestCase;
 
@@ -16,39 +16,39 @@ public class HttpActionTypeTest extends TestCase {
                     "<html><body>Hello</body></html>\n";
 
     public void testGetHttpRequestFile() {
-        HttpRequestBase rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
+        HttpRequest rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
         assertEquals(HttpRequestFile.class, rq.getClass());
     }
 
     public void testGetHttpRequestSoap() {
         String buffer2 = bufferWithQuery.replace("Host", "Accept: application/xml\nHost");
-        HttpRequestBase rq = HttpActionType.getHttpRequest(buffer2, null);
+        HttpRequest rq = HttpActionType.getHttpRequest(buffer2, null);
         assertEquals(HttpRequestSoap.class, rq.getClass());
     }
 
     public void testGetHttpRequestJson() {
         String buffer2 = bufferWithQuery.replace("Host", "Accept: application/json\nHost");
-        HttpRequestBase rq = HttpActionType.getHttpRequest(buffer2, null);
+        HttpRequest rq = HttpActionType.getHttpRequest(buffer2, null);
         assertEquals(HttpRequestJson.class, rq.getClass());
     }
 
     public void testGetTypedRequest() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        HttpRequestBase rb = HttpActionType.getTypedRequest(rq);
+        HttpRequest rb = HttpActionType.getTypedRequest(rq);
         assertEquals(HttpRequestFile.class, rb.getClass());
     }
 
     public void testGetTypedResponse() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
         rq.parseBody(lineIndex, lines);
-        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, rq.manager);
+        HttpResponse rs = HttpActionType.getTypedResponse(rq, rq.manager);
         assertEquals(HttpResponseFile.class, rs.getClass());
     }
 }

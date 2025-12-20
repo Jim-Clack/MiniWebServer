@@ -16,10 +16,10 @@ import java.util.Date;
 /**
  * All HTTP responses are based on this.
  */
-public abstract class HttpResponseBase {
+public abstract class HttpResponse {
 
     /** Logger slf4j. */
-    private final Logger logger = LoggerFactory.getLogger(HttpResponseBase.class);
+    private final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     /** Description of the response. */
     protected String description = "----";

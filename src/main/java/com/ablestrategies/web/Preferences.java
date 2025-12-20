@@ -1,8 +1,6 @@
 package com.ablestrategies.web;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Simple settings class.
@@ -78,10 +76,17 @@ public class Preferences {
      * @return List of PluginPojos.
      */
     @SuppressWarnings("ALL") // Until we flesh this method out
-    public List<PluginPojo> getPluginPojos() {
-        List<PluginPojo> pluginPojos = new LinkedList<>();
-        // Not yet coded
-        return pluginPojos;
+    public String[] getPluginClassNames() {
+        String[] plugins = new String[0];
+        String pluginPojos = System.getProperty("MiniWebServer.plugins", null);
+        if(pluginPojos == null) {
+            return plugins;
+        }
+        plugins = pluginPojos.split(",");
+        for(int i = 0; i < plugins.length; i++) {
+            plugins[i] = plugins[i].trim();
+        }
+        return plugins;
     }
 
     /**

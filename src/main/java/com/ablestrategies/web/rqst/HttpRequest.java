@@ -11,16 +11,16 @@ import org.slf4j.LoggerFactory;
  * All of the HttpRequestXxxx classes extend this. They can be created by
  * calling their ctors or by cloning the state of another HttpRequestXxxx.
  */
-public class HttpRequestBase extends HttpRequestPojo {
+public class HttpRequest extends HttpRequestPojo {
 
     /** Logger slf4j. */
-    private final Logger logger = LoggerFactory.getLogger(HttpRequestBase.class);
+    private final Logger logger = LoggerFactory.getLogger(HttpRequest.class);
 
     /**
      * Ctor.
      * @param manager The server manager. May be null if cloneState() will be called afterwards.
      */
-    public HttpRequestBase(ServerManager manager) {
+    public HttpRequest(ServerManager manager) {
         this.manager = manager;
     }
 

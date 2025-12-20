@@ -4,7 +4,7 @@ import com.ablestrategies.web.HttpActionType;
 import com.ablestrategies.web.Preferences;
 import com.ablestrategies.web.resp.ResponseCode;
 import com.ablestrategies.web.ServerManager;
-import com.ablestrategies.web.resp.HttpResponseBase;
+import com.ablestrategies.web.resp.HttpResponse;
 import com.ablestrategies.web.rqst.*;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -105,9 +105,9 @@ public class ConnectionHandler extends SocketIOBase {
      * Receive an HTTP request then send an HTTP response. (Main server loop handler)
      */
     private void handleRequest() {
-        HttpRequestBase request = handler1GetRequest();
+        HttpRequest request = handler1GetRequest();
         if (request == null) return;
-        HttpResponseBase response = HttpActionType.getTypedResponse(request, manager);
+        HttpResponse response = HttpActionType.getTypedResponse(request, manager);
         ResponseCode code = response.generateContent(socket);
         logger.debug("Processed request, code={}, type={}", code, HttpActionType.getRequestKind(request));
         updateHistory(request, response, code);
@@ -120,8 +120,8 @@ public class ConnectionHandler extends SocketIOBase {
      * Create an HttpRequestXxxx from the message returned by getReadBuffer().
      * @return The completed request, null on error.
      */
-    private @Nullable HttpRequestBase handler1GetRequest() {
-        HttpRequestBase request = new HttpRequestFile(getReadBuffer(), manager);
+    private @Nullable HttpRequest handler1GetRequest() {
+        HttpRequest request = new HttpRequestFile(getReadBuffer(), manager);
         if(request.getErrorCode() == RequestError.BAD_FIRST_LINE || request.getErrorCode() == RequestError.BAD_HEADER) {
             updateHistory(request, null, ResponseCode.RC_UNKNOWN_ERROR);
             Thread.currentThread().interrupt();
@@ -136,7 +136,7 @@ public class ConnectionHandler extends SocketIOBase {
      * @param response The request.
      * @param request The corresponfing request.
      */
-    private void handler2SendResponse(HttpResponseBase response, HttpRequestBase request) {
+    private void handler2SendResponse(HttpResponse response, HttpRequest request) {
         send(response.getContent());
         SessionContext context = request.getContext(false);
         if(context != null) { // For the Console "Sessions" command to display.
@@ -151,7 +151,7 @@ public class ConnectionHandler extends SocketIOBase {
      * @param response The response, null if none.
      * @param code Per response.
      */
-    private void updateHistory(HttpRequestPojo request, HttpResponseBase response, ResponseCode code) {
+    private void updateHistory(HttpRequestPojo request, HttpResponse response, ResponseCode code) {
         String now = dateFormat.format(new Date());
         StringBuilder buffer = new StringBuilder();
         buffer.append(now);

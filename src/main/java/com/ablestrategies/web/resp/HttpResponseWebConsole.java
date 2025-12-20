@@ -15,7 +15,7 @@ import java.net.Socket;
  *    Threads        Show all Threads
  *    Kill Idle 60   Kill connections that have been inactive for 60 seconds or more
  */
-public class HttpResponseWebConsole extends HttpResponseBase {
+public class HttpResponseWebConsole extends HttpResponse {
 
     /** The HttpRequestXxx that requested this response. */
     private final HttpRequestPojo request;

@@ -4,21 +4,19 @@ import com.ablestrategies.web.rqst.HttpRequestPojo;
 
 import java.net.Socket;
 
-@SuppressWarnings("ALL") // Until we flesh this class out
-public class HttpResponsePlugin extends HttpResponseBase {
+@SuppressWarnings("ALL") // Plugins must extend this base class
+public abstract class HttpResponsePlugin extends HttpResponse {
 
-    public HttpResponsePlugin(HttpRequestPojo request) {
-        this.description = "Plug-in";
-        // Not yet coded
-    }
+    public abstract void initialize(HttpRequestPojo request, Socket socket);
 
-    @Override
-    public ResponseCode generateContent(Socket socket) {
-        return null;
-    }
+    // @Override
+    //   generateContent()
+    //   getContent()
+    //   set description
 
     @Override
-    public byte[] getContent() {
-        return new byte[0];
-    }
+    public abstract ResponseCode generateContent(Socket socket);
+
+    @Override
+    public abstract byte[] getContent();
 }

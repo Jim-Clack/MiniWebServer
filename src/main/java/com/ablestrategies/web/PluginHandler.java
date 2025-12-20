@@ -1,26 +1,80 @@
 package com.ablestrategies.web;
 
-@SuppressWarnings("ALL") // Until we flesh this class out
+import com.ablestrategies.web.rqst.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * PluginHandler
+ *  TODO: Test this class - it has not been tested!!!
+ * getProperty("MiniWebServer.plugins", "comma,delimited,classes");
+ * - Each such jar must have one class named Plugin that extends PluginBase
+ * - HttpResponse response = Plugin.handle(HttpRequest request, ...);
+ */
 public class PluginHandler {
 
-    private PluginHandler instance = null;
+    /** Logger slf4j. */
+    private final Logger logger = LoggerFactory.getLogger(PluginHandler.class);
+
+    private static PluginHandler instance = null;
+
+    private final List<PluginBase> plugins = new LinkedList<>();
 
     /**
-     * Need to support getProperty("mws-plugins", "comma-delimited-jars");
-     * - Each such jar must have a class named PlugInPojo to configure it
-     * - Intercept regex: fileType, requestType, mimeType, acceptType
-     * - hook: HttpResponse response = Plugin.handle(HttpRequest request);
+     * Ctor.
      */
-
     private PluginHandler() {
-        // Not yet coded
+        Preferences preferences = Preferences.getInstance();
+        String[] classNames = preferences.getPluginClassNames();
+        for(String className : classNames) {
+            try {
+                Object object = ClassLoader.getPlatformClassLoader().loadClass(className);
+                @SuppressWarnings("all")
+                Class<? extends PluginBase> clazz = (Class<? extends PluginBase>)object;
+                if(clazz == null) {
+                    logger.warn("Cannot find plugin " + className);
+                } else {
+                    Class<?>[] args = {Preferences.class};
+                    Constructor<?> ctor = clazz.getConstructor(args);
+                    ctor.setAccessible(true);
+                    PluginBase plugin = (PluginBase)ctor.newInstance(preferences);
+                    plugins.add(plugin);
+                }
+            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException e) {
+                logger.warn("Cannot instantiate plugin " + className);
+            }
+        }
     }
 
-    public PluginHandler getInstance() {
+    /**
+     * Singleton.
+     * @return the instance.
+     */
+    public static PluginHandler getInstance() {
         if(instance == null) {
             instance = new PluginHandler();
         }
         return instance;
+    }
+
+    /**
+     * Get a plugin based on the request type.
+     * @param request an HttpRequest to be analyzed.
+     * @return the corresponding plugin, null if none.
+     */
+    public PluginBase getPlugin(HttpRequest request) {
+        for (PluginBase plugin : plugins) {
+            if (plugin.getKind(request) != null) {
+                return plugin;
+            }
+        }
+        return null;
     }
 
 }

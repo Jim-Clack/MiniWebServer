@@ -1,7 +1,7 @@
 package com.ablestrategies.web.resp;
 
 import com.ablestrategies.web.HttpActionType;
-import com.ablestrategies.web.rqst.HttpRequestBase;
+import com.ablestrategies.web.rqst.HttpRequest;
 import junit.framework.TestCase;
 
 public class HttpResponseXxxxTest extends TestCase {
@@ -16,8 +16,8 @@ public class HttpResponseXxxxTest extends TestCase {
                         "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\n" +
                         "\n" +
                         "<html><body>Hello</body></html>\n";
-        HttpRequestBase rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
-        HttpResponseBase rs = HttpActionType.getTypedResponse(rq, null);
+        HttpRequest rq = HttpActionType.getHttpRequest(bufferWithQuery, null);
+        HttpResponse rs = HttpActionType.getTypedResponse(rq, null);
         assertEquals(HttpResponseFile.class, rs.getClass());
         // GET /index.html?qu=samp&qty=1 HTTP/1.1
         // Host: localhost

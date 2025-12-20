@@ -11,10 +11,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * HTTP Response that simply returns the contents of a file.
  */
-public class HttpResponseFile extends HttpResponseBase {
+public class HttpResponseFile extends HttpResponse {
 
     /** Logger slf4j. */
-    private final Logger logger = LoggerFactory.getLogger(HttpResponseBase.class);
+    private final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
     /** The HTTP that requested the file. */
     private final HttpRequestPojo request;

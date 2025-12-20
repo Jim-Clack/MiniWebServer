@@ -5,7 +5,7 @@ import com.ablestrategies.web.rqst.HttpRequestPojo;
 import java.net.Socket;
 
 @SuppressWarnings("ALL") // Until we flesh this class out
-public class HttpResponseSoap extends HttpResponseBase {
+public class HttpResponseSoap extends HttpResponse {
 
     public HttpResponseSoap(HttpRequestPojo request) {
         this.description = "SOAP";

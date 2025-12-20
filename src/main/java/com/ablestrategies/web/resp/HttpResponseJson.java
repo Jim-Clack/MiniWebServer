@@ -5,7 +5,7 @@ import com.ablestrategies.web.rqst.HttpRequestPojo;
 import java.net.Socket;
 
 @SuppressWarnings("ALL") // Until we flesh this class out
-public class HttpResponseJson extends HttpResponseBase {
+public class HttpResponseJson extends HttpResponse {
 
     public HttpResponseJson(HttpRequestPojo request) {
         this.description = "JSON";

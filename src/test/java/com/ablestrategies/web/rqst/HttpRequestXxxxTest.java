@@ -18,7 +18,7 @@ public class HttpRequestXxxxTest extends TestCase {
             "<html><body>Hello</body></html>\n";
 
     public void testGetRequestKind() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -28,7 +28,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetFilePath() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -38,7 +38,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetQueryValue() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -50,7 +50,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetHeader() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -61,7 +61,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetBody() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -71,7 +71,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetMethod() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -81,7 +81,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetErrorCode() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -91,7 +91,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetUrl() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -101,7 +101,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testGetVersion() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         rq.parseStatusLine(lines[0]);
         int lineIndex = rq.parseHeaders(lines);
@@ -111,7 +111,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testErrorCodeNoBody() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         String[] lines2 = Arrays.copyOfRange(lines, 0, 5);
         rq.parseStatusLine(lines2[0]);
@@ -122,7 +122,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testErrorCodeBadVersion() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         lines[0] = "GET /index.html?qu=samp&qty=1 HTTP/2.0";
         rq.parseStatusLine(lines[0]);
@@ -133,7 +133,7 @@ public class HttpRequestXxxxTest extends TestCase {
     }
 
     public void testErrorCodeBadMethod() {
-        HttpRequestBase rq = new HttpRequestBase(null);
+        HttpRequest rq = new HttpRequest(null);
         String[] lines = bufferWithQuery.split("\n");
         lines[0] = "BLUMP /index.html?qu=samp&qty=1 HTTP/1.1";
         rq.parseStatusLine(lines[0]);

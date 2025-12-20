@@ -6,7 +6,7 @@ import com.ablestrategies.web.ServerManager;
  * File request AS WELL AS any unknown type of request.
  * Veneer class, as most functionality if in HttpRequestBase.
  */
-public class HttpRequestFile extends HttpRequestBase {
+public class HttpRequestFile extends HttpRequest {
 
     /**
      * Ctor.

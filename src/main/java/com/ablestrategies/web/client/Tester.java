@@ -29,13 +29,13 @@ public class Tester {
             throw new RuntimeException(ex);
         }
         try (
-            Socket socket = new Socket("localhost", Preferences.getInstance().getPortNumber());
+            Socket socket = new Socket("localhost", Preferences.getInstance().getPortNumber())
         ) {
             InputStream inputStream = socket.getInputStream();
             socket.getOutputStream().write(BufferWithQuery.getBytes(StandardCharsets.UTF_8));
             int avail;
             for(avail = 0; avail < 1; avail = inputStream.available()) {
-                Thread.yield(); // wait for response
+                Thread.yield(); // spinlock, wait for response
             }
             byte[] bytes = inputStream.readNBytes(avail);
             String response = new String(bytes, StandardCharsets.UTF_8);

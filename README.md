@@ -21,7 +21,6 @@
  - ftp, webdav, websockets, or other protocols
  - multi-part messages
  - HTTP other than 1.1, overlapping requests
- - plugins/extensions
  - JEE, servlets, JSP
  - zip/jar/war/aar/ear deployment
  - load balancing
@@ -49,5 +48,6 @@ listed in Preferences.java.
 - (I'm 76 and just wrote this, so I hope it's not too old-fashioned.)
 - If you want to contact me, I'm at jim.clack@ablestrategies.com
 ## TODO...
+- Test Plugins, as the code has not been exercised for this
 - Need to change HTTPRequest buffer to byte[] to handle binary requests
 - Need to use remote IP Address to track session if there is no sessionID
