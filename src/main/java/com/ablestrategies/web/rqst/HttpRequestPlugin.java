@@ -5,8 +5,8 @@ package com.ablestrategies.web.rqst;
  */
 public class HttpRequestPlugin extends HttpRequest {
 
-    public HttpRequestPlugin(HttpRequestPojo original) {
-        super(null);
+    public HttpRequestPlugin(HttpRequest original) {
+        super(original.manager);
         cloneState(original);
     }
 }

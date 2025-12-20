@@ -1,12 +1,18 @@
 package com.ablestrategies.web.resp;
 
+import com.ablestrategies.web.conn.ContentMimeType;
+import com.ablestrategies.web.rqst.HttpRequest;
+
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class HttpResponseExample extends HttpResponsePlugin {
 
-    public HttpResponseExample() {
+    protected HttpRequest request;
+
+    public HttpResponseExample(HttpRequest request) {
         initialize("Example");
+        this.request = request;
     }
 
     /**
@@ -25,12 +31,9 @@ public class HttpResponseExample extends HttpResponsePlugin {
      */
     @Override
     public byte[] getContent() {
-        String content =
-            "HTTP/1.1 200 OK\n" +
-            "content-type: application/json; charset=UTF-8\n" +
-            "content-length: 123\n" +
-            "\n" +
-            "{Body}\n";
+        String body = "{Body}\n";
+        assembleHeaders(request, "HTTP/1.1 200 OK", body.length(), ContentMimeType.MIME_JSON, 10);
+        String content = headerBuffer.toString() + body;
         return content.getBytes(StandardCharsets.UTF_8);
     }
 }

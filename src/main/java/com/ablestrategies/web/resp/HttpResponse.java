@@ -24,15 +24,15 @@ public abstract class HttpResponse {
     /** Description of the response. */
     protected String description = "----";
 
+    /** The response header gets assembled into this. */
+    protected StringBuilder headerBuffer;
+
     /**
      * Generate the response with line1, headers, and body.
      * @param socket Connection to remote client.
      * @return The response code: watch out for RC_NOT_FOUND.
      */
     public abstract ResponseCode generateContent(Socket socket);
-
-    /** The response header gets assembled into this. */
-    protected StringBuilder headerBuffer;
 
     /**
      * Get the response that was assembled by the generateContent() call.
@@ -76,12 +76,13 @@ public abstract class HttpResponse {
      * @param maxSeconds Cache-control - validity of response in seconds.
      */
     @SuppressWarnings("all")
-    protected void assembleHeaders(HttpRequestPojo request, StringBuilder headerBuffer,
+    protected void assembleHeaders(HttpRequestPojo request,
                                    String line1, int contentLength, ContentMimeType mimeType, int maxSeconds) {
         DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
         String now = dateFormat.format(new Date());
         String sessionId = request.getSessionId(true);
-        headerBuffer.insert(0, line1);
+        headerBuffer = new StringBuilder();
+        headerBuffer.insert(0, line1 + "\n");
         headerBuffer.append("content-type: " + mimeType.getMimeString() + "\n");
         headerBuffer.append("set-cookie: sessionid-mws=" + sessionId + "\n");
         headerBuffer.append("date: " + now + "\n");

@@ -86,8 +86,8 @@ public class HttpResponseFile extends HttpResponse {
      */
     private void generateLine1AndHeaders(int contentLength, ContentMimeType mimeType) {
         String line1 = request.getVersion() + " " +
-                responseCode.getNumValue() + " " + responseCode.getTextValue() + "\n";
-        assembleHeaders(request, headerBuffer, line1, contentLength, mimeType, 15);
+                responseCode.getNumValue() + " " + responseCode.getTextValue();
+        assembleHeaders(request, line1, contentLength, mimeType, 15);
     }
 
 }

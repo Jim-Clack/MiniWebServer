@@ -29,6 +29,6 @@ public class ExamplePlugin extends PluginBase {
      */
     @Override
     public HttpResponse handleRequest(HttpRequest request) {
-        return new HttpResponseExample();
+        return new HttpResponseExample(request);
     }
 }

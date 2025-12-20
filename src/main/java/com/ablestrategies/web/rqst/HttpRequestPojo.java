@@ -10,7 +10,7 @@ import java.util.Map;
  * HttpRequestXxxx -> HttpRequestBase -> HttpRequestPojo
  *   Xxxx = Pojo - A lightweight class for state that can be cloned.
  *   Xxxx = Base - Socket HTTP Request message parsing methods.
- *   Xxxx = File - File transfer request or other kind of request.
+ *   Xxxx = File, etc. - File transfer request or other kind of request.
  */
 public class HttpRequestPojo {
 
