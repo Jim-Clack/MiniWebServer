@@ -27,6 +27,12 @@ public class HttpResponseExample extends HttpResponsePlugin {
      */
     @Override
     public byte[] getContent() {
-        return "Content".getBytes(StandardCharsets.UTF_8);
+        String content =
+            "HTTP/1.1 200 OK\n" +
+            "content-type: application/json; charset=UTF-8\n" +
+            "content-length: 123\n" +
+            "\n" +
+            "{Body}\n";
+        return content.getBytes(StandardCharsets.UTF_8);
     }
 }

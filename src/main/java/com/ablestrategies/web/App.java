@@ -14,7 +14,7 @@ public class App {
     public static void main(String[] args) {
         try {
             new Server(args).start();
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

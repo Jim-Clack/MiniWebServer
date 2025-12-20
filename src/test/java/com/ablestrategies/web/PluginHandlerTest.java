@@ -26,7 +26,7 @@ public class PluginHandlerTest extends TestCase {
         HttpResponse rs = HttpActionType.getTypedResponse(rq, null);
         assertEquals(HttpResponseExample.class, rs.getClass());
         assertEquals("Example", rs.getDescription());
-        assertEquals("Content", new String(rs.getContent()));
+        assertTrue(new String(rs.getContent()).contains("Body"));
         System.setProperty("MiniWebServer.plugins", oldValue);
         PluginHandler.getInstance().loadPlugins(); // reload after changing property
     }
