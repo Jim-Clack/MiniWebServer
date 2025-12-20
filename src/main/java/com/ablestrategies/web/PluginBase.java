@@ -3,9 +3,6 @@ package com.ablestrategies.web;
 import com.ablestrategies.web.resp.HttpResponse;
 import com.ablestrategies.web.rqst.HttpRequest;
 
-import java.net.Socket;
-import java.util.Map;
-
 /**
  * Generally, this is read from a local JSON file.
  */

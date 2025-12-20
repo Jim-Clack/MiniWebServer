@@ -73,7 +73,7 @@ public class Preferences {
 
     /**
      * Read in PluginPojo JSON files.
-     * @return List of PluginPojos.
+     * @return List of Plugins derived from PluginBase, to be dynamically loaded..
      */
     @SuppressWarnings("ALL") // Until we flesh this method out
     public String[] getPluginClassNames() {
