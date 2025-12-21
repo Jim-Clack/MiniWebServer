@@ -68,8 +68,7 @@ public class HttpResponseWebConsole extends HttpResponse {
      * @apiNote Output is appended to headerBuffer.
      */
     private void generateHeaders() {
-        String line1 = request.getVersion() + " 200 OK";
-        assembleHeaders(request, line1, bodyBuffer.length(), ContentMimeType.MIME_HTML, 1);
+        assembleHeaders(request, ResponseCode.RC_OK, bodyBuffer.length(), ContentMimeType.MIME_HTML, 1);
     }
 
     /**

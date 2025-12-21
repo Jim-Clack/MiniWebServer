@@ -10,6 +10,8 @@ public class HttpResponseExample extends HttpResponsePlugin {
 
     protected HttpRequest request;
 
+    protected String line1 = "";
+
     public HttpResponseExample(HttpRequest request) {
         initialize("Example");
         this.request = request;
@@ -23,6 +25,8 @@ public class HttpResponseExample extends HttpResponsePlugin {
      */
     @Override
     public ResponseCode generateContent(Socket socket) {
+        ResponseCode rc = ResponseCode.RC_OK;
+        line1 = "HTTP/1.1 " + rc.getNumValue() + "  " + rc.getTextValue();
         return ResponseCode.RC_OK;
     }
 
@@ -32,7 +36,7 @@ public class HttpResponseExample extends HttpResponsePlugin {
     @Override
     public byte[] getContent() {
         String body = "{Body}\n";
-        assembleHeaders(request, "HTTP/1.1 200 OK", body.length(), ContentMimeType.MIME_JSON, 10);
+        assembleHeaders(request, ResponseCode.RC_OK, body.length(), ContentMimeType.MIME_JSON, 10);
         String content = headerBuffer.toString() + body;
         return content.getBytes(StandardCharsets.UTF_8);
     }

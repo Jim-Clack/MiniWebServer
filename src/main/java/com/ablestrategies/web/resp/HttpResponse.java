@@ -70,18 +70,21 @@ public abstract class HttpResponse {
      * Generate the headers for the response.
      * @param headerBuffer For results. You may pre-populate this with additional headers.
      * @param request The HTTP request - needed for Session ID.
-     * @param line1 First line, ending with an endline, such as: "HTTP/1.1 200 OK\n".
+     * @param responseCode OK or error response code
      * @param contentLength Length of body. (Yes, you have to generate the body first)
      * @param mimeType Type of content in body
      * @param maxSeconds Cache-control - validity of response in seconds.
      */
     @SuppressWarnings("all")
-    protected void assembleHeaders(HttpRequestPojo request,
-                                   String line1, int contentLength, ContentMimeType mimeType, int maxSeconds) {
+    protected void assembleHeaders(HttpRequestPojo request, ResponseCode responseCode,
+                                   int contentLength, ContentMimeType mimeType, int maxSeconds) {
+        String line1 = "HTTP/1.1 " + responseCode.getNumValue() + " " + responseCode.getTextValue();
         DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss zzz");
         String now = dateFormat.format(new Date());
         String sessionId = request.getSessionId(true);
         headerBuffer = new StringBuilder();
+        // Should the set-cookie expire? is it secure? i.e.
+        //   sessionid-mws=XXXX; Expires=Fri, 5 Oct 2025 14:28:00 GMT; Secure;
         headerBuffer.insert(0, line1 + "\n");
         headerBuffer.append("content-type: " + mimeType.getMimeString() + "\n");
         headerBuffer.append("set-cookie: sessionid-mws=" + sessionId + "\n");

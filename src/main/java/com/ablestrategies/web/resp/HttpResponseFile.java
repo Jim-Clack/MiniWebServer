@@ -85,9 +85,7 @@ public class HttpResponseFile extends HttpResponse {
      * @param contentLength Size of body - file to be returned.
      */
     private void generateLine1AndHeaders(int contentLength, ContentMimeType mimeType) {
-        String line1 = request.getVersion() + " " +
-                responseCode.getNumValue() + " " + responseCode.getTextValue();
-        assembleHeaders(request, line1, contentLength, mimeType, 15);
+        assembleHeaders(request, responseCode, contentLength, mimeType, 15);
     }
 
 }

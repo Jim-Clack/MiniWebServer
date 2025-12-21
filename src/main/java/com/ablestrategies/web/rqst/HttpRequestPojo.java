@@ -2,6 +2,7 @@ package com.ablestrategies.web.rqst;
 
 import com.ablestrategies.web.ServerManager;
 import com.ablestrategies.web.conn.SessionContext;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,14 +60,7 @@ public class HttpRequestPojo {
         if(context == null && !createIfNotExist) {
             return null;
         }
-        String sessionId = null;
-        String[] cookies = getHeaderValues("cookie");
-        for (String cookie : cookies) {
-            if (cookie.contains("sessionid-mws=")) {
-                sessionId = cookie.split("=")[1].trim();
-                break;
-            }
-        }
+        String sessionId = getRequestedSessionId();
         if(context == null) {
             context = manager.getSessionHandler().getOrCreateSession(sessionId);
         }
@@ -79,6 +73,30 @@ public class HttpRequestPojo {
         copyHeaderToStringValues("referer");
         copyHeaderToStringValues("via");
         return context;
+    }
+
+    private @Nullable String getRequestedSessionId() {
+        String sessionId = null;
+        // unlike set-cookie, cookie uses a semicolon delimiter !
+        String header = getHeaderValue("cookie");
+        if (header != null && !header.isEmpty()) {
+            String[] cookies = header.split(";");
+            for (String cookie : cookies) {
+                if (cookie.contains("sessionid-mws=")) {
+                    String cookieValue = cookie.trim();
+                    int indexOfComma = cookieValue.indexOf(",");
+                    if (indexOfComma > 12) { // strip off optional attributes
+                        cookieValue = cookieValue.substring(0, indexOfComma).trim();
+                    }
+                    String[] sections = cookieValue.split("=");
+                    if (sections.length > 1) {
+                        sessionId = sections[1].trim();
+                        break;
+                    }
+                }
+            }
+        }
+        return sessionId;
     }
 
     /**

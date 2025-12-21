@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class Tester {
 
-    private static final String BufferWithQuery =
+    private static final String Request =
             "GET /index.html?qu=samp&qty=1 HTTP/1.1\n" +
                     "Host: localhost\n" +
                     "Content-Length: 32\n" +
@@ -28,25 +28,32 @@ public class Tester {
             System.out.println(ex.getMessage());
             throw new RuntimeException(ex);
         }
+        System.out.println("================\nRequest...\n----------------\n" + Request + "================\n");
+        String response = requestResponse();
+        System.out.println("================\nResponse...\n----------------\n" + response + "\n================\n");
+        showResults(response);
+    }
+
+    private static String requestResponse() {
+        String response = "?";
         try (
             Socket socket = new Socket("localhost", Preferences.getInstance().getPortNumber())
         ) {
             InputStream inputStream = socket.getInputStream();
-            socket.getOutputStream().write(BufferWithQuery.getBytes(StandardCharsets.UTF_8));
+            socket.getOutputStream().write(Request.getBytes(StandardCharsets.UTF_8));
             int avail;
             for(avail = 0; avail < 1; avail = inputStream.available()) {
                 Thread.yield(); // spinlock, wait for response
             }
             byte[] bytes = inputStream.readNBytes(avail);
-            String response = new String(bytes, StandardCharsets.UTF_8);
-            showResults(response);
+            response = new String(bytes, StandardCharsets.UTF_8);
         } catch(IOException ex) {
             System.out.println(ex.getMessage());
         }
+        return response;
     }
 
     private static void showResults(String response) {
-        System.out.println("Response...\n\n" + response + "\n");
         if(!response.contains("HTTP/1.1 200 OK")) {
             System.out.println("Bad response!\n!");
         } else if(!response.contains("content-length:")) {

@@ -1,7 +1,5 @@
 package com.ablestrategies.web.resp;
 
-import com.ablestrategies.web.ServerManager;
-
 import java.net.Socket;
 
 @SuppressWarnings("ALL") // Plugins must extend this base class
