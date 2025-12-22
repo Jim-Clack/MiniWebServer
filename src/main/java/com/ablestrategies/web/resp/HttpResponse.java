@@ -1,8 +1,6 @@
 package com.ablestrategies.web.resp;
 
 import com.ablestrategies.web.conn.ContentMimeType;
-import com.ablestrategies.web.conn.SessionContext;
-import com.ablestrategies.web.rqst.HttpRequest;
 import com.ablestrategies.web.rqst.HttpRequestPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

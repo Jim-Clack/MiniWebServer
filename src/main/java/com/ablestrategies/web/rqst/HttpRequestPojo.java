@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Partially populated HttpRequest that is not usable on its own, but
  * that can be cloned into a usable one by HttpRequest.cloneState().
- *
+
  * HttpRequestXxxx extends HttpRequestBase extends HttpRequestPojo
  *   Xxxx = Pojo - A lightweight class for state that can be cloned.
  *   Xxxx = Base - Socket HTTP Request message parsing methods.

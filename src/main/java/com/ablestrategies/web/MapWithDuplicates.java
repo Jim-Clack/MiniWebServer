@@ -7,24 +7,24 @@ import java.util.*;
 
 /**
  * MapWithDuplicates
- *
+
  * Implementation of a Map that permits duplicates and null values.
  * Notice that this can lead to some ambiguities which are handled
  * in a predictable manner by this class. For instance, if you remove
  * a key, then all values with that key will be removed. So to remove
  * only a specific value with that key, call removeValue(). You may
  * have to cast it to a MapWithDuplicates in order to allow this.
- *
+
  * In most situations you should prefer to call getAll() instead of
  * get() because it will return all values that have the specified
  * key, as duplicates are allowed. You may have to cast it to a
  * MapWithDuplicates in order to allow this.
- *
+
  * Values are stored in a List that is the value V in the Map(K, V).
  * So you cannot retrieve the EntrySet directly because that would
  * violate the guarantee of the Map interface. Instead it returns a
  * null value. To get the actual EntrySet, call getKeyValueList.
- *
+
  * @param <K> The key - any type
  * @param <V> The value - any type
  */
@@ -251,6 +251,7 @@ public class MapWithDuplicates<K, V> implements Map<K, V> {
      * @param value the value to remove
      * @return number of values deleted
      */
+    @SuppressWarnings("all")
     public int removeValue(K key, V value) {
         int count = 0;
         List<V> list = map.get(key);
