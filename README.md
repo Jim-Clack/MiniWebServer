@@ -1,4 +1,4 @@
-### Basic web server ###
+### Basic Web Server ###
  - Lightweight and easy to use.
  - Handles static pages: HTML, PNG, JPEG, JS, CSS, etc.
  - Supports both HTTP and HTTPS. (TLS/SSL)
@@ -17,7 +17,7 @@
    - localhost:12345/webconsole
  - Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
 
-### Does NOT support ###
+### Does NOT Support ###
  - basic auth, URL-based credentials (yet)
  - web services, JSON, SOAP, etc. (yet)
  - ftp, webdav, websockets, or other protocols
@@ -29,7 +29,7 @@
  - alternate connections (non-HTTP)
  - could also use more thorough exception/error handling
 
-### Preferences ###
+### Args and Preferences ###
 You can pass in configuration settings or put them into the java properties
 ```
    Setting          arg[n] Java property              Default
@@ -47,13 +47,13 @@ You may link as an embedded web server or run it as a standalone web server.
    new Server(args).start();
 ```
 
-### To create a Plugin ###
+### To Create a Plugin ###
 - Extend HttpResponsePlugin with your own, implementing getContent()
 - Extend PluginBase with your own, implementing handleRequest()
 - The above classes or a JAR than contains them must be in the classpath
 - setProperty("MiniWebServer.plugins", "comma,delimited,plugin,classes");
 
-### Developer notes, guide to the sources ###
+### Developer Notes, Source Code ###
 - Connection = Client-Server match-up based on IP-Address-and-Port
 - Session = Client-Server match-up based on sessionid-mws cookie
 - The main loop is in ConnectionHandler: handleRequest()
@@ -65,3 +65,5 @@ You may link as an embedded web server or run it as a standalone web server.
 ### TODO ###
 - Need to use remote IP Address to track session if there is no sessionID
 - Need to change HTTPRequest buffer to byte[] to handle binary requests
+- Problem: It's using the same sessionid-mws for multiple sessions
+- Problem: Does not return cookies from browser back to browser

@@ -1,6 +1,8 @@
 package com.ablestrategies.web.resp;
 
 import com.ablestrategies.web.conn.ContentMimeType;
+import com.ablestrategies.web.conn.SessionContext;
+import com.ablestrategies.web.rqst.HttpRequest;
 import com.ablestrategies.web.rqst.HttpRequestPojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * All HTTP responses are based on this.
@@ -27,6 +31,20 @@ public abstract class HttpResponse {
     /** The response header gets assembled into this. */
     protected StringBuilder headerBuffer;
 
+    /** Maintains the exchange of cookies */
+    protected Map<String, String> cookies = new HashMap<>();
+
+    /** The HTTP that requested the file. */
+    protected final HttpRequestPojo request;
+
+    /**
+     * ctor.
+     * @param request corresponding request
+     */
+    public HttpResponse(HttpRequestPojo request) {
+        this.request = request;
+    }
+
     /**
      * Generate the response with line1, headers, and body.
      * @param socket Connection to remote client.
@@ -39,6 +57,15 @@ public abstract class HttpResponse {
      * @return A socket-ready HTTP response.
      */
     public abstract byte[] getContent();
+
+    /**
+     * Add cookies.
+     * @param cookie name of cookie
+     * @param value value of cookie
+     */
+    public void addCookie(String cookie, String value) {
+        this.cookies.put(cookie, value);
+    }
 
     /**
      * Get the response description.
@@ -83,11 +110,14 @@ public abstract class HttpResponse {
         String now = dateFormat.format(new Date());
         String sessionId = request.getSessionId(true);
         headerBuffer = new StringBuilder();
+        cookies.put("sessionid-mws", sessionId);
+        for(Map.Entry<String, String> entry : cookies.entrySet()) {
+            headerBuffer.append("set-cookie: " + entry.getKey() + "=" + entry.getValue() + "\n");
+        }
         // Should the set-cookie expire? is it secure? i.e.
         //   sessionid-mws=XXXX; Expires=Fri, 5 Oct 2025 14:28:00 GMT; Secure;
         headerBuffer.insert(0, line1 + "\n");
         headerBuffer.append("content-type: " + mimeType.getMimeString() + "\n");
-        headerBuffer.append("set-cookie: sessionid-mws=" + sessionId + "\n");
         headerBuffer.append("date: " + now + "\n");
         headerBuffer.append("cache-control: max-age=" + maxSeconds + "\n");
         if(maxSeconds == 0) {

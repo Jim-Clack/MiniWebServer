@@ -17,9 +17,6 @@ import java.net.Socket;
  */
 public class HttpResponseWebConsole extends HttpResponse {
 
-    /** The HttpRequestXxx that requested this response. */
-    private final HttpRequestPojo request;
-
     /** The top-level object that knows about all connections. */
     private final ServerManager manager;
 
@@ -32,8 +29,8 @@ public class HttpResponseWebConsole extends HttpResponse {
      * @param manager The top-level object that knows about all connections.
      */
     public HttpResponseWebConsole(HttpRequestPojo request, ServerManager manager) {
+        super(request);
         this.description = "WebConsole";
-        this.request = request;
         this.headerBuffer = new StringBuilder();
         this.bodyBuffer = new StringBuilder();
         this.manager = manager;

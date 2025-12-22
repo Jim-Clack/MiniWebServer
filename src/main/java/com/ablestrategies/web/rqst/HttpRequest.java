@@ -4,6 +4,8 @@ import com.ablestrategies.web.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * Class for handling all kinds of HTTP requests. Accepts the raw message and
  * parses out the url, headers, and body.
@@ -36,6 +38,14 @@ public class HttpRequest extends HttpRequestPojo {
         this.method = original.method;
         this.uri = original.uri;
         this.version = original.version;
+    }
+
+    /**
+     * Get all of the headers.
+     * @return Map of header names and values.
+     */
+    public Map<String,String> getHeaders() {
+        return headers;
     }
 
     /**

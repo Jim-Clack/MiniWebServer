@@ -1,14 +1,17 @@
 package com.ablestrategies.web.rqst;
 
+import com.ablestrategies.web.MapWithDuplicates;
 import com.ablestrategies.web.ServerManager;
 import com.ablestrategies.web.conn.SessionContext;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * HttpRequestXxxx -> HttpRequestBase -> HttpRequestPojo
+ * Partially populated HttpRequest that is not usable on its own, but
+ * that can be cloned into a usable one by HttpRequest.cloneState().
+ *
+ * HttpRequestXxxx extends HttpRequestBase extends HttpRequestPojo
  *   Xxxx = Pojo - A lightweight class for state that can be cloned.
  *   Xxxx = Base - Socket HTTP Request message parsing methods.
  *   Xxxx = File, etc. - File transfer request or other kind of request.
@@ -19,7 +22,7 @@ public class HttpRequestPojo {
     protected ServerManager manager;
 
     /** Here's where we stash the headers. */
-    protected Map<String, String> headers = new HashMap<>();
+    protected MapWithDuplicates<String, String> headers = new MapWithDuplicates<>();
 
     /** The HTTP body gets stored here. */
     protected StringBuilder body = new StringBuilder();
@@ -65,29 +68,24 @@ public class HttpRequestPojo {
             context = manager.getSessionHandler().getOrCreateSession(sessionId);
         }
         // We certainly don't need all of these, but for now, they're useful diagnostics
-        copyHeaderToStringValues("user-agent");
-        copyHeaderToStringValues("authorization");
-        copyHeaderToStringValues("accept");
-        copyHeaderToStringValues("from");
-        copyHeaderToStringValues("origin");
-        copyHeaderToStringValues("referer");
-        copyHeaderToStringValues("via");
+        copyHeaderToContext("user-agent");
+        copyHeaderToContext("authorization");
+        copyHeaderToContext("accept");
+        copyHeaderToContext("from");
+        copyHeaderToContext("origin");
+        copyHeaderToContext("referer");
+        copyHeaderToContext("via");
         return context;
     }
 
     private @Nullable String getRequestedSessionId() {
         String sessionId = null;
         // unlike set-cookie, cookie uses a semicolon delimiter !
-        String header = getHeaderValue("cookie");
-        if (header != null && !header.isEmpty()) {
-            String[] cookies = header.split(";");
+        String[] cookies = getHeaderValues("cookie", ";");
+        if (cookies != null) {
             for (String cookie : cookies) {
                 if (cookie.contains("sessionid-mws=")) {
                     String cookieValue = cookie.trim();
-                    int indexOfComma = cookieValue.indexOf(",");
-                    if (indexOfComma > 12) { // strip off optional attributes
-                        cookieValue = cookieValue.substring(0, indexOfComma).trim();
-                    }
                     String[] sections = cookieValue.split("=");
                     if (sections.length > 1) {
                         sessionId = sections[1].trim();
@@ -103,10 +101,12 @@ public class HttpRequestPojo {
      * If a chosen header exists, copy it to the Session string values.
      * @param key Lowercase header key.
      */
-    private void copyHeaderToStringValues(String key) {
-        String value = getHeaderValue(key);
-        if(value != null && !value.isEmpty()) {
-            context.setStringValue(key, value);
+    private void copyHeaderToContext(String key) {
+        String[] values = getHeaderValues(key, null);
+        if(values != null) {
+            for(String str : values) {
+                context.setStringValue(key, str);
+            }
         }
     }
 
@@ -130,31 +130,26 @@ public class HttpRequestPojo {
     }
 
     /**
-     * Fetch a value from the headers.
-     * @param key The name of the header line.
-     * @return the value of that key. There may be multiple comma-separated-values. May return null.
-     */
-    public String getHeaderValue(String key) {
-        String header = this.headers.get(key.toLowerCase());
-        if(header == null || header.isEmpty()) {
-            return null;
-        }
-        return header;
-    }
-
-    /**
      * Fetch values from the headers.
      * @param key The name of the header line.
+     * @param valueDelimiter if a header entry may have multiple values, what is the delimiter (,)
      * @return the value of that key. There may be multiple values. Never returns null.
      */
-    public String[] getHeaderValues(String key) {
-        String headers = this.headers.get(key.toLowerCase());
-        if(headers == null || headers.isEmpty()) {
-            String[] stringArray = new String[1];
-            stringArray[0] = "";
-            return stringArray;
+    public String[] getHeaderValues(String key, String valueDelimiter) {
+        List<String> values = new LinkedList<>();
+        List<String> headers = this.headers.getAll(key.trim().toLowerCase());
+        if(valueDelimiter == null) {
+            valueDelimiter = ",";
         }
-        return headers.split(",");
+        if(headers != null && !headers.isEmpty()) {
+            for (String hdr : headers) {
+                String[] vals = hdr.split(valueDelimiter);
+                for (String s : vals) {
+                    values.add(s.trim());
+                }
+            }
+        }
+        return values.toArray(new String[0]);
     }
 
     /**

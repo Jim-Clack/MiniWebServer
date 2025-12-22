@@ -8,13 +8,11 @@ import java.nio.charset.StandardCharsets;
 
 public class HttpResponseExample extends HttpResponsePlugin {
 
-    protected HttpRequest request;
-
     protected String line1 = "";
 
     public HttpResponseExample(HttpRequest request) {
+        super(request);
         initialize("Example");
-        this.request = request;
     }
 
     /**

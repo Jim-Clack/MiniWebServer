@@ -1,9 +1,19 @@
 package com.ablestrategies.web.resp;
 
+import com.ablestrategies.web.rqst.HttpRequestPojo;
+
 import java.net.Socket;
 
 @SuppressWarnings("ALL") // Plugins must extend this base class
 public abstract class HttpResponsePlugin extends HttpResponse {
+
+    /**
+     * ctor.
+     * @param request corresponding request
+     */
+    public HttpResponsePlugin(HttpRequestPojo request) {
+        super(request);
+    }
 
     public void initialize(String description) {
         this.description = description;

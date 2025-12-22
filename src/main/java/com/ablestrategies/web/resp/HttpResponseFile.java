@@ -16,9 +16,6 @@ public class HttpResponseFile extends HttpResponse {
     /** Logger slf4j. */
     private final Logger logger = LoggerFactory.getLogger(HttpResponse.class);
 
-    /** The HTTP that requested the file. */
-    private final HttpRequestPojo request;
-
     /** Line1, headers, and body (file content) are assembled into this. */
     private byte[] responseBuffer = null;
 
@@ -30,8 +27,8 @@ public class HttpResponseFile extends HttpResponse {
      * @param request The HTTP that requested the file.
      */
     public HttpResponseFile(HttpRequestPojo request) {
+        super(request);
         this.description = "File";
-        this.request = request;
         this.headerBuffer = new StringBuilder();
     }
 

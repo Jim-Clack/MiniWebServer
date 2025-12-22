@@ -8,6 +8,7 @@ import java.net.Socket;
 public class HttpResponseJson extends HttpResponse {
 
     public HttpResponseJson(HttpRequestPojo request) {
+        super(request);
         this.description = "JSON";
         // Not yet coded
     }

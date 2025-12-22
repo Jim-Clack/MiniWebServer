@@ -43,9 +43,9 @@ public class HttpActionType {
      * @return RequestKind, typically based on the Content-Type header.
      */
     public static RequestType getRequestKind(HttpRequest request) {
-        String[] acceptContents = request.getHeaderValues("Accept");
+        String[] acceptContents = request.getHeaderValues("Accept", null);
         if (acceptContents == null || acceptContents.length == 0) {
-            acceptContents = request.getHeaderValues("Content-Type");
+            acceptContents = request.getHeaderValues("Content-Type", null);
         }
         ContentMimeType responseMimeType = ContentMimeType.getMimeType(acceptContents);
         PluginBase plugin = PluginHandler.getInstance().getPlugin(request);
