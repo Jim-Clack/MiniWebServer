@@ -83,8 +83,8 @@ public class ConsoleSupport {
         int countConnections = manager.killIdleConnections(60);
         int countSessions = manager.discardIdleSessions(60);
         buffer.append(dashes);
-        buffer.append("  Number of connections killed: " + countConnections + "\n");
-        buffer.append("  Number of sessions killed: " + countSessions + "\n");
+        buffer.append("  Number of connections killed: ").append(countConnections).append("\n");
+        buffer.append("  Number of sessions killed: ").append(countSessions).append("\n");
         buffer.append(dashes);
         return buffer.toString();
     }
@@ -118,7 +118,7 @@ public class ConsoleSupport {
             ++threadCount;
         }
         buffer.append(dashes);
-        buffer.append("Number of threads: " + threadCount + "\n");
+        buffer.append("Number of threads: ").append(threadCount).append("\n");
         return buffer.toString();
     }
 
@@ -133,23 +133,23 @@ public class ConsoleSupport {
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
         for (SessionContext context : manager.getSessionHandler().getSessions()) {
-            buffer.append("Session:  " + context.getSessionId() + "\n");
-            buffer.append("Created:  " + context.getCreated().toString() + "\n");
-            buffer.append("Idle:     " + context.beenIdleForHowLong() + "\n");
+            buffer.append("Session:  ").append(context.getSessionId()).append("\n");
+            buffer.append("Created:  ").append(context.getCreated().toString()).append("\n");
+            buffer.append("Idle:     ").append(context.beenIdleForHowLong()).append("\n");
             Map<String, String> values = context.getStringValues();
             for (String key : values.keySet()) {
-                buffer.append(" -" + key + " = " + values.get(key) + "\n");
+                buffer.append(" -").append(key).append(" = ").append(values.get(key)).append("\n");
             }
             for (ConnectionThread connection : manager.getConnections()) {
                 List<String> history = connection.getHistory();
                 if (history != null && !history.isEmpty() && history.get(0).contains(context.getSessionId())) {
-                    buffer.append(" *" + connection.getThreadName() + "\n");
+                    buffer.append(" *").append(connection.getThreadName()).append("\n");
                 }
             }
             buffer.append(dashes);
             sessionCount++;
         }
-        buffer.append("Number of sessions: " + sessionCount + "\n");
+        buffer.append("Number of sessions: ").append(sessionCount).append("\n");
         return buffer.toString();
     }
 
@@ -163,21 +163,21 @@ public class ConsoleSupport {
         StringBuilder buffer = new StringBuilder();
         buffer.append(dashes);
         for (ConnectionThread connection : manager.getConnections()) {
-            buffer.append("Thread:   " + connection.getThreadName() + "\n");
-            buffer.append("Alive:    " + connection.isAlive() + "\n");
-            buffer.append("Protocol: " + connection.getProtocol() + "\n");
-            buffer.append("Idle:     " + connection.beenIdleForHowLong() + "\n");
-            buffer.append("Client:   " + connection.getAddressAndPort() + "\n");
+            buffer.append("Thread:   ").append(connection.getThreadName()).append("\n");
+            buffer.append("Alive:    ").append(connection.isAlive()).append("\n");
+            buffer.append("Protocol: ").append(connection.getProtocol()).append("\n");
+            buffer.append("Idle:     ").append(connection.beenIdleForHowLong()).append("\n");
+            buffer.append("Client:   ").append(connection.getAddressAndPort()).append("\n");
             List<String> history = connection.getHistory();
             for (String historyLine : history) {
-                buffer.append(" >" + historyLine + "\n");
+                buffer.append(" >").append(historyLine).append("\n");
             }
             buffer.append(dashes);
             if (connection.isAlive()) {
                 threadCount++;
             }
         }
-        buffer.append("Number of connections Alive: " + threadCount + "\n");
+        buffer.append("Number of connections Alive: ").append(threadCount).append("\n");
         manager.discardDeadConnections();
         return buffer.toString();
     }
@@ -202,7 +202,7 @@ public class ConsoleSupport {
      * @return null if we're not using that logger. Else a descriptive message.
      */
     private String toggleJavaLogger() {
-        String packageName = this.getClass().getPackage().getName();
+        // String packageName = this.getClass().getPackage().getName();
         String message = null;
         Logger logger = Logger.getLogger("");
         if(logger != null) {
@@ -225,7 +225,7 @@ public class ConsoleSupport {
         buffer.append("Environment\n");
         Map<String, String> env = System.getenv();
         for(Map.Entry<String, String> entry : env.entrySet()) {
-            buffer.append(" " + entry.getKey() + " = " + entry.getValue() + "\n");
+            buffer.append(" ").append(entry.getKey()).append(" = ").append(entry.getValue()).append("\n");
         }
     }
 
@@ -234,7 +234,7 @@ public class ConsoleSupport {
         buffer.append("Properties\n");
         Properties properties = System.getProperties();
         for(Object property : properties.keySet()) {
-            buffer.append(" " + property.toString() + ": " + properties.get(property).toString().
+            buffer.append(" ").append(property.toString()).append(": ").append(properties.get(property).toString().
                     replaceAll("\\x0d", "[CR]").replaceAll("\\x0A", "[LF]") + "\n");
         }
     }
@@ -242,12 +242,12 @@ public class ConsoleSupport {
     private static void ListPreferences(StringBuilder buffer) {
         buffer.append(dashes);
         buffer.append("Preferences\n");
-        buffer.append(" Web root path directory: " + Preferences.getInstance().getRootPath() + "\n");
-        buffer.append(" HTTP IP port number: " + Preferences.getInstance().getPortNumber() + "\n");
-        buffer.append(" HTTPS IP port number: " + Preferences.getInstance().getSslPortNumber() + "\n");
-        buffer.append(" Max history per connection: " + Preferences.getInstance().getMaxHistory() + "\n");
-        buffer.append(" Connection max idle seconds: " + Preferences.getInstance().getConnectionMaxIdleSeconds() + "\n");
-        buffer.append(" Session max idle seconds: " + Preferences.getInstance().getSessionMaxIdleSeconds() + "\n");
+        buffer.append(" Web root path directory: ").append(Preferences.getInstance().getRootPath()).append("\n");
+        buffer.append(" HTTP IP port number: ").append(Preferences.getInstance().getPortNumber()).append("\n");
+        buffer.append(" HTTPS IP port number: ").append(Preferences.getInstance().getSslPortNumber()).append("\n");
+        buffer.append(" Max history per connection: ").append(Preferences.getInstance().getMaxHistory()).append("\n");
+        buffer.append(" Connection max idle seconds: ").append(Preferences.getInstance().getConnectionMaxIdleSeconds()).append("\n");
+        buffer.append(" Session max idle seconds: ").append(Preferences.getInstance().getSessionMaxIdleSeconds()).append("\n");
     }
 
     private void listIpAddresses(StringBuilder buffer) {
@@ -255,10 +255,10 @@ public class ConsoleSupport {
         buffer.append("IPAddresses\n");
         Map<String, ListenerThread> listeners = manager.getListeners();
         for(String protocol : listeners.keySet()) {
-            buffer.append(" Server: " + protocol + " ==> IP Addr:/" + listeners.get(protocol).getAddressAndPort() + "\n");
+            buffer.append(" Server: ").append(protocol).append(" ==> IP Addr:/").append(listeners.get(protocol).getAddressAndPort()).append("\n");
         }
         for (ConnectionThread connection : manager.getConnections()) {
-            buffer.append(" Client: " + connection.getProtocol() + " ==> IP Addr:" + connection.getAddressAndPort() + "\n");
+            buffer.append(" Client: ").append(connection.getProtocol()).append(" ==> IP Addr:").append(connection.getAddressAndPort()).append("\n");
         }
     }
 
