@@ -1,5 +1,7 @@
 package com.ablestrategies.web.conn;
 
+import com.ablestrategies.web.sess.SessionContext;
+import com.ablestrategies.web.sess.SessionHandler;
 import junit.framework.TestCase;
 
 import java.util.HashSet;
@@ -9,7 +11,7 @@ public class SessionHandlerTest extends TestCase {
     @SuppressWarnings("ALL")
     public void testSessionIdUniqueness() {
         SessionHandler sessionHandler = new SessionHandler();
-        sessionHandler.developerWarning = false;
+        sessionHandler.setDeveloperWarning(false);
         HashSet<String> sessionIds = new HashSet<String>();
         for(int i = 0; i < 10000; i++) {
             String sessionId = sessionHandler.newSession(null).getSessionId();
@@ -23,7 +25,7 @@ public class SessionHandlerTest extends TestCase {
 
     public void testNewSession() {
         SessionHandler sessionHandler = new SessionHandler();
-        sessionHandler.developerWarning = false;
+        sessionHandler.setDeveloperWarning(false);
         SessionContext context = sessionHandler.newSession(null);
         assertNotNull(context);
         String sessionId = context.getSessionId();
@@ -32,7 +34,7 @@ public class SessionHandlerTest extends TestCase {
 
     public void testGetSession() {
         SessionHandler sessionHandler = new SessionHandler();
-        sessionHandler.developerWarning = false;
+        sessionHandler.setDeveloperWarning(false);
         SessionContext context1 = sessionHandler.newSession(null);
         assertNotNull(context1);
         String sessionId1 = context1.getSessionId();
@@ -50,7 +52,7 @@ public class SessionHandlerTest extends TestCase {
         long now = System.currentTimeMillis();
         String sessionId0 = "S" + now;
         SessionHandler sessionHandler = new SessionHandler();
-        sessionHandler.developerWarning = false;
+        sessionHandler.setDeveloperWarning(false);
         SessionContext context1 = sessionHandler.getOrCreateSession(sessionId0); // doesn't exist, so create
         assertNotNull(context1);
         String sessionId1 = context1.getSessionId();

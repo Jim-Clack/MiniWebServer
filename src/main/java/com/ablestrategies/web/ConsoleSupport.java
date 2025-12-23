@@ -1,11 +1,10 @@
 package com.ablestrategies.web;
 
 import com.ablestrategies.web.conn.ConnectionThread;
-import com.ablestrategies.web.conn.SessionContext;
+import com.ablestrategies.web.sess.SessionContext;
 
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 

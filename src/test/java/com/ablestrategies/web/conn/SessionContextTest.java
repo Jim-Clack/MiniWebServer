@@ -1,5 +1,6 @@
 package com.ablestrategies.web.conn;
 
+import com.ablestrategies.web.sess.SessionContext;
 import junit.framework.TestCase;
 
 public class SessionContextTest extends TestCase {

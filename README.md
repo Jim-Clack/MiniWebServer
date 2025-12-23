@@ -61,9 +61,3 @@ You may link as an embedded web server or run it as a standalone web server.
   - (...but recoverable exceptions will be handled by the server)
 - (I'm 76 and just wrote this, so I hope it's not too old-fashioned.)
 - If you want to contact me, I'm at jim.clack@ablestrategies.com
-
-### TODO ###
-- Need to use remote IP Address to track session if there is no sessionID
-- Need to change HTTPRequest buffer to byte[] to handle binary requests
-- Problem: It's using the same sessionid-mws for multiple sessions
-- Problem: Does not return cookies from browser back to browser

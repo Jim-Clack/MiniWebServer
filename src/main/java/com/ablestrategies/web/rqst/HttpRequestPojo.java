@@ -2,7 +2,7 @@ package com.ablestrategies.web.rqst;
 
 import com.ablestrategies.web.MapWithDuplicates;
 import com.ablestrategies.web.ServerManager;
-import com.ablestrategies.web.conn.SessionContext;
+import com.ablestrategies.web.sess.SessionContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

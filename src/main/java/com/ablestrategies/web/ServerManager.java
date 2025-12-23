@@ -1,7 +1,7 @@
 package com.ablestrategies.web;
 
 import com.ablestrategies.web.conn.ConnectionThread;
-import com.ablestrategies.web.conn.SessionHandler;
+import com.ablestrategies.web.sess.SessionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

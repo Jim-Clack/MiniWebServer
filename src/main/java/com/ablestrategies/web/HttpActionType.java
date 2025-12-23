@@ -21,7 +21,6 @@ public class HttpActionType {
         RQ_FILE_GET,
         RQ_FILE_POST,   // not yet handled
         RQ_WEB_CONSOLE,
-        RQ_WS_SOAP,     // not yet implemented
         RQ_WS_JSON,     // not yet implemented
         RQ_PLUG_IN,     // dynamically loaded
     }
@@ -51,8 +50,6 @@ public class HttpActionType {
         PluginBase plugin = PluginHandler.getInstance().getPlugin(request);
         if(plugin != null) {
             return RequestType.RQ_PLUG_IN;
-        } else if(responseMimeType == ContentMimeType.MIME_XML) {
-            return RequestType.RQ_WS_SOAP;
         } else if(responseMimeType == ContentMimeType.MIME_JSON) {
             return RequestType.RQ_WS_JSON;
         } else if(request.getUri().startsWith("/webconsole")) {
@@ -70,9 +67,7 @@ public class HttpActionType {
      */
     public static HttpRequest getTypedRequest(HttpRequest request) {
         RequestType requestType = getRequestKind(request);
-        if (requestType == RequestType.RQ_WS_SOAP) {
-            return new HttpRequestSoap(request);
-        } else if (requestType == RequestType.RQ_WS_JSON) {
+        if (requestType == RequestType.RQ_WS_JSON) {
             return new HttpRequestJson(request);
         } else if (requestType == RequestType.RQ_PLUG_IN) {
             return new HttpRequestPlugin(request);
@@ -89,9 +84,7 @@ public class HttpActionType {
     @SuppressWarnings("ALL")
     public static HttpResponse getTypedResponse(HttpRequest request, ServerManager manager) {
         RequestType requestType = getRequestKind(request);
-        if (requestType == RequestType.RQ_WS_SOAP) {
-            return new HttpResponseSoap(request);
-        } else if (requestType == RequestType.RQ_WS_JSON) {
+        if (requestType == RequestType.RQ_WS_JSON) {
             return new HttpResponseJson(request);
         } else if (requestType == RequestType.RQ_WEB_CONSOLE) {
             return new HttpResponseWebConsole(request, manager);

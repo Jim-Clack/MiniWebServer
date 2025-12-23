@@ -1,4 +1,4 @@
-package com.ablestrategies.web.conn;
+package com.ablestrategies.web.sess;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

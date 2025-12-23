@@ -20,12 +20,6 @@ public class HttpActionTypeTest extends TestCase {
         assertEquals(HttpRequestFile.class, rq.getClass());
     }
 
-    public void testGetHttpRequestSoap() {
-        String buffer2 = bufferWithQuery.replace("Host", "Accept: application/xml\nHost");
-        HttpRequest rq = HttpActionType.getHttpRequest(buffer2, null);
-        assertEquals(HttpRequestSoap.class, rq.getClass());
-    }
-
     public void testGetHttpRequestJson() {
         String buffer2 = bufferWithQuery.replace("Host", "Accept: application/json\nHost");
         HttpRequest rq = HttpActionType.getHttpRequest(buffer2, null);

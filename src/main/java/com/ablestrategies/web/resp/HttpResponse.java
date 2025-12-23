@@ -29,8 +29,8 @@ public abstract class HttpResponse {
     /** The response header gets assembled into this. */
     protected StringBuilder headerBuffer;
 
-    /** Maintains the exchange of cookies */
-    protected Map<String, String> cookies = new HashMap<>();
+    /** Maintains the setting of new or modified cookies */
+    protected Map<String, String> setCookies = new HashMap<>();
 
     /** The HTTP that requested the file. */
     protected final HttpRequestPojo request;
@@ -61,8 +61,8 @@ public abstract class HttpResponse {
      * @param cookie name of cookie
      * @param value value of cookie
      */
-    public void addCookie(String cookie, String value) {
-        this.cookies.put(cookie, value);
+    public void addSetCookie(String cookie, String value) {
+        this.setCookies.put(cookie, value);
     }
 
     /**
@@ -108,8 +108,8 @@ public abstract class HttpResponse {
         String now = dateFormat.format(new Date());
         String sessionId = request.getSessionId(true);
         headerBuffer = new StringBuilder();
-        cookies.put("sessionid-mws", sessionId);
-        for(Map.Entry<String, String> entry : cookies.entrySet()) {
+        setCookies.put("sessionid-mws", sessionId);
+        for(Map.Entry<String, String> entry : setCookies.entrySet()) {
             headerBuffer.append("set-cookie: " + entry.getKey() + "=" + entry.getValue() + "\n");
         }
         // Should the set-cookie expire? is it secure? i.e.

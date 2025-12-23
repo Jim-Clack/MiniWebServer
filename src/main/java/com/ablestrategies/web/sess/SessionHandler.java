@@ -1,4 +1,4 @@
-package com.ablestrategies.web.conn;
+package com.ablestrategies.web.sess;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,6 @@ public class SessionHandler {
             if(doesSessionExist(sessionId)) {
                 context = contexts.get(sessionId);
             }
-            context = contexts.get(sessionId);
         }
         if (context == null) {
             context = newSession(sessionId);
@@ -58,6 +57,14 @@ public class SessionHandler {
             return contexts.containsKey(sessionId);
         }
         return false;
+    }
+
+    /**
+     * setDeveloperWarning
+     * @param developerWarning true to issue a warning for illegal calls only used for unit testing
+     */
+    public void setDeveloperWarning(boolean developerWarning) {
+        this.developerWarning = developerWarning;
     }
 
     /**
@@ -98,7 +105,7 @@ public class SessionHandler {
      * @return Newly created session context.
      * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    protected SessionContext newSession(String sessionId) {
+    public SessionContext newSession(String sessionId) {
         if(developerWarning) {
             throw new RuntimeException("Don't call newSession() directly!");
         }
@@ -121,7 +128,7 @@ public class SessionHandler {
      * @return the session context, possibly null if not found.
      * @apiNote Not thread safe !!! (use getOrCreateSession() instead)
      */
-    protected SessionContext getSession(String sessionId) {
+    public SessionContext getSession(String sessionId) {
         if(developerWarning) {
             throw new RuntimeException("Don't call getSession() directly!");
         }
