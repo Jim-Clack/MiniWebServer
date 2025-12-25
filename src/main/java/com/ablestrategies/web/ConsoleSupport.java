@@ -187,7 +187,7 @@ public class ConsoleSupport {
      * @return Multi-line string.
      */
     @SuppressWarnings("all")
-    public synchronized String listProperties() {
+    public synchronized String listAllProperties() {
         StringBuilder buffer = new StringBuilder();
         listEnvironment(buffer);
         listProperties(buffer);
@@ -248,6 +248,9 @@ public class ConsoleSupport {
         buffer.append(" Max history per connection: ").append(Preferences.getInstance().getMaxHistory()).append("\n");
         buffer.append(" Connection max idle seconds: ").append(Preferences.getInstance().getConnectionMaxIdleSeconds()).append("\n");
         buffer.append(" Session max idle seconds: ").append(Preferences.getInstance().getSessionMaxIdleSeconds()).append("\n");
+        for(String plugin : Preferences.getInstance().getPluginClassNames()) {
+            buffer.append(" Server plugin class: ").append(plugin).append("\n");
+        }
     }
 
     private void listIpAddresses(StringBuilder buffer) {

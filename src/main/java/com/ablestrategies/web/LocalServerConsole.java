@@ -51,7 +51,7 @@ public class LocalServerConsole {
                     System.out.println(manager.getConsole().listAllThreads());
                     break;
                 case 'P':
-                    System.out.println(manager.getConsole().listProperties());
+                    System.out.println(manager.getConsole().listAllProperties());
                     break;
                 case 'L':
                     System.out.println(manager.getConsole().toggleLogLevel());

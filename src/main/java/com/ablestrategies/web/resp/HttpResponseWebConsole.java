@@ -109,7 +109,7 @@ public class HttpResponseWebConsole extends HttpResponse {
                 toBodyAsHtml(manager.getConsole().listAllThreads());
                 break;
             case 'P':
-                toBodyAsHtml(manager.getConsole().listProperties());
+                toBodyAsHtml(manager.getConsole().listAllProperties());
                 break;
             case 'L':
                 toBodyAsHtml(manager.getConsole().toggleLogLevel());

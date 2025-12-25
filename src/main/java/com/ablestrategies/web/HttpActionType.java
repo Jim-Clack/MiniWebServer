@@ -22,7 +22,7 @@ public class HttpActionType {
         RQ_FILE_POST,   // not yet handled
         RQ_WEB_CONSOLE,
         RQ_WS_JSON,     // not yet implemented
-        RQ_PLUG_IN,     // dynamically loaded
+        RQ_PLUG_IN,
     }
 
     /**

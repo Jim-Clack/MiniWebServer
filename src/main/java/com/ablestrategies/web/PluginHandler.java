@@ -32,6 +32,10 @@ public class PluginHandler {
         loadPlugins();
     }
 
+    /**
+     * loadPlugins
+     * Instantiate each plugin.
+     */
     public void loadPlugins() {
         Preferences preferences = Preferences.getInstance();
         String[] classNames = preferences.getPluginClassNames();
@@ -42,7 +46,7 @@ public class PluginHandler {
                 @SuppressWarnings("all")
                 Class<? extends PluginBase> clazz = (Class<? extends PluginBase>)object;
                 if(clazz == null) {
-                    logger.warn("Cannot find plugin " + className);
+                    logger.warn("Cannot find plugin {}", className);
                 } else {
                     Class<?>[] args = {Preferences.class};
                     Constructor<?> ctor = clazz.getConstructor(args);
@@ -53,7 +57,7 @@ public class PluginHandler {
                 }
             } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                      InvocationTargetException ex) {
-                logger.warn("Cannot instantiate plugin " + className, ex);
+                logger.warn("Cannot instantiate plugin {}", className, ex);
             }
         }
     }

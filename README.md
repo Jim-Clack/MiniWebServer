@@ -18,6 +18,7 @@
  - Note: Requires slf4j 2 (i.e. slf4j-api:2.0.3 and slf4j-simple:2.0.3)
 
 ### Does NOT Support ###
+ - multi-tenant hosting and managed subdomains (yet)
  - basic auth, URL-based credentials (yet)
  - web services, JSON, SOAP, etc. (yet)
  - ftp, webdav, websockets, or other protocols
@@ -32,11 +33,11 @@
 ### Args and Preferences ###
 You can pass in configuration settings or put them into the java properties
 ```
-   Setting          arg[n] Java property              Default
-   IP port to listen   0  MiniWebServer.portNumber    12345
-   SSL IP listen port  1  MiniWebServer.sslPortNumber 0 (disabled)
-   Website root path   2  MiniWebServer.rootPath      /Users/[user]/webroot
-   Plugins                MiniWebServer.plugins       (none) comma-delimited
+   Setting              arg[n]  Java property               Default
+   IP port to listen         0  MiniWebServer.portNumber    12345
+   SSL IP listen port        1  MiniWebServer.sslPortNumber 0 (disabled) 
+   Website root path         2  MiniWebServer.rootPath      ~/webroot
+   Plugins (comma-delimited)    MiniWebServer.plugins       (none)
 ```
 In order to support SSL/HTTPS, you have to set certain Java properties, as\
 listed in Preferences.java.
@@ -57,7 +58,5 @@ You may link as an embedded web server or run it as a standalone web server.
 - Connection = Client-Server match-up based on IP-Address-and-Port
 - Session = Client-Server match-up based on sessionid-mws cookie
 - The main loop is in ConnectionHandler: handleRequest()
-- You may want to catch IOException and InterruptedException
-  - (...but recoverable exceptions will be handled by the server)
 - (I'm 76 and just wrote this, so I hope it's not too old-fashioned.)
 - If you want to contact me, I'm at jim.clack@ablestrategies.com

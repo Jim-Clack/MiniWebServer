@@ -3,6 +3,7 @@ package com.ablestrategies.web;
 import com.ablestrategies.web.resp.HttpResponse;
 import com.ablestrategies.web.resp.HttpResponseExample;
 import com.ablestrategies.web.rqst.HttpRequest;
+import org.jetbrains.annotations.NotNull;
 
 public class ExamplePlugin extends PluginBase {
 
@@ -15,7 +16,7 @@ public class ExamplePlugin extends PluginBase {
      * @param request@return null unless it can be handled by this plugin
      */
     @Override
-    public Class<? extends PluginBase> getKind(HttpRequest request) {
+    public Class<? extends PluginBase> getKind(@NotNull HttpRequest request) {
         if(request.getFilePath(false).endsWith(".example")) {
             return ExamplePlugin.class;
         }
